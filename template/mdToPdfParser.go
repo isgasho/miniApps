@@ -193,13 +193,20 @@ func renderTable() {
 	cellGap := 2.0
 
 	ColWdArray := make([]float64, 0)
+	AlignArray := make([]string, 0)
 	if allWidths, ok := tableData[1]; ok {
 		for _, oneWidth := range allWidths {
-			f, err := strconv.ParseFloat(oneWidth.Text, 64)
+			strs := strings.Split(oneWidth.Text, ",")
+			if len(strs) != 2 {
+				panic("Need to Pass tabe width and alignment" + oneWidth.Text)
+			}
+			f, err := strconv.ParseFloat(strs[0], 64)
 			if err != nil {
-				panic("size not defined cannot move ahead with tables")
+				fmt.Println(err)
+				panic("size not defined cannot move ahead with tables:")
 			}
 			ColWdArray = append(ColWdArray, f)
+			AlignArray = append(AlignArray, strs[1])
 		}
 		delete(tableData, 1) //because 2nd row ie. 1st index is width size
 		y := pdf.GetY()
@@ -228,7 +235,7 @@ func renderTable() {
 				cellY := y + cellGap //+ (maxHt-val2.Height)/2
 				for _, oneVal := range val2.List {
 					pdf.SetXY(x+cellGap, cellY)
-					pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, val2.Direction, false, 0, "")
+					pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, AlignArray[key], false, 0, "")
 					cellY += lineHt
 				}
 				x += ColWdArray[key]

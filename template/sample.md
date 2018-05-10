@@ -76,29 +76,26 @@ Contract Period: **01/05/2018 to 30/04/2019.**
 
 Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
 ----------|----|-------|--------------|---|---------|
-55|25|30|25|15|25|
-Robomak Floor & Desktop & New & old & Cr & Holy|4,500/-|810/-|5,310/-|1|5,310/-|
+55,L|25,L|30,R|25,R|15,L|25,R|
+Robomak Floor & Desktop & New |4,500/-|810/-|5,310/-|1|5,310/-|
+Model xyz & acv|5,000/-|900/-|5,900/-|1|5,900/-|
 GrandTotal|||||5,310/-|
 
-<br/>
-<br/>
+
 <br/>
 
 **Payment Details**
 
 Payment Bank Details|A/c Name: Veb Robomak Pvt. Ltd.\nBank Name: SBI\nBranch: Old Padra Road\nA/C No: 33778781620\nIFSC Code: SBIN0010687|
 -----------------------|----------------
-87|88|
+87,L|88,L|
 Payment Terms|Annually Advance|
 
-<br/>
-<br/>
 <br/>
 Signed on Behalf of Institution                         Signed on Behalf of Veb Robomak Pvt Ltd
 
 <br/>
-<br/>
 **Authorized Signature & Stamp.**                   **Authorized Signature & Stamp.**
 
-**Date:**                                                               **Date:**
+**Date:**                                                               **Date: 12/04/2018**
 
