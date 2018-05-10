@@ -1,4 +1,5 @@
-**VRPL:CCM:REN:AMC:CBI:0318:001**                   **Date: 15, March 2018**                           
+**VRPL:CCM:REN:AMC:CBI:0318:001**                           **Date: 15, March 2018**
+<br/>                           
 **The Branch Manager**
 **Central Bank of India**
 Jagnath Plot Branch,
@@ -17,7 +18,7 @@ In this connection, we have enclosed herewith **A.M.C.** contract offer letter e
 
 **Hope Our above offer is in line with your requirement.**
 
-If any clarification is required please feel free to call us on **9925204929/ 079 26766642**
+If any clarification is required please feel free to call us on **9925204929/079-26766642**
 
 Thanking you in the meanwhile and assuring you the best of our service and kind
 attention always.
@@ -50,8 +51,7 @@ levies will payable extra.
 We agree to provide Comprehensive Maintenance services under the agreement to
 keep the machine in good working condition.
 
-1. Maintenance will cover both preventive and breakdown calls. This will include the cost of the parts except those considered as consumable like **OK stamp & Ink
-Bottle.**
+1. Maintenance will cover both preventive and breakdown calls. This will include the cost of the parts except those considered as consumable like "OK stamp" & "Ink Bottle".
 2. Preventive maintenance will be provided Quarterly.
 3. The service includes as under: cleaning of spindles, encoding diaphragm change,
 belt checking, checking of RPM of the motor, cleaning of air filter & checking of
@@ -76,21 +76,29 @@ Contract Period: **01/05/2018 to 30/04/2019.**
 
 Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
 ----------|----|-------|--------------|---|---------|
-Robomak Floor|4,500/-|810/-|5,310/-|1|5,310/-|
-GrandTotal|.|.|.|.|5,310/-|
+55|25|30|25|15|25|
+Robomak Floor & Desktop & New & old & Cr & Holy|4,500/-|810/-|5,310/-|1|5,310/-|
+GrandTotal|||||5,310/-|
+
+<br/>
+<br/>
+<br/>
 
 **Payment Details**
 
 Payment Bank Details|A/c Name: Veb Robomak Pvt. Ltd.\nBank Name: SBI\nBranch: Old Padra Road\nA/C No: 33778781620\nIFSC Code: SBIN0010687|
---------------------|--------------------|
+-----------------------|----------------
+87|88|
 Payment Terms|Annually Advance|
 
+<br/>
+<br/>
+<br/>
+Signed on Behalf of Institution                         Signed on Behalf of Veb Robomak Pvt Ltd
 
-Signed on Behalf of Institution             Signed on Behalf of Veb Robomak Pvt Ltd
+<br/>
+<br/>
+**Authorized Signature & Stamp.**                   **Authorized Signature & Stamp.**
 
-
-**Authorized Signature & Stamp.**           **Authorized Signature & Stamp.**
-
-
-**Date:**                                   **Date:**
+**Date:**                                                               **Date:**
 

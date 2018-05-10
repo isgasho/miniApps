@@ -6,6 +6,9 @@ import (
 	"github.com/jung-kurt/gofpdf"
 	bf "gopkg.in/russross/blackfriday.v2"
 	"io/ioutil"
+	"sort"
+	"strconv"
+	"strings"
 )
 
 var (
@@ -16,6 +19,7 @@ var (
 	tableEnabled     = false
 	tableRowIndex    = -1
 	tableColumnIndex = -1
+	footer           = "For any complaints call us on: 079 26424229 / M:99252 04929/ M:99099 58229"
 )
 
 type TableItem struct {
@@ -24,6 +28,7 @@ type TableItem struct {
 	Bold      bool
 	Height    float64
 	List      [][]byte
+	Render    bool
 }
 
 var ht float64
@@ -59,6 +64,11 @@ func main() {
 		Size:           gofpdf.SizeType{Wd: 210, Ht: 297},
 		OrientationStr: "P",
 	})
+	pdf.SetFooterFunc(func() {
+		pdf.SetY(-15)
+		pdf.SetFont("Arial", "I", fontSize)
+		pdf.CellFormat(0, ht, footer, "", 0, "C", false, 0, "")
+	})
 	pdf.SetMargins(20, 75, 20)
 	pdf.SetFont("Arial", "", fontSize)
 	ht = pdf.PointConvert(fontSize)
@@ -74,7 +84,6 @@ func main() {
 }
 
 func walker(node *bf.Node, entering bool) bf.WalkStatus {
-	fmt.Println(node, entering)
 	switch node.Type {
 	case bf.Strong:
 		if entering {
@@ -178,31 +187,68 @@ func walker(node *bf.Node, entering bool) bf.WalkStatus {
 
 func renderTable() {
 	pdf.Ln(ht)
-	colWd := 60.0
+	//colWd := 20.0
 	marginH := 15.0
 	lineHt := 5.5
 	cellGap := 2.0
-	y := pdf.GetY()
-	for _, val := range tableData {
-		maxHt := lineHt
-		for _, val2 := range val {
-			val2.List = pdf.SplitLines([]byte(val2.Text), colWd-cellGap-cellGap)
-			val2.Height = float64(len(val2.List)) * lineHt
-			if val2.Height > maxHt {
-				maxHt = val2.Height
+
+	ColWdArray := make([]float64, 0)
+	if allWidths, ok := tableData[1]; ok {
+		for _, oneWidth := range allWidths {
+			f, err := strconv.ParseFloat(oneWidth.Text, 64)
+			if err != nil {
+				panic("size not defined cannot move ahead with tables")
 			}
+			ColWdArray = append(ColWdArray, f)
 		}
-		x := marginH
-		for _, val2 := range val {
-			pdf.Rect(x, y, colWd, maxHt+cellGap+cellGap, "D")
-			cellY := y + cellGap //+ (maxHt-val2.Height)/2
-			for _, oneVal := range val2.List {
-				pdf.SetXY(x+cellGap, cellY)
-				pdf.CellFormat(colWd-cellGap-cellGap, lineHt, string(oneVal), "", 0, val2.Direction, false, 0, "")
-				cellY += lineHt
+		delete(tableData, 1) //because 2nd row ie. 1st index is width size
+		y := pdf.GetY()
+		sortedKeys := getSortedKeys()
+		for _, itr := range sortedKeys {
+			val := tableData[itr]
+			if itr == 0 {
+				pdf.SetFont("Arial", "B", fontSize)
+			} else {
+				pdf.SetFont("Arial", "", fontSize)
 			}
-			x += colWd
+			maxHt := lineHt
+			for key, val2 := range val {
+				newStr := strings.Split(val2.Text, `\n`)
+				str2 := strings.Join(newStr, "\n")
+				val2.List = pdf.SplitLines([]byte(str2), ColWdArray[key]-cellGap-cellGap)
+				val2.Height = float64(len(val2.List)) * lineHt
+				if val2.Height > maxHt {
+					maxHt = val2.Height
+				}
+			}
+			//This code is for merging cells
+			x := marginH
+			for key, val2 := range val {
+				pdf.Rect(x, y, ColWdArray[key], maxHt+cellGap+cellGap, "D")
+				cellY := y + cellGap //+ (maxHt-val2.Height)/2
+				for _, oneVal := range val2.List {
+					pdf.SetXY(x+cellGap, cellY)
+					pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, val2.Direction, false, 0, "")
+					cellY += lineHt
+				}
+				x += ColWdArray[key]
+			}
+			y += maxHt + cellGap + cellGap
 		}
-		y += maxHt + cellGap + cellGap
+		pdf.Ln(ht)
+		for key, _ := range tableData {
+			delete(tableData, key)
+		}
+	} else {
+		panic("Cannot render table no column size found on Row No 2 index 1 found")
 	}
+}
+
+func getSortedKeys() []int {
+	keys := make([]int, 0)
+	for key, _ := range tableData {
+		keys = append(keys, key)
+	}
+	sort.Ints(keys)
+	return keys
 }
