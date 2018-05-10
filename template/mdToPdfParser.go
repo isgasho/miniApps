@@ -195,7 +195,7 @@ func renderTable() {
 		x := marginH
 		for _, val2 := range val {
 			pdf.Rect(x, y, colWd, maxHt+cellGap+cellGap, "D")
-			cellY := y + cellGap + (maxHt-val2.Height)/2
+			cellY := y + cellGap //+ (maxHt-val2.Height)/2
 			for _, oneVal := range val2.List {
 				pdf.SetXY(x+cellGap, cellY)
 				pdf.CellFormat(colWd-cellGap-cellGap, lineHt, string(oneVal), "", 0, val2.Direction, false, 0, "")
