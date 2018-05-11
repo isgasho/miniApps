@@ -1,16 +1,14 @@
-**VRPL:{{.MachineType}}:REN:AMC:{{.BankName}}:0318:001**                                         **Date:{{.Date}}**
+**VRPL:{{.Quotation.Region}}:{{.Quotation.MachineType}}:REN:AMC:{{.Quotation.BankName}}:{{.MonthYear}}:{{.Quotation.RefNo}}**                                         **Date:{{.Date}}**
 <br/>                           
-{{.Address}}
+{{.Quotation.Address}}
 
 Dear Sir,
 
+**Sub: Renewal offer For Comphrensive Annual Maintenance Contract For Your Currency Counting/ Detecting Machines ({{machineNames .Quotation.Machines}})**
 
+This is in connection with the above said contract, we would like to inform you that your AMC period has completed on **{{.Quotation.ExpiryDate}}**
 
-**Sub: Renewal offer For Comphrensive Annual Maintenance Contract For Your Currency Counting/ Detecting Machines ( Model- Robomak Floor )**
-
-This is in connection with the above said contract, we would like to inform you that your AMC period has completed on **{{.ExpiryDate}}**
-
-In this connection, we have enclosed herewith **A.M.C.** contract offer letter effective from **Date: {{.Period}}** for your kind consideration and confirmation.
+In this connection, we have enclosed herewith **A.M.C.** contract offer letter effective from **Date: {{.Quotation.Period}}** for your kind consideration and confirmation.
 
 **Hope Our above offer is in line with your requirement.**
 
@@ -24,6 +22,7 @@ Yours faithfully,
 
 For, **Veb Robomak (P) Ltd.**
 
+<br/>
 
 **Authorized Signatory**
 
@@ -68,15 +67,15 @@ etc. not originally included in the contract. Repairs of malfunctioning or damag
 
 **Contract Details:**
 
-Contract Period: **{{.Period}}**
+Contract Period: **{{.Quotation.Period}}**
 
 Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
 ----------|----|-------|--------------|---|---------|
 55,L|25,L|30,R|25,R|15,L|25,R|
-{{- range .Machines}}
-{{.Model}}|{{.Rate}}|{{.GstInt}}|{{totWithTax .GstInt .RateInt}}|{{.Qty}}|{{totAmt .GstInt .RateInt .QtyInt}}|
+{{- range .Quotation.Machines}}
+{{.Model}}|{{.Rate}}|{{.Gst}}|{{.TotalWithTax}}|{{.Qty}}|{{.Total}}|
 {{- end}}
-GrandTotal|||||{{.Total}}|
+GrandTotal|||||{{.Quotation.Total}}|
 
 
 <br/>
@@ -86,7 +85,7 @@ GrandTotal|||||{{.Total}}|
 Payment Bank Details|A/c Name: Veb Robomak Pvt. Ltd.\nBank Name: SBI\nBranch: Old Padra Road\nA/C No: 33778781620\nIFSC Code: SBIN0010687|
 -----------------------|----------------
 87,L|88,L|
-Payment Terms|{{.PaymentTerms}}|
+Payment Terms|{{.Quotation.PaymentTerms}}|
 
 <br/>
 Signed on Behalf of Institution                         Signed on Behalf of Veb Robomak Pvt Ltd
