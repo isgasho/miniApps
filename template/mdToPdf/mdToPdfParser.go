@@ -42,6 +42,7 @@ type MdtoPdf struct {
 	tableData             map[int][]*TableItem
 	paraDepth             int
 	fontSize              float64
+	fontStyle             string
 	pdf                   *gofpdf.Fpdf
 	liLevel               int
 	tableEnabled          bool
@@ -49,13 +50,14 @@ type MdtoPdf struct {
 	tableColumnIndex      int
 }
 
-func NewMdtoPdf(fontSize float64) *MdtoPdf {
+func NewMdtoPdf(fontSize float64, fontStyle string) *MdtoPdf {
 
 	newInst := &MdtoPdf{}
 	newInst.orderedListLevelCount = make(map[int]int)
 	newInst.orderedListLevelType = make(map[int]bool)
 	newInst.tableData = make(map[int][]*TableItem)
 	newInst.fontSize = fontSize
+	newInst.fontStyle = fontStyle
 	return newInst
 }
 
@@ -68,10 +70,10 @@ func (md *MdtoPdf) NewPdf(fileBytes []byte, outfileName string, footer string) e
 	})
 	md.ht = md.pdf.PointConvert(md.fontSize)
 	md.pdf.SetMargins(20, 75, 20)
-	md.pdf.SetFont("Arial", "", md.fontSize)
+	md.pdf.SetFont(md.fontStyle, "", md.fontSize)
 	md.pdf.SetFooterFunc(func() {
 		md.pdf.SetY(-15)
-		md.pdf.SetFont("Arial", "I", md.fontSize)
+		md.pdf.SetFont(md.fontStyle, "I", md.fontSize)
 		md.pdf.CellFormat(0, md.ht, footer, "", 0, "C", false, 0, "")
 	})
 	md.pdf.AddPage()
@@ -107,9 +109,9 @@ func (md *MdtoPdf) walker(node *bf.Node, entering bool) bf.WalkStatus {
 				md.tableData[md.tableRowIndex][md.tableColumnIndex].Bold = true
 				break
 			}
-			md.pdf.SetFont("Arial", "B", md.fontSize)
+			md.pdf.SetFont(md.fontStyle, "B", md.fontSize)
 		} else {
-			md.pdf.SetFont("Arial", "", md.fontSize)
+			md.pdf.SetFont(md.fontStyle, "", md.fontSize)
 		}
 	case bf.Paragraph:
 		if md.liLevel > 0 {
@@ -203,7 +205,7 @@ func (md *MdtoPdf) walker(node *bf.Node, entering bool) bf.WalkStatus {
 
 func (md *MdtoPdf) renderTable() {
 	md.pdf.Ln(md.ht)
-	marginH := 15.0
+	marginH := 20.0
 	lineHt := 5.5
 	cellGap := 2.0
 
@@ -229,9 +231,9 @@ func (md *MdtoPdf) renderTable() {
 		for _, itr := range sortedKeys {
 			val := md.tableData[itr]
 			if itr == 0 {
-				md.pdf.SetFont("Arial", "B", md.fontSize)
+				md.pdf.SetFont(md.fontStyle, "B", md.fontSize)
 			} else {
-				md.pdf.SetFont("Arial", "", md.fontSize)
+				md.pdf.SetFont(md.fontStyle, "", md.fontSize)
 			}
 			maxHt := lineHt
 			for key, val2 := range val {
@@ -249,7 +251,11 @@ func (md *MdtoPdf) renderTable() {
 				cellY := y + cellGap //+ (maxHt-val2.Height)/2 //if you need text vertically center
 				for _, oneVal := range val2.List {
 					md.pdf.SetXY(x+cellGap, cellY)
-					md.pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, AlignArray[key], false, 0, "")
+					if key == 0 {
+						md.pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, "L", false, 0, "")
+					} else {
+						md.pdf.CellFormat(ColWdArray[key]-cellGap-cellGap, lineHt, string(oneVal), "", 0, AlignArray[key], false, 0, "")
+					}
 					cellY += lineHt
 				}
 				x += ColWdArray[key]

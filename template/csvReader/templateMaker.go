@@ -38,14 +38,12 @@ type TemplateReader struct {
 	allQuotation map[string]*Quotation
 	keys         []string
 	cursor       int
-	MonthYear    string
 	Date         string
 }
 
-func NewTemplateReader(monthYear string, date string) *TemplateReader {
+func NewTemplateReader(date string) *TemplateReader {
 	inst := &TemplateReader{}
 	inst.allQuotation = make(map[string]*Quotation)
-	inst.MonthYear = monthYear
 	inst.Date = date
 	inst.cursor = -1
 	inst.keys = make([]string, 0)
@@ -101,8 +99,22 @@ func (t *TemplateReader) ReadCsv(filepath string) error {
 			oneMachine.Total = oneMachine.TotalWithTax * qty
 			oneQuoatation.Total += oneMachine.Total
 
-			strs := strings.Split(strings.Trim(oneQuoatation.Address, " "), "~")
+			strs := strings.Split(strings.Trim(oneQuoatation.Address, " "), "\n")
+			for index, _ := range strs {
+				strs[index] = strings.Replace(strs[index], "~", "", 0)
+				if index == 0 || index == 1 {
+					strs[index] = fmt.Sprintf("**%s**", strs[index])
+				}
+			}
 			oneQuoatation.Address = strings.Join(strs, "\n")
+			/*Region Modify*/
+			if strings.ToUpper(oneQuoatation.Region) == "BARODA" {
+				oneQuoatation.Region = "BRD"
+			} else if strings.ToUpper(oneQuoatation.Region) == "AHMEDABAD" {
+				oneQuoatation.Region = "AHD"
+			} else {
+				oneQuoatation.Region = "XYZ"
+			}
 
 			/*append one machine*/
 			oneQuoatation.Machines = append(oneQuoatation.Machines, oneMachine)
@@ -116,6 +128,7 @@ func (t *TemplateReader) ReadCsv(filepath string) error {
 		cnt++
 	}
 	//Reading Pass 2 i.e Read Additional Lines of the Quotation for M/c Details
+	fp.Seek(0, 0)
 	r = csv.NewReader(fp)
 	cnt = 0
 	for {
