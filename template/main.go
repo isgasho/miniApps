@@ -42,36 +42,19 @@ func main() {
 	quotatonDate := flag.String("qdate", "01-01-2000", "Quotation Date for generation")
 	flag.Parse()
 	initDirectory(*outputDirectory)
-	ncm, err := Asset("templates/COMP/REN/ncm.md")
+	ncm, err := Asset("templates/COMP/ncm.md")
 	if err != nil {
 		panic(err)
 	}
-	ccm, err := Asset("templates/COMP/REN/ccm.md")
+	ccm, err := Asset("templates/COMP/ccm.md")
 	if err != nil {
 		panic(err)
 	}
-	ccmNew, err := Asset("templates/COMP/NEW/ccm.md")
+	ncmNonc, err := Asset("templates/NONCOMP/ncm.md")
 	if err != nil {
 		panic(err)
 	}
-	ncmNew, err := Asset("templates/COMP/NEW/ncm.md")
-	if err != nil {
-		panic(err)
-	}
-
-	nNcm, err := Asset("templates/NONCOMP/REN/ncm.md")
-	if err != nil {
-		panic(err)
-	}
-	nCcm, err := Asset("templates/NONCOMP/REN/ccm.md")
-	if err != nil {
-		panic(err)
-	}
-	nCcmNew, err := Asset("templates/NONCOMP/NEW/ccm.md")
-	if err != nil {
-		panic(err)
-	}
-	nNcmNew, err := Asset("templates/NONCOMP/NEW/ncm.md")
+	ccmNonc, err := Asset("templates/NONCOMP/ccm.md")
 	if err != nil {
 		panic(err)
 	}
@@ -98,38 +81,6 @@ func main() {
 			return datesFmt(dtStr)
 		},
 	}
-	/*f1, err := os.Open("./templates/ncm.md")
-	if err != nil {
-		panic(err)
-	}
-	f2, err := os.Open("./templates/ccm.md")
-	if err != nil {
-		panic(err)
-	}
-	f3, err := os.Open("./templates/ccmNew.md")
-	if err != nil {
-		panic(err)
-	}
-	f4, err := os.Open("./templates/ncmNew.md")
-	if err != nil {
-		panic(err)
-	}
-	ncm, err := ioutil.ReadAll(f1)
-	if err != nil {
-		panic(err)
-	}
-	ccm, err := ioutil.ReadAll(f2)
-	if err != nil {
-		panic(err)
-	}
-	ccmNew, err := ioutil.ReadAll(f3)
-	if err != nil {
-		panic(err)
-	}
-	ncmNew, err := ioutil.ReadAll(f4)
-	if err != nil {
-		panic(err)
-	}*/
 
 	ncmTmpl, err := template.New("NCM").Funcs(funcMap).Parse(string(ncm))
 	if err != nil {
@@ -139,32 +90,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	ncmTmplNew, err := template.New("NCMNew").Funcs(funcMap).Parse(string(ncmNew))
+	ncmNonCTmpl, err := template.New("NCM").Funcs(funcMap).Parse(string(ncmNonc))
 	if err != nil {
 		panic(err)
 	}
-	ccmTmplNew, err := template.New("CCMNew").Funcs(funcMap).Parse(string(ccmNew))
+	ccmNonCTmpl, err := template.New("CCM").Funcs(funcMap).Parse(string(ccmNonc))
 	if err != nil {
 		panic(err)
 	}
-
-	nNcmTmpl, err := template.New("NCM").Funcs(funcMap).Parse(string(nNcm))
-	if err != nil {
-		panic(err)
-	}
-	nCcmTmpl, err := template.New("CCM").Funcs(funcMap).Parse(string(nCcm))
-	if err != nil {
-		panic(err)
-	}
-	nNcmTmplNew, err := template.New("NCMNew").Funcs(funcMap).Parse(string(nNcmNew))
-	if err != nil {
-		panic(err)
-	}
-	nCcmTmplNew, err := template.New("CCMNew").Funcs(funcMap).Parse(string(nCcmNew))
-	if err != nil {
-		panic(err)
-	}
-
 	csvRd := csvReader.NewTemplateReader(*quotatonDate)
 	err = csvRd.ReadCsv(*inputFile, *ignoreFirstLine)
 	if err != nil {
@@ -178,7 +111,7 @@ func main() {
 		var b bytes.Buffer
 		oneRecord := csvRd.GetRecord()
 		mixture.Quotation = oneRecord
-		if oneRecord.QuotationType == "REN" {
+		if oneRecord.QuotationType == "REN" || oneRecord.QuotationType == "NEW" {
 			if oneRecord.MachineType == "CCM" {
 				ccmTmpl.Execute(&b, mixture)
 			} else if oneRecord.MachineType == "NCM" {
@@ -186,25 +119,11 @@ func main() {
 			} else {
 				continue
 			}
-		} else if oneRecord.QuotationType == "NEW" {
+		} else if oneRecord.QuotationType == "RENNON" || oneRecord.QuotationType == "NEWNON" {
 			if oneRecord.MachineType == "CCM" {
-				ccmTmplNew.Execute(&b, mixture)
+				ccmNonCTmpl.Execute(&b, mixture)
 			} else if oneRecord.MachineType == "NCM" {
-				ncmTmplNew.Execute(&b, mixture)
-			} else {
-				continue
-			}
-		} else if oneRecord.QuotationType == "RENNON" {
-			if oneRecord.MachineType == "CCM" {
-				nCcmTmpl.Execute(&b, mixture)
-			} else if oneRecord.MachineType == "NCM" {
-				nNcmTmpl.Execute(&b, mixture)
-			}
-		} else if oneRecord.QuotationType == "NEWNON" {
-			if oneRecord.MachineType == "CCM" {
-				nCcmTmplNew.Execute(&b, mixture)
-			} else if oneRecord.MachineType == "NCM" {
-				nNcmTmplNew.Execute(&b, mixture)
+				ncmNonCTmpl.Execute(&b, mixture)
 			}
 		} else {
 			continue
