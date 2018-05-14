@@ -128,7 +128,7 @@ func (md *MdtoPdf) walker(node *bf.Node, entering bool) bf.WalkStatus {
 	case bf.Document:
 		break
 	case bf.HorizontalRule:
-		md.pdf.SetMargins(20, 30, 20)
+		md.pdf.SetMargins(20, 40, 20)
 		md.pdf.AddPage()
 	case bf.Text:
 		if md.liLevel > 0 {
