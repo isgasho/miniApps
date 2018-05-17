@@ -3,10 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"github.com/devarsh/miniApps/template/csvReader"
-	"github.com/devarsh/miniApps/template/envelope"
-	"github.com/devarsh/miniApps/template/mdToPdf"
-	//"io/ioutil"
+
 	"flag"
 	"os"
 	"path"
@@ -15,6 +12,10 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/devarsh/miniApps/template/csvReader"
+	"github.com/devarsh/miniApps/template/envelope"
+	"github.com/devarsh/miniApps/template/mdToPdf"
 )
 
 type Mixture struct {
@@ -159,10 +160,9 @@ func IndianCurrComma(amount string) string {
 	}
 	if len(firstPart) <= 3 {
 		if len(amounts) < 2 && secondPart == 0 {
-			return firstPart + "/-"
-		} else {
-			return firstPart + "." + amounts[1]
+			return firstPart + ".00"
 		}
+		return firstPart + "." + amounts[1]
 	}
 
 	bytes := []byte(firstPart)
@@ -188,10 +188,10 @@ func IndianCurrComma(amount string) string {
 		bytesout[i], bytesout[opp] = bytesout[opp], bytesout[i]
 	}
 	if len(amounts) < 2 || secondPart == 0 {
-		return string(bytesout) + "/-"
-	} else {
-		return string(bytesout) + "." + amounts[1]
+		return string(bytesout) + ".00"
 	}
+	return string(bytesout) + "." + amounts[1]
+
 }
 
 func datesFmt(dtStr string) string {

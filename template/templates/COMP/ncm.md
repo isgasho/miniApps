@@ -82,9 +82,12 @@ Contract Period: **{{datesFmt .Quotation.Period}}**
 
 Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
 ----------|----|-------|--------------|---|---------|
-50,L|30,R|25,R|30,R|15,L|25,R|
+50,L|30,R|25,R|30,R|14,L|32,R|
 {{- range .Quotation.Machines}}
 {{.Model}}|{{indianCurr .Rate}}|{{indianCurrF .Gst}}|{{indianCurrF .TotalWithTax}}|{{.Qty}}|{{indianCurrF .Total}}|
+{{- end}}
+{{- if .Quotation.RoundOff}}
+RoundOff|||||{{indianCurrF .Quotation.RoundOff}}|
 {{- end}}
 GrandTotal|||||{{indianCurrF .Quotation.Total}}|
 
@@ -99,14 +102,14 @@ Payment Bank Details|A/c Name: Veb Robomak Pvt. Ltd.\nBank Name: SBI\nBranch: Ol
 Payment Bank Details|A/c Name: Veb Robomak Pvt. Ltd.\nBank Name: SBI\nBranch: Polytechnic , Ahmedabad\nA/C No: 30956461892\nIFSC Code: SBIN0001043|
 {{- end}}
 -----------------------|----------------
-87,L|88,L|
+80,L|101,L|
 Payment Terms|{{.Quotation.PaymentTerms}}|
 
 <br/>
-Signed on Behalf of Institution              Signed on Behalf of Veb Robomak Pvt Ltd
+Signed on Behalf of Institution                Signed on Behalf of Veb Robomak Pvt Ltd
 
 <br/>
 
-**Authorized Signature & Stamp.**         **Authorized Signature & Stamp.**
+**Authorized Signature & Stamp.**           **Authorized Signature & Stamp.**
 
-**Date:**                                                     **Date: {{datesFmt .Date}}**
+**Date:**                                                       **Date: {{datesFmt .Date}}**

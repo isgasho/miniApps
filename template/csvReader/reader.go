@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"sort"
 	"strconv"
@@ -22,6 +23,7 @@ type Quotation struct {
 	Machines      []*MachineDetails
 	PaymentTerms  string
 	Total         float64
+	RoundOff      float64
 	QuotationType string
 }
 
@@ -177,6 +179,12 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 			t.allQuotation[oneMachine.SrNo].Machines = append(t.allQuotation[oneMachine.SrNo].Machines, oneMachine)
 		}
 		cnt++
+	}
+	for _, oneQ := range t.allQuotation {
+		roundVal := math.Round(oneQ.Total)
+		calDiff := roundVal - oneQ.Total
+		oneQ.RoundOff = calDiff
+		oneQ.Total = roundVal
 	}
 	sort.Strings(t.keys)
 	return nil
