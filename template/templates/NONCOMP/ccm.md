@@ -1,8 +1,8 @@
 **Date:**{{datesFmt .Date}}
 <br/>
-{{- if eq .Quotation.QuotationType "NEW"}} 
+{{- if eq .Quotation.QuotationType "NEWNON"}} 
 **REF:**VRPL:{{.Quotation.Region}}:{{.Quotation.MachineType}}:NEW:AMC:{{.Quotation.RefNo}}
-{{- else if eq .Quotation.QuotationType "REN"}}
+{{- else if eq .Quotation.QuotationType "RENNON"}}
 **REF:**VRPL:{{.Quotation.Region}}:{{.Quotation.MachineType}}:REN:AMC:{{.Quotation.RefNo}}
 {{- else}}
 **REF:**No Refrence Found For this Quotation Type
@@ -12,13 +12,13 @@
 
 Dear Sir,
 
-{{- if eq .Quotation.QuotationType "NEW"}}
+{{- if eq .Quotation.QuotationType "NEWNON"}}
 **Sub: Offer for Non Comphrensive Annual Maintenance Contract for Your Currency Counting/ Detecting Machines ({{machineNames .Quotation.Machines}})**
 
 We take privilege to introduce our self as a leading Manufacturer and Maintenance House. For past three decades we have been providing services in Nationalized Banks, Co-operative Banks and Corporate. We are supplying Note Counting Machines and providing maintenance services for the same and other brands as well.
 
 In this connection we are please to submit our fresh annual maintenance contract for your Note Counting Machine for your kind consideration.
-{{- else if eq .Quotation.QuotationType "REN"}}
+{{- else if eq .Quotation.QuotationType "RENNON"}}
 **Sub: Renewal offer for Non Comphrensive Annual Maintenance Contract for Your Currency Counting/ Detecting Machines ({{machineNames .Quotation.Machines}})**
 
 This is in connection with the above said contract, we would like to inform you that your AMC period has completed on **{{.Quotation.ExpiryDate}}**

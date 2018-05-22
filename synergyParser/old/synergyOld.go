@@ -8,15 +8,23 @@ Password:- 5alD_PlbOVu3-
 package main
 
 import (
+	"flag"
 	"fmt"
-	"github.com/fatih/color"
-	"golang.org/x/net/publicsuffix"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"os"
+	"path"
 	"strings"
 	"time"
+
+	"encoding/csv"
+	"errors"
+
+	"github.com/devarsh/miniApps/synergyParser/utils"
+	"github.com/fatih/color"
+	"golang.org/x/net/publicsuffix"
 )
 
 var (
@@ -24,16 +32,21 @@ var (
 	loginUrl         = "https://synergy.wipro.com/synergy/LoginServlet"
 	invoicesUrl      = "https://synergy.wipro.com/synergy/CN_AgencyInvoicesView.jsp"
 	invoiceDetailUrl = "https://synergy.wipro.com/synergy/CN_AgencyInvoiceSingleView.jsp?hSelectedPartner=%s&hSelectedInvoiceNumber=%s&hSelectedInvoiceStatus=PARKED"
-	usernameG        = "13618"
-	passwordG        = "5alD_PlbOVu3-"
+	usernameG        = ""
+	passwordG        = ""
+	month            = ""
+	year             = ""
+	filePath         = ""
 )
 
 var client *http.Client
+var proxy *utils.Proxy
+var uas *utils.UA
 
 func getHeaders(init bool, cookieString string) http.Header {
 	customHeader := http.Header{}
 	customHeader.Add("upgrade-insecure-requests", "1")
-	customHeader.Add("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
+	customHeader.Add("user-agent", uas.GetRndUserAgent())
 	customHeader.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
 	customHeader.Add("dnt", "1")
 	customHeader.Add("accept-encoding", "gzip, deflate, br")
@@ -56,8 +69,32 @@ func appendCookies(cookies string, cookiesArray []*http.Cookie) string {
 	return cookies
 }
 
+func _init_() {
+	proxy = utils.NewProxy(5)
+	color.Magenta("Fetching Proxy list")
+	proxy.LoadProxies()
+	color.Magenta("Ranking Proxies")
+	proxy.RankProxy()
+	color.Magenta("Setting up User Agents")
+	uas = utils.NewRandomUA()
+	uas.LoadDummyUserAgents()
+}
+
 func main() {
+	username := flag.String("username", "13618", "Enter login username")
+	password := flag.String("password", "5alD_PlbOVu3-", "Enter Login password")
+	yearStr := flag.String("year", "2018", "Year for which you want to fetch invoices")
+	monthInt := flag.Int("month", 3, "Moth for which you want to fetch invoices i.e 1 - Janurary, 2 February")
+	outFilePath := flag.String("path", "./", "outfile path")
+	flag.Parse()
+	usernameG = *username
+	passwordG = *password
+	year = *yearStr
+	filePath = *outFilePath
+	monthStr := time.Month(*monthInt)
+	month = monthStr.String()
 	color.Magenta("......Start.....")
+	_init_()
 	client = initClient()
 	cookies, err := loadPage()
 	if err != nil {
@@ -72,20 +109,32 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	err = fetchAllSingleInvoice(invoices, cookies)
+	allInvoices, err := fetchAllSingleInvoice(invoices, cookies)
 	if err != nil {
 		panic(err)
 	}
-
+	err = writeInvoicesToCsv(allInvoices)
+	if err != nil {
+		panic(err)
+	}
+	err = writeInvoicesOneAtAtATimeToCsv(allInvoices)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func initClient() *http.Client {
+	proxyAdr := proxy.GetProxy()
+	color.Magenta("New Proxy Setup :", proxyAdr.ToString())
+
+	color.Magenta("Setting Up Http Client")
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	if err != nil {
 		panic(err)
 	}
-	proxyUrl, err := url.Parse(fmt.Sprintf("http://%s:%s", "51.15.86.88", "3128"))
-	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+	host := fmt.Sprintf("%s:%s", proxyAdr.Ip, proxyAdr.Port)
+	urlProxy := &url.URL{Host: host}
+	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
 	return &client
 }
 
@@ -140,9 +189,9 @@ func performLogin(cookies string) (bool, error) {
 func fetchInvoicesList(cookies string) ([]string, error) {
 	form := url.Values{}
 	form.Add("PageNo", "1")
-	form.Add("RecordsPerPage", "30")
-	form.Add("selectMonth", "February")
-	form.Add("selectYear", "2018")
+	form.Add("RecordsPerPage", "200")
+	form.Add("selectMonth", month)
+	form.Add("selectYear", year)
 	form.Add("selectStatus", "NONE")
 	form.Add("InvoiceNumber", "NONE")
 
@@ -167,30 +216,134 @@ func fetchInvoicesList(cookies string) ([]string, error) {
 	return invoices, nil
 }
 
-func fetchAllSingleInvoice(invoices []string, cookies string) error {
+func fetchAllSingleInvoice(invoices []string, cookies string) (map[string]AllEmployeeDetails, error) {
 	startTime := time.Now()
+	allInvocies := make(map[string]AllEmployeeDetails)
 	for _, oneInvoice := range invoices {
 		url := fmt.Sprintf(invoiceDetailUrl, usernameG, oneInvoice)
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		res, err := client.Do(req)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		color.Green("Get Single Invoice Detail For Invoice No:%s\nGET %s\nTime Taken:%s\n", oneInvoice, url, time.Since(startTime))
 		defer res.Body.Close()
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		responseStr := string(body)
 		oneInvoiceEmps := FetchInvoiceDetail(responseStr)
-		for _, oneEmp := range *oneInvoiceEmps {
-			fmt.Println(oneEmp)
+		allInvocies[oneInvoice] = oneInvoiceEmps
+	}
+	return allInvocies, nil
+}
+
+func writeInvoicesToCsv(invoices map[string]AllEmployeeDetails) error {
+	records := make([][]string, 0)
+	headerRecord := []string{
+		"InvoiceNumber", "EmployeeName", "EmployeeId", "InvoiceMonth",
+		"InvoiceYear", "PeriodFrom", "PeriodTo", "WorkingDuration",
+		"ContractorRate", "InvoiceAmount",
+	}
+	records = append(records, headerRecord)
+	for invoiceNo, invoiceDtl := range invoices {
+		if invoiceDtl == nil {
+			return errors.New("empty invoice found in invoices map")
 		}
-		return nil
+		for _, oneEmp := range invoiceDtl {
+			if oneEmp == nil {
+				return errors.New("empty Employees dtl found invoice detail")
+			}
+			oneRecord := []string{
+				invoiceNo,
+				oneEmp.EmployeeName,
+				oneEmp.EmployeeId,
+				oneEmp.InvoiceMonth,
+				oneEmp.InvoiceYear,
+				oneEmp.PeriodFrom,
+				oneEmp.PeriodTo,
+				oneEmp.WorkingDuration,
+				oneEmp.ContractorRate,
+				oneEmp.InvoiceAmount,
+			}
+			records = append(records, oneRecord)
+		}
+	}
+	finalFilePath := path.Join(filePath, "./allInvoices.csv")
+	color.Cyan("Creating File for all Invoices: %s", finalFilePath)
+	fs, err := os.Create(finalFilePath)
+	if err != nil {
+		fmt.Println("error creating file")
+		return err
+	}
+	w := csv.NewWriter(fs)
+	for _, record := range records {
+		if err := w.Write(record); err != nil {
+			fmt.Println("error writing to the file", err)
+			return err
+		}
+	}
+	w.Flush()
+	if err := w.Error(); err != nil {
+		fmt.Println("error writing to file", err)
+		return err
+	}
+	color.Cyan("Done creating file....")
+	return nil
+}
+
+func writeInvoicesOneAtAtATimeToCsv(invoices map[string]AllEmployeeDetails) error {
+	if invoices == nil {
+		return errors.New("Oops no data in invoices map")
+	}
+	mapOfAllInvoicesRecrods := make(map[string][][]string)
+	for invoiceNo, OneInvoices := range invoices {
+		if OneInvoices == nil {
+			return errors.New("oops no employee daa in invoices map")
+		}
+		records := make([][]string, 0)
+		headerRecord := []string{"Name (EID)", "From", "To", "Days", "Amt"}
+		records = append(records, headerRecord)
+		for _, oneEmp := range OneInvoices {
+			oneRecord := []string{
+				oneEmp.EmployeeName,
+				oneEmp.PeriodFrom,
+				oneEmp.PeriodTo,
+				oneEmp.WorkingDuration,
+				oneEmp.InvoiceAmount,
+			}
+			records = append(records, oneRecord)
+			oneRecord = []string{"( " + oneEmp.EmployeeId + " )", "", "", "", ""}
+			records = append(records, oneRecord)
+		}
+		mapOfAllInvoicesRecrods[invoiceNo] = records
+	}
+	for invoiceNumber, invoiceLines := range mapOfAllInvoicesRecrods {
+		finalFilePath := path.Join(filePath, fmt.Sprintf("Synergy-%s-%s-%s.csv", invoiceNumber, month, year))
+		color.Cyan("Creating File %s", finalFilePath)
+		fs, err := os.Create(finalFilePath)
+		if err != nil {
+			fmt.Println("error creating file")
+			return err
+		}
+		w := csv.NewWriter(fs)
+		for _, record := range invoiceLines {
+			if err := w.Write(record); err != nil {
+				fmt.Println("oops error writing to file", err)
+				return err
+			}
+		}
+		w.Flush()
+		if err := w.Error(); err != nil {
+			fmt.Println("error writing to file", err)
+			return err
+		}
+		color.Cyan("Done creating file %s", finalFilePath)
+
 	}
 	return nil
 }

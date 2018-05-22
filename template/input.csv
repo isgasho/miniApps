@@ -1,27 +1,968 @@
 SR NO,REGION,MACHINE,REF NO,ADDRESS,EXPIRY DATE,PERIOD 1,Payment Terms,MODEL,RATE,QTY,TYPE,STATUS
-1,BARODA,NCM,,"The Branch Manager~
-State Bank of India~
-Mandvi Main Branch~
-",3/31/2018,1-4-18 to 31-3-19,,ROBOMAK T.T,4000,6,REN,ALREADY PRINTED
-1,,,,,,,,KORES KASHMAN II,4500,1,REN,
-1,,,,,,,,ROBOMAK FLOOR,4500,1,REN,
-2,AHMEDABAD,NCM,,"The Branch Manager~
-State Bank Of India~
-Somnath IE Branch~
-Daman. (UT)~
+16,AHMEDABAD,CCM,012/0518,"The Branch Manager~
+Bank of Baroda~
+Bopal Branch~
+Shri Hari House~
+5, Vraj Vihar Society~
+Bopal~
+Ahmedabad-380058.~
+Tel: 02717-230531.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+17,AHMEDABAD,NCM,013/0518,"The Branch Manager~
+Bank of Baroda~
+Bopal Branch~
+Shri Hari House~
+5, Vraj Vihar Society~
+Bopal~
+Ahmedabad-380058.~
+Tel: 02717-230531.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Methodex Floor,3500,1,REN,
+18,AHMEDABAD,CCM,014/0518,"
+The Branch Manager~
+Central Bank of India~
+Bhupendra Road Branch~
+Shaligram Complex~
+Bhupendra Road~
+Rajkot~
+Mo: 9427564456.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+19,AHMEDABAD,CCM,016/0518,"
+The Branch Manager~
+Union Bank Of India~
+Sidhpur  Branch~
+Near Old Tower~
+Municipal Building~
+Station Road~
+Ta:-Sidhpur~
+Dist:-Patan-384151~
 
-",3/31/2018,1-4-18 to 31-3-19,,BRADMA CHIHUA,4500,1,NEW,
-2,,,,,,,,METHODEX SYS FLOOR,4500,1,REN,
-2,,,,,,,,ROBOMAK T.T,4000,2,REN,
-3,BARODA,CCM,,"The Branch Manager~
-State Bank of India~
-Mandvi Main Branch~
-",3/31/2018,1-4-18 to 31-3-19,,ROBOMAK T.T,24034.3,1,REN,
-4,BARODA,NCM,,"The Branch Manager~
-State Bank Of India~
-Somnath IE Branch~
-Daman. (UT)~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+20,AHMEDABAD,CCM,017/0518,"The Branch Manager~
+Central Bank of India~
+Dehmai Branch~
+Dehmai - 383330~
+Ta : Bayad~
+Dist : Sabarkantha~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+21,AHMEDABAD,NCM,018/0518,"
+The Branch Manager~
+Central Bank of India~
+Unjha Branch~
+Patel Building~
+Station Road~
+Unjha.~
+Dist: Mehsana ~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Infres Floor,2500,1,REN,
+22,AHMEDABAD,CCM,019/0518,"
+The Branch Manager~
+Citizen Co Opp Bank Ltd~
+Morbi Branch~
+Kharakuva~
+Sardar Road~
+Morbi - 363642~
 
-",3/31/2018,1-4-18 to 31-3-19,,BRADMA CHIHUA,4500,1,NEWNON,
-4,,,,,,,,METHODEX SYS FLOOR,4500,1,REN,
-4,,,,,,,,ROBOMAK T.T,4000,2,REN,
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+23,AHMEDABAD,NCM,020/0518,"The Branch Manager~
+Bank of India ~
+Sabarmati Branch~
+Near Pukhraj Hospital~
+Ramnagar~
+Sabarmati~
+Ahmedabad.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Albertson Floor,3500,3,REN,
+24,AHMEDABAD,CCM,021/0518,"
+The Branch Manager~
+State Bank of India ~
+University Campus Area Branch~
+Lajpatnagar~
+University Campus Area~
+Ahmedabad-380014.~
+Tel: 079-26402192.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,2,REN,
+25,AHMEDABAD,CCM,022/0518,"The Branch Manager~
+State Bank of India~
+Theba Branch~
+Via: Dhuva.~
+Theba-361120.~
+Dist: Jamnagar.~
+Tel: 0288-2570321.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+26,AHMEDABAD,CCM,023/0518,"The Branch Manager~
+State Bank of India~
+Science City Branch~
+3-4-5, Maurya Times Square Complex~
+Opp. R.K.Hall~
+Science City Road~
+Ahmedabad.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+27,AHMEDABAD,CCM,024/0518,"The Branch Manager~
+State Bank of India~
+Ramdevnagar Branch~
+Palak-2, Opp. Shreeji Enclave~
+Anandnagar Ramdevnagar Road~
+Ahmedabad-380015~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+28,AHMEDABAD,CCM,025/0518,"The Branch Manager~
+State Bank of India~
+M.G.Road Branch~
+Mahatma Gandhi Road~
+Gondal-360311.~
+Dist: Rajkot.~
+Tel: 02825-220086.~
+Mo: 7600036262.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,2,REN,
+29,AHMEDABAD,CCM,026/0518,"The Branch Manager~
+State Bank of India~
+Chandlodia Branch~
+Silverstar Complex~
+Near Chandlodia Overbridge~
+Ahmedabad-382481.~
+Tel: 079-27606092~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+30,AHMEDABAD,CCM,027/0518,"The Branch Manager~
+State Bank of India~
+Barwala Branch~
+Khamidana Gate~
+Barwala(Ghelasha)-382450~
+Dist : Ahmedabad.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+31,AHMEDABAD,CCM,028/0518,"The Branch Manager~
+Nabros Transport Pvt.Ltd~
+D-1201, Titanim Square~
+Thaltej Cross Road , S G Road~ Ahmedabad - 380054~Mob: 8511140381 / 8511140382~",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,2500,1,REN,
+32,AHMEDABAD,CCM,029/0518,"The Branch Manager~
+Central Bank of India~
+Paldi Branch~
+Mahalaxmi Society Corner~ 
+Paldi, Ellis Bridge~ 
+Ahmedabad.~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3000,1,REN,
+33,AHMEDABAD,CCM,031/0518,"The Branch Manager~
+Bank of Baroda~
+Panchkuva Branch~
+Opp. Panchkuva Darwaja~
+Panchkuva~
+Ahmedabad.~
+Tel: 079-22142346~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+34,AHMEDABAD,CCM,032/0518,"The Branch Manager~
+BANK OF BARODA~
+MASKATI MARKET BRANCH~
+Sakar Bazzar~
+Maskati Market~
+Kalupur~
+Ahmedabad 380002~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+35,AHMEDABAD,CCM,033/0518,"The Manager~
+Gallantt Metal Ltd~
+Survey No:175/1~
+Village: Samakhiali~
+Ta: Bhachau~
+Dist: Kutch~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,2500,1,REN,
+36,AHMEDABAD,CCM,034/0518,"The Branch Manager~
+State Bank of India~
+Anandnagar Branch~
+The Grand Monarch~
+Anandnagar Road~
+Ahmedabad-380015~
+Tel: 079-26765522~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+37,AHMEDABAD,CCM,035/0518,"The Branch Manager~
+State Bank of India~
+Bhuyangdev Char Rasta Branch~
+A-7, C.P.Nagar Society Part-I~
+Bhuyangdev Cross Road~
+Bhuyangdev~
+Ahmedabad-380052~
+Mo: 7600041201~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+38,AHMEDABAD,NCM,037/0518,"The Branch Manager~
+State Bank of India~
+Galaxy Chowk Dhoraji Branch~
+Galaxy Chowk~
+Porbandar Road~
+Dhoraji~
+Dist: Rajkot~
+Tel: 02824-221885~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Bradma Floor,4500,1,REN,
+39,AHMEDABAD,NCM,038/0518,"The Branch Manager~
+State Bank of India~
+Surajpar Branch~
+Bharapar~
+Ta: Bhuj~
+Dist: Kutch~
+Tel: 02832-285307~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,4500,1,REN,
+40,AHMEDABAD,NCM,039/0518,"The Branch Manager~
+State Bank of India~
+Nani Chirai Branch~
+C/o. Plastine India Ltd~
+Survey No: 317/1~
+Nani Chirai-370140~
+Ta: Bhachau~
+Dist: Kutch~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,4500,1,REN,
+41,AHMEDABAD,NCM,040/0518,"Union Bank Of India~
+Sardarnagar Branch~
+Shop No. 147, 164, 165, 166~
+Main Bazar, Opposite Garden~
+Sardanagar, Sindhi Colony~
+Ahmedabad~                                     Gujarat 382475~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Sinic Floor,5000,1,REN,
+42,AHMEDABAD,NCM,041/0518,"The Branch Manager~
+State Bank of India~
+Gamph Branch~
+Gamph-382460~
+Ta: Dhandhuka~
+Dist: Ahmedabad~
+Tel: 02713-231181~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,4500,1,REN,
+43,AHMEDABAD,NCM,042/0518,"The Branch Manager~
+State Bank of India~
+Jail Road Gondal Branch~
+Jail Road, Gundala Gate~
+Gondal-360311~
+Dist: Rajkot~
+Tel: 02825-221546~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Bradma Desktop,4500,2,REN,
+44,AHMEDABAD,NCM,043/0518,"The Branch Manager~
+State Bank of India~
+Ranjit Road Branch~
+Ranjit Road~
+Jamnagar~
+Tel: 0288-2676683~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak,4500,1,REN,
+44,,,,,,,Annually,Bradma,4500,1,REN,
+44,,,,,,,Annually,Supertech,4500,1,REN,
+45,AHMEDABAD,NCM,044/0518,"The Branch Manager~
+Central Bank of India~
+Sahijpur Bogha Branch~
+Near sahijpur Post Office~
+Naroda Road~
+Ahmedabad-380045~
+Tel: 079-22821341~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,4500,1,REN,
+46,AHMEDABAD,NCM,045/0518,"The Branch Manager~
+Central Bank of India~
+Sahijpur Bogha Branch~
+Near sahijpur Post Office~
+Naroda Road~
+Ahmedabad-380045~
+Tel: 079-22821341~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Bradma Floor,5500,1,REN,
+47,AHMEDABAD,NCM,046/0518,"The Branch Manager~
+State Bank of India~
+Bagathala Branch~
+Bhaktinagar circle~
+Near Morvi Bypass Road~
+Morvi 363641~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Kores Floor,4500,1,REN,
+48,AHMEDABAD,NCM,047/0518,"The Branch Manager
+State Bank of India
+Dhandhuka Branch
+Station Road, 
+Dhandhuka-382460.
+Dist: Ahmedabad.
+Tel: 02713-222321.
+
+
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,4500,2,REN,
+49,AHMEDABAD,NCM,048/0518,"The Branch Manager~
+UNION BANK OF INDIA~
+Lokhand Bazar~
+Post Box No. 17~ 
+Bhavnagar~
+Gujarat, Pin - 364 001`
+(0278)-2517015,2423126~
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Bradma Floor,5000,1,REN,
+50,AHMEDABAD,NCM,049/0518,"The Branch Manager
+Union Bank of India
+Madhapar Branch
+Near Gram Panchayat,
+Nava Vas,
+Madhapar-370020.
+Dist: Kutch.
+Tel: 02832-241781
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Floor,5000,1,REN,
+51,AHMEDABAD,NCM,050/0518,"The Branch Manager
+Union Bank of India
+Dhrangadhra Branch
+Liyawala Bunglows,
+Near Navyug Cinema,
+Dhrangadhra.
+Dist: Surendranagar.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Infres Desktop,5000,1,REN,
+52,AHMEDABAD,NCM,051/0518,"The Branch Manager
+State Bank of India
+Ranjitpara Branch
+Shreejikrupa,
+Ashapura Chowk,
+Bhanvad-360510.
+Dist: Jamnagar
+Tel: 02896-232456.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Robomak Desktop,4500,1,REN,
+53,AHMEDABAD,CCM,052/0518,"The Branch Manager
+State Bank of India
+Dholera Branch
+Dholera-382455.
+Dist: Ahmedabad.
+Mo: 7600042026.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
+54,AHMEDABAD,NCM,053/0518,"The Branch Manager 
+Bank of Baroda
+Savgadh Branch
+Z Crown,
+RTO to Mehtapura Road,,
+Panpur Patiya, Savgadh-383001.
+Ta: Himatnagar.
+Dist: Sabarkantha.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Bradma Floor,2750,1,REN,
+55,AHMEDABAD,CCM,054/0518,"The Branch Manager
+State Bank of India
+Ranjitpara Branch
+Shreejikrupa,
+Ashapura Chowk,
+Bhanvad-360510.
+Dist: Jamnagar
+Tel: 02896-232456.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Half Yearly,Maxsell 50i,3000,1,REN,
+56,AHMEDABAD,CCM,055/0518,"
+The Branch Manager
+State Bank of India
+Bagathala Branch,
+Bhaktinagar circle,
+Near Morvi Bypass Road,
+Morvi 363641
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,1500,1,Ren N ,
+57,AHMEDABAD,CCM,056/0518,"The Branch Manager 
+State Bank of India
+Panch Pipla Branch 
+Panch Pipla � 360370
+TA : Jetpur,
+Dist : Rajkot
+Tel No : (02823)282361.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,Ren,
+58,AHMEDABAD,CCM,057/0518,"The Branch Manager
+State Bank of India
+Thakkarbapanagr Branch
+Nr. Bajarang Ashram,
+Thakkarbapanagar,
+Ahmedabad-382350.
+Tel: 079-22733993
+",30/Apr/2018,1-5-2018 to 30-4-2019,Half Yearly,Maxsell 50i,3500,1,Ren,
+59,AHMEDABAD,CCM,058/0518,"The Branch Manager
+State Bank of India
+Udhyognagar Branch
+Opp. Modha Vidhyalaya,
+Narsang Tekri, Udhyognagar,
+Porbandar-360577.
+Tel: 0286-251515.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Half Yearly,Maxsell 50i,3500,2,Ren,
+60,AHMEDABAD,NCM,059/0518,"
+The Branch Manager
+State Bank of India
+Thakkarbapanagr Branch
+Nr. Bajarang Ashram,
+Thakkarbapanagar,
+Ahmedabad-382350.
+Tel: 079-22733993.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Half Yearly,Robomak Floor,4500,1,Ren,
+61,AHMEDABAD,NCM,060/0518,"
+The Branch Manager
+State Bank of India
+Varjang Jalia Branch
+Varjang Jalia � 360490.
+Ta: Upleta.
+Dist: Rajkot.
+Tel: 02826-282160.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Quarterly,Robomak Floor,4500,1,Ren,
+62,AHMEDABAD,CCM,036/0518,"The Branch Manager
+State Bank of India 
+Sabarmati Branch
+Kabir Chowk,
+Sabarmati,
+Ahmedabad-380005.
+Tel: 079-27500683.
+",30/Apr/2018,1-5-2018 to 30-4-2019,Quarterly,Maxsell 50i,3500,3,Ren,
+63,BARODA,NCM,100/0518,"The Branch Manager,
+State Bank of India
+Harni Gam Branch,
+Near IOC petrol pump
+Baroda
+",31/8/2017,1/9/2017 to 31/8/18,Annually Advance,Kental Floor,4000,1,Ren,
+64,AHMEDABAD,NCM,061/0518,"The Branch Manager
+State Bank of India
+Amraiwadi Branch
+Near Nagarvel Hanuman Mandir,
+Rakhial,
+Ahmedabad.
+Tel: 079-22741787.",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3000,2,Ren,
+65,BARODA,NCM,012/0518,"The Branch Manager,
+State Bank of India
+Somnath � I.E. Branch,
+Dist. Valsad.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Chihua,4500,1,Ren,
+65,,,,,,,,Methodex Floor,4500,1,Ren,
+65,,,,,,,,Robomak T.T,4000,2,Ren,
+66,BARODA,NCM,013/0518,"The Branch Manager,
+State Bank of India
+Atladra Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS100,4000,1,Ren,
+67,BARODA,NCM,014/0518,"The Branch Manager,
+State Bank of India
+Gandevi Branch,
+Dist. Navsari.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+67,,,,,,,,Bradma Chihua,4500,1,Ren,
+68,BARODA,NCM,015/0518,"The Branch Manager,
+State Bank of India
+Sadhli Branch,
+Dist. Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+69,BARODA,NCM,016/0518,"The Branch Manager,
+State Bank Of India
+Bardoli Main branch,
+Dist. Surat.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+69,,,,,,,,Kores Floor,4500,1,Ren,
+69,,,,,,,,Robomak Floor,4500,2,Ren,
+70,BARODA,NCM,017/0518,"The Branch Manager,
+State Bank of India
+Salad Branch,
+Dist. Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+71,BARODA,NCM,018/0518,"The Branch Manager,
+State Bank of India
+Moti Daman Branch,
+U.T.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+71,,,,,,,,Bradma Chihua,4500,1,Ren,
+72,BARODA,NCM,019/0518,"The Branch Manager,
+State Bank of India
+Manjalpur Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4000,2,Ren,
+73,BARODA,NCM,020/0518,"The Branch Manager,
+State Bank of India
+V.I.P. Road Branch,
+Saptrishi Complex,
+Borsad,
+Anand Road Borsad,
+Anand,
+M-98980 24619
+M-98980 24684 ",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+73,,,,,,,,Robomak Floor,4500,1,Ren,
+74,BARODA,NCM,021/0518,"The Branch Manager,
+State Bank Of India
+Angadi branch,
+Post :Nepalpura
+Ta:Thasra
+Dist. Kheda
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Loose Counting,3057,1,Ren,
+75,BARODA,NCM,024/0518,"The Branch Manager,
+State Bank Of India
+Harni Road branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,4,Ren,
+75,,,,,,,,Robomak Floor,4500,1,Ren,
+76,BARODA,NCM,029/0518,"The Branch Manager,
+State Bank of India
+Chandod Branch,
+Dist. Baroda.
+",31/4/2018,1/5/2018 to 30/4/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+77,BARODA,NCM,030/0518,"The Manager
+Memdabad Urban Co-op Bank Ltd. 
+Head Office,
+Memdabad.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,RCSC-05HD,4000,1,Ren,
+78,BARODA,NCM,031/0518,"The Chief Manager,
+State Bank Of India
+Station Road Branch,
+Valsad.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,2,Ren,
+78,,,,,,,,Robomak T.T,4000,2,Ren,
+78,,,,,,,,Robomak Floor,4500,1,Ren,
+78,,,,,,,,Bradma Chihua,4500,1,Ren,
+79,BARODA,CCM,032/0518,"The Branch Manager,
+State Bank of India
+Padra Branch,
+Dist. Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3044,1,Ren,
+80,BARODA,NCM,033/0518,"The Branch Manager,
+State Bank of India
+Iskon Temple Road Branch, Gotri,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS150,4500,1,Ren,
+81,BARODA,NCM,034/0518,"The Branch Manager,
+State Bank of India
+Pratapnagar Branch,
+Dist. Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+82,BARODA,NCM,035/0518,"The Branch Manager,
+State Bank of India
+Siswa Branch,
+Tal. Borsad. Dist. Anand.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+83,BARODA,NCM,036/0518,"The Branch Manager,
+State Bank of India
+Tandalja Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,2,Ren,
+84,BARODA,NCM,037/0518,"The Branch Manager,
+State Bank of India
+Vrundavan Char Rasta Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,2,Ren,
+85,BARODA,CCM,098/0518,"The Branch Manager,
+State Bank of India
+Vrundavan Char Rasta Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3044,1,Ren,
+86,BARODA,NCM,038/0518,"The Branch Manager,
+State Bank of India
+Dediapada Branch,
+Dist. Bharuch.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS100,4000,1,Ren,
+87,BARODA,NCM,039/0518,"The Branch Manager,
+State Bank Of India
+Dungri branch,
+Dist. Valsad.
+",30/4/2018,1/5/2018 to 30/4/2019,Annually Advance,Godrej T.T,4000,1,Ren,
+88,BARODA,NCM,040/0518,"The Chief Manager
+State Bank Of India
+Jambusar Branch,
+Jambusar.
+",30/4/2018,1/5/2018 to 30/4/2019,Annually Advance,Sinic NS100,4000,3,Ren,
+88,,,,,,,,Bradma Chihua,4000,1,Ren,
+89,BARODA,NCM,041/0518,"The Branch Manager,
+State Bank of India
+Limdi Branch,
+Dahod
+",30/4/2018,1/5/2018 to 30/4/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+90,BARODA,NCM,042/0518,"The Branch Manager,
+State Bank Of India
+Kalol branch,
+Dist. Panchmahal.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+90,,,,,,,,Bradma Chihua,4500,1,Ren,
+90,,,,,,,,Robomak Floor,4500,2,Ren,
+91,BARODA,NCM,043/0518,"The Branch Manager,
+State Bank of India
+Vasna Road Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+92,BARODA,NCM,044/0518,"The Branch Manager,
+State Bank Of India
+Cambay branch,
+Dist. Anand.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4386,1,Ren,
+92,,,,,,,,Bradma Chihua,4386,1,Ren,
+92,,,,,,,,Bradma NT2000,4386,1,Ren,
+92,,,,,,,,Robomak Floor,4386,1,Ren,
+93,BARODA,NCM,045/0518,"The Branch Manager,
+State Bank of India
+Parivar Char Rasta Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,3898,2,Ren,
+94,BARODA,NCM,046/0518,"The Branch Manager,
+State Bank of India
+Akshar Chowk Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,3884,1,Ren,
+94,,,,,,,,Methodex Floor,4400,1,Ren,
+95,BARODA,NCM,047/0518,"The Branch Manager,
+State Bank of India
+Kaladarshan Char Rasta Branch,
+Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4385,1,Ren,
+96,BARODA,NCM,048/0518," 
+The Branch Manager,
+State Bank of India
+Nandesari Branch,
+Dist. Baroda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,3830,1,Ren,
+97,BARODA,NCM,049/0518,"The Branch Manager,
+State Bank Of India
+Hanuman Chawk - Dahod Branch,
+Dahod.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4386,1,Ren,
+99,BARODA,NCM,008/0518,"The Chief Manager,
+State Bank of India
+Sp. Comm.� Vapi Branch,
+Dist. Valsad.
+",31/3/2018,1/4/2018 to 31/3/2019,Half Yearly,Methodex Floor,2250,1,Ren,
+99,,,,,,,,Robomak Floor,2250,1,Ren,
+100,BARODA,NCM,007/0518,"The Branch Manager
+State Bank Of India
+Nirmali Branch,
+Ta: Kapdavanj
+Dist: Kheda.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+101,AHMEDABAD,NCM,008/0518,"The Branch Manager
+Bank of Baroda
+Kalyanpura Branch
+At & Post: Kalyanpura
+Dist: Mehsana-382165.
+Tel: 02764-271352.
+",31/01/2017,1/02/2017 to 31/01/2018,Annually Advance,Bradma Floor,2750,1,Ren,
+102,AHMEDABAD,NCM,015/0518,"The Branch Manager
+State Bank of India
+Amraiwadi Branch
+Near Nagarvel Hanuman Mandir,
+Rakhial,
+Ahmedabad.
+Tel: 079-22741787.",31/01/2018, 01/02/2018 to 31/01/2019,Annually Advance,Robomal Floor,4500,1,Ren,
+103,AHMEDABAD,CCM,0516/0518,"The Branch Manager
+Central Bank of India
+Gujarat Law Sociert Area Branch
+Ellisbridge,
+Ahmedabad.
+Tel: 079-26430536",5/31/2018,1/6/2018 to 31/5/2019,Annually Advance,Maxsell 50i,3000,1,New,
+104,AHMEDABAD,CCM,019/0518,"The Branch Manager
+Citizen Co Opp Bank Ltd
+Morbi Branch
+Kharakuva
+Sardar Road
+Morbi - 363642",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Maxsell 50i,3500,1,Ren,
+105,BARODA,NCM,022/0518,"The Branch Manager
+State Bank Of India
+Sucen Circle Branch
+Bhagat Colony
+Vadodara
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS150,4500,1,Ren,
+106,BARODA,NCM,028/0518,"The Branch Manager,
+State Bank of India
+Bansda Branch,
+Dist. Dang.
+Pin Code- 396 580",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Jay Enn FT600,4500,1,Ren,
+106,,,,,,,,Jay Enn DT150,4000,1,Ren,
+107,BARODA,NCM,051/0518,"The Branch Manager,
+State Bank of India
+Tankari Branch,
+Dist. Bharuch.
+Ta - Jambusar",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS100,4000,1,Ren,
+108,BARODA,NCM,052/0518,"The Branch Manager
+State Bank of India
+Air Force Station Branch,
+Vadodara.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS100,4000,1,Ren,
+109,BARODA,NCM,053/0518,"The Branch Manager,
+State Bank of India
+Gujarat Refinery Branch,
+Po: Jawaharnagar,Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CT3000,3884,1,Ren,
+109,,,,,,,,Bradma Chihua,4400,1,Ren,
+110,BARODA,NCM,055/0518,"The Branch Manager,
+State Bank Of India
+Halol Branch - 389 350
+Dist. Panchmahals.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Chihua,4500,1,Ren,
+111,BARODA,NCM,056/0518,"The Branch Manager,
+State Bank of India
+Mahij Branch,
+Above Dudh Utpadak Sahkari Mandli,Dist. Kheda.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+112,BARODA,NCM,057/0518,"The Branch Manager,
+State Bank of India
+Pratapnagar Branch,
+Ta: Nandod
+Dist. Bharuch Pin code-393140",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS100,3889,1,Ren,
+113,BARODA,NCM,058/0518,"The Branch Manager,
+State Bank Of India
+Muval branch,
+Dist. Baroda.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+113,,,,,,,,Robomal Floor,4284,1,Ren,
+114,BARODA,NCM,059/0518,"The Branch Manager,
+State Bank of India
+Dahej Branch,
+Dist. Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman,4000,3,Ren,
+115,BARODA,NCM,060/0518,"The Branch Manager,
+State Bank Of India
+Kheda branch,
+Kheda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,3,Ren,
+115,,,,,,,,Bradma Chihua,4500,1,Ren,
+116,BARODA,NCM,061/0518,"The Branch Manager,
+State Bank of India
+Ajwa Road Branch,
+Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+116,,,,,,,,Robomak Floor,4500,1,Ren,
+117,BARODA,NCM,062/0518,"The Branch Manager,
+State Bank of India
+Por Branch,
+Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+118,BARODA,CCM,062/0518,"The Branch Manager,
+State Bank of India
+Por Branch,
+Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3115,1,Ren,
+119,BARODA,NCM,063/0518,"The Branch Manager,
+State Bank of India
+Panoli Branch,
+Dist. Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+120,BARODA,NCM,064/0518,"The Branch Manager,
+State Bank Of India
+MukktiNagar Branch,
+Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+120,,,,,,,,Jay Enn FT600,4000,1,Ren,
+120,,,,,,,,Methodex T.T,4000,1,Ren,
+121,BARODA,NCM,065/0518,"The Branch Manager,
+State Bank of India
+Pardi Branch,
+Dist. Valsad.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Chihua,4500,1,Ren,
+121,,,,,,,,Robomak T.T,4000,2,Ren,
+122,BARODA,NCM,066/0518,"The Branch Manager,
+State Bank of India
+Southern Township Branch,
+P.O. Petrochemicals Township,
+Baroda.",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+123,BARODA,NCM,067/0518,"The Branch Manager,
+State Bank of India
+Southern Township Branch,
+P.O. Petrochemicals Township,
+Baroda.",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Mycica Loose Counting,3044,1,Ren,
+124,BARODA,NCM,068/0518,"The Branch Manager,
+State Bank Of India
+Dandia Bazar Branch,
+Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100 T.T,3850,2,Ren,
+124,,,,,,,,Bradma Chihua,4480,1,Ren,
+124,,,,,,,,Robomak T.T,3900,1,Ren,
+125,BARODA,NCM,069/0518,"The Branch Manager,
+State Bank Of India
+Hansot Branch,
+Dist. Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Godrej F.T,3898,1,Ren,
+125,,,,,,,,Kores T.T,3898,1,Ren,
+126,BARODA,NCM,070/0518,"The Branch Manager,
+State Bank Of India
+Hansot Branch,
+Dist. Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kental,2966,1,Ren,
+127,BARODA,NCM,072/0518,"The Branch Manager
+State Bank of India 
+The Branch Manager,
+State Bank of India
+Savli Branch,
+Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+127,,,,,,,,Bradma Chihua,4500,1,Ren,
+128,BARODA,NCM,073/0518," 
+The Branch Manager,
+State Bank of India
+Desar Branch,
+Tal. Savli, Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+129,BARODA,NCM,074/0518,"
+The Chief Manager
+State Bank Of India,
+Hazira branch,
+Dist. Surat.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Sinic NS 150,4500,1,Ren,
+130,BARODA,NCM,075/0518,"The Branch Manager,
+State Bank of India
+Chikhli Branch,
+Dist. Navsari.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CT3000,4000,1,Ren,
+130,,,,,,,,Bradma Chihua,4500,1,Ren,
+130,,,,,,,,Bradma NT2000,4500,1,Ren,
+131,BARODA,NCM,076/0518,"The Branch Manager,
+State Bank Of India
+Anklav branch,
+Dist. Anand.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+132,BARODA,NCM,078/0518,"The Branch Manager,
+State Bank Of India
+N.R.I. Anand branch,
+Dawat Complex, 
+Nr.Bhaikaka Statue,VallabhVidhyanagar, Anand.",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Bradma T.T,4000,1,Ren,
+133,BARODA,NCM,079/0518,"The Branch Manager,
+State Bank Of India
+Derol branch,Ta:Kalol,
+Dist. Panchmahal.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma  CT3000,4000,1,Ren,
+134,BARODA,NCM,080/0518,"The Branch Manager,
+State Bank of India
+Lunsikui Branch,
+Dist. Navsari.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+135,BARODA,NCM,082/0518,"The Branch Manager,
+State Bank Of India
+Old Padra Road Branch,
+Baroda.",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+136,BARODA,NCM,087/0518,"Branch manager
+State bank of india
+ONGC Ankleshwar Branch
+Ankleshwar
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Chihua,4000,1,Ren,
+136,,,,,,,,Godrej T.T,4000,1,Ren,
+137,BARODA,NCM,084/0518,"The Branch Manager,
+State Bank Of India
+Dakor branch,
+Dist. Kheda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Chihua,4500,1,Ren,
+137,,,,,,,,Methodex Floor,4500,1,Ren,
+138,BARODA,NCM,085/0518,"The Branch Manager,
+State Bank Of India
+Dakor branch,
+Dist. Kheda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Super Care,3050,1,Ren,
+139,BARODA,NCM,081/0518,"The Branch Manager,
+State Bank Of India
+St Rd Amalsad Branch,
+Dist. Navsari
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Godrej T.T,4000,1,Ren,
+140,BARODA,NCM,088/0518,"The Branch Manager,
+State Bank of India
+Bilimora Branch,
+P.O.Box No:57, College Road, Dist:Navsari. ",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma CT3000,4000,2,Ren,
+140,,,,,,,,Bradma Chihua,4500,1,Ren,
+140,,,,,,,,Bradma NT2000,4500,1,Ren,
+141,BARODA,NCM,089/0518,"The Branch Manager,
+State Bank of India
+Katopore Darwaja Branch,
+Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kores Kashman II,4000,1,Ren,
+142,BARODA,NCM,090/0518,"The Branch Manager 
+State Bank Of India
+Magod Branch,
+Dist. Valsad.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+143,BARODA,NCM,091/0518,"The Branch Manager,
+State Bank of India
+Umarsadi Branch,
+Dist. Valsad.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+144,BARODA,NCM,092/0518,"The Branch Manager,
+State Bank of India
+Chala  Road Branch
+Fortune Square
+Near TBZ show room
+Vapi.
+Dist. Valsad.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,2,Ren,
+145,BARODA,NCM,093/0518,"The Branch Manager,
+State Bank of India
+Atgam Branch,
+Dist. Valsad.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+146,BARODA,NCM,094/0518,"The Branch Manager,
+State Bank of India
+Chhapra Road Branch,
+Riba Flats,1stFloor,Sindhi Camp,
+Dist. Navsari-396445                              ",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak T.T,4000,1,Ren,
+147,BARODA,NCM,095/0518,"The Branch Manager,
+State Bank Of India
+Vagra Branch,
+Dist. Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Godrej T.T,4000,1,Ren,
+147,,,,,,,,Robomak Floor,4000,1,Ren,
+148,BARODA,NCM,096/0518,"The Branch Manager,
+State Bank of India
+Kosindra Branch,
+Ta:Sankheda
+Dist. Baroda.",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Bradma CC3100,4000,1,Ren,
+149,BARODA,NCM,097/0518,"The Branch Manager,
+State Bank Of India
+Pavi Jetpur branch,
+Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Kental loose Note Counting,4565,2,Ren,
+150,BARODA,NCM,101/0518,"The Branch Manager,
+State Bank Of India
+Pavi Jetpur branch,
+Dist. Baroda.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Bradma Floor,4500,2,Ren,
+150,,,,,,,,Bradma T.T,4000,1,Ren,
+150,,,,,,,,Kores T.T,4000,1,Ren,
+151,BARODA,NCM,102/0518,"The Branch Manager,
+State Bank of India
+Kevadia Colony Branch,
+Dist. Bharuch.",10/31/2017,1/11/2017 to 31/10/2018,Annually Advance,Bradma CC 3100,4000,1,Ren,
+151,,,,,,,,Bradma Chihua,4000,1,Ren,
+152,BARODA,NCM,103/0518,"The Branch Manager,
+State Bank Of India
+Kosamba branch,
+Valsad.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Swift T.T,4000,1,Ren,
+153,BARODA,NCM,104/0518,"The Branch Manager,
+State Bank Of India
+Sarigam branch,
+Tal. Umergam, Dist. Valsad.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Godrej T.T,4000,1,Ren,
+153,,,,,,,,Robomak T.T,4000,1,Ren,
+154,BARODA,NCM,105/0518,"The Chief Manager,
+State Bank Of India
+Vapi I.E. Township Branch,
+Dist. Valsad
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Bradma Chihua,4500,3,Ren,
+154,,,,,,,,Robomak T.T,4000,5,Ren,
+155,BARODA,NCM,106/0518,"The Branch Manager,
+State Bank of India
+Raopura Branch,
+Baroda.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Combo-CSC-05HD,7500,1,Ren,
+156,BARODA,NCM,107/0518,"The Branch Manager,
+State Bank of India
+GNVFC - Chavaj Branch,
+Dist. Bharuch.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Kores Kashman II,3478,1,Ren,
+157,BARODA,NCM,108/0518,"The Chief Manager,
+State Bank of India
+Bharuch Main Branch,
+Bharuch.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4000,1,Ren,
+158,BARODA,NCM,026/0518," 
+The Branch Manager,
+State Bank of India
+Gotri Road Branch,
+Baroda.
+",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Kental loose Note Counting,3044,1,Ren,
+159,BARODA,CCM,025/0518,"The Branch Manager,
+C R Scooters
+Ground Floor,Regent Tower,
+Race Course Circle,Opp Income Tax Office,Baroda",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Maxsell 50i,3500,1,Ren,
+160,BARODA,CCM,062/0518,"The Branch Manager
+State Bank of India
+Paldi Branch
+Opp. Kochrab Ashram,
+Paldi,
+Ahmedabad-380007.
+Tel: 079-26577952.
+",3/31/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3500,2,Ren,
+161,AHMEDABAD,NCM,063/0518,"The Branch Manager
+Central Bank of India
+Gandhi Chauk Branch
+Post Box 520,
+Ashapura Road,
+Gandhi Chauk, Jamnagar
+M: 8980008924",4/30/2018,1/5/2018 to 30/4/2019,Annually Advance,Bradama Floor,4500,1,Ren,
+162,AHMEDABAD,NCM,050/0518,"The Branch Manager
+Central Bank of India
+Gandhi Chauk Branch
+Post Box 520,
+Ashapura Road,
+Gandhi Chauk, Jamnagar
+M: 8980008924",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Robomak Floor,4500,1,Ren,
+163,AHMEDABAD,CCM,061/0518,"The Branch Manager
+State Bank of India
+Amraiwadi Branch
+Near Nagarvel Hanuman Mandir,
+Rakhial,
+Ahmedabad.
+Tel: 079-22741787.",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Maxsell 50i,3000,2,Ren,
+164,BARODA,NCM,008/0518," 
+The Chief Manager,
+State Bank of India
+Sp. Comm.� Vapi Branch,
+Dist. Valsad.
+",31/3/2018,1/4/2018 to 31/3/2019,Annually Advance,Methodex Sys Floor,2250,1,Ren,
+164,,,,,,,,Robomak Floor,2250,1,Ren,

@@ -1,8 +1,13 @@
 package main
 
 import (
-	"github.com/anaskhan96/soup"
 	"strings"
+
+	"golang.org/x/net/html"
+
+	"regexp"
+
+	"github.com/anaskhan96/soup"
 )
 
 type EmployeeDetail struct {
@@ -17,9 +22,8 @@ type EmployeeDetail struct {
 	InvoiceAmount   string
 }
 
-type AllEmployeeDetails []EmployeeDetail
+type AllEmployeeDetails []*EmployeeDetail
 
-//this function will fetch invoices coming from page - invoicesUrl variable
 func FetchInvoiceList(respBody string) []string {
 	doc := soup.HTMLParse(respBody)
 	trs := doc.Find("form", "name", "AgencyInvoice").
@@ -51,15 +55,18 @@ func ExtractInvoicesNoFromTrs(parent soup.Root) string {
 	return ""
 }
 
-func FetchInvoiceDetail(respBody string) *AllEmployeeDetails {
+func FetchInvoiceDetail(respBody string) AllEmployeeDetails {
 	doc := soup.HTMLParse(respBody)
 	trs := doc.Find("form", "name", "AgencyInvoice").
 		Find("table").Find("tbody").Find("tbody").FindAll("tr")
 	details := make(AllEmployeeDetails, 0)
 	for _, oneTr := range trs {
-		details = append(details, *FetchInvoiceDetailsEmployee(oneTr))
+		oneTrd := FetchInvoiceDetailsEmployee(oneTr)
+		if oneTrd != nil {
+			details = append(details, oneTrd)
+		}
 	}
-	return &details
+	return details
 }
 
 func FetchInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
@@ -71,13 +78,37 @@ func FetchInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
 	if len(tdsList) != 12 {
 		return nil
 	}
-	data := EmployeeDetail{}
-	data.EmployeeName = strings.TrimSpace(tdsList[0].Find("div").Text())
+	data := &EmployeeDetail{}
+	data.EmployeeName = strings.TrimSpace(ExtractAllText(tdsList[0].Find("div")))
+	empData := strings.Split(data.EmployeeName, "~")
+	if len(empData) == 4 {
+		data.EmployeeName = empData[0]
+		braces := regexp.MustCompile("[()]")
+		data.EmployeeId = braces.ReplaceAllString(empData[1], "")
+	}
 	data.InvoiceMonth = strings.TrimSpace(tdsList[2].Find("div").Text())
 	data.PeriodFrom = strings.TrimSpace(tdsList[3].Find("div").Text())
 	data.PeriodTo = strings.TrimSpace(tdsList[4].Find("div").Text())
 	data.WorkingDuration = strings.TrimSpace(tdsList[5].Find("div").Text())
 	data.ContractorRate = strings.TrimSpace(tdsList[6].Find("div").Text())
-	data.InvoiceAmount = strings.TrimSpace(tdsList[7].Find("div", "id", "print_con61").Text())
-	return &data
+	data.InvoiceAmount = strings.TrimSpace(tdsList[7].Find("div", "style", "display:block").Text())
+	return data
+}
+
+func ExtractAllText(r soup.Root) string {
+	val := ""
+	k := r.Pointer.FirstChild
+checkNode:
+	if k == nil {
+		return val
+	}
+	if k.Type == html.TextNode {
+		val = val + strings.TrimSpace(k.Data) + "~"
+		k = k.NextSibling
+		goto checkNode
+	} else if k != nil {
+		k = k.NextSibling
+		goto checkNode
+	}
+	return val
 }

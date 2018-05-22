@@ -11,6 +11,10 @@ import (
 	"strings"
 )
 
+var (
+	gst = 0.18
+)
+
 type Quotation struct {
 	SrNo          string
 	RefNo         string
@@ -38,18 +42,18 @@ type MachineDetails struct {
 }
 
 type TemplateReader struct {
-	allQuotation map[string]*Quotation
-	keys         []string
+	allQuotation map[int64]*Quotation
+	keys         []int64
 	cursor       int
 	Date         string
 }
 
 func NewTemplateReader(date string) *TemplateReader {
 	inst := &TemplateReader{}
-	inst.allQuotation = make(map[string]*Quotation)
+	inst.allQuotation = make(map[int64]*Quotation)
 	inst.Date = date
 	inst.cursor = -1
-	inst.keys = make([]string, 0)
+	inst.keys = make([]int64, 0)
 	return inst
 }
 
@@ -99,15 +103,15 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 			/*Calculate GST & Total & Append total to grand Total*/
 			rate, err := strconv.ParseFloat(oneMachine.Rate, 64)
 			if err != nil {
-				fmt.Print("Error Line No -", cnt, oneMachine.Rate, oneMachine.SrNo)
+				fmt.Print("Error Parsing Rate Line No:- ", cnt, " Rate:-", oneMachine.Rate, " SrNo:- ", oneMachine.SrNo)
 				return err
 			}
 			qty, err := strconv.ParseFloat(oneMachine.Qty, 64)
 			if err != nil {
-				fmt.Print("Error Line No -", cnt, oneMachine.Qty, oneMachine.SrNo)
+				fmt.Print("Error Parsing Qty Line No:- ", cnt, " Rate:- ", oneMachine.Rate, " SrNo:- ", oneMachine.SrNo)
 				return err
 			}
-			oneMachine.Gst = rate * 0.18
+			oneMachine.Gst = rate * gst
 			oneMachine.TotalWithTax = rate + oneMachine.Gst
 			oneMachine.Total = oneMachine.TotalWithTax * qty
 			oneQuoatation.Total += oneMachine.Total
@@ -133,11 +137,16 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 
 			/*append one machine*/
 			oneQuoatation.Machines = append(oneQuoatation.Machines, oneMachine)
-			if _, ok := t.allQuotation[oneQuoatation.SrNo]; ok {
+			/*Parse SrNo to Int for Proper sorting*/
+			SrNoInt, err := strconv.ParseInt(oneQuoatation.SrNo, 10, 64)
+			if err != nil {
+				fmt.Print("Error Parsing SrNo Line No:- ", cnt, " SrNo:- ", oneMachine.SrNo)
+			}
+			if _, ok := t.allQuotation[SrNoInt]; ok {
 				fmt.Printf("Skipping record because duplicate record for SrNo: %s\n", oneQuoatation.SrNo)
 			} else {
-				t.allQuotation[oneQuoatation.SrNo] = oneQuoatation
-				t.keys = append(t.keys, oneQuoatation.SrNo)
+				t.allQuotation[SrNoInt] = oneQuoatation
+				t.keys = append(t.keys, SrNoInt)
 			}
 		}
 		cnt++
@@ -171,12 +180,15 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 				fmt.Print("Error Line No -", cnt, oneMachine.Qty, oneMachine.SrNo)
 				return err
 			}
-			oneMachine.Gst = rate * 0.18
+			oneMachine.Gst = rate * gst
 			oneMachine.TotalWithTax = rate + oneMachine.Gst
 			oneMachine.Total = oneMachine.TotalWithTax * qty
-
-			t.allQuotation[oneMachine.SrNo].Total += oneMachine.Total
-			t.allQuotation[oneMachine.SrNo].Machines = append(t.allQuotation[oneMachine.SrNo].Machines, oneMachine)
+			SrNoInt, err := strconv.ParseInt(oneMachine.SrNo, 10, 64)
+			if err != nil {
+				fmt.Print("Error Parsing SrNo Line No:- ", cnt, " SrNo:- ", oneMachine.SrNo)
+			}
+			t.allQuotation[SrNoInt].Total += oneMachine.Total
+			t.allQuotation[SrNoInt].Machines = append(t.allQuotation[SrNoInt].Machines, oneMachine)
 		}
 		cnt++
 	}
@@ -186,7 +198,7 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 		oneQ.RoundOff = calDiff
 		oneQ.Total = roundVal
 	}
-	sort.Strings(t.keys)
+	sort.Slice(t.keys, func(i int, j int) bool { return t.keys[i] < t.keys[j] })
 	return nil
 }
 
