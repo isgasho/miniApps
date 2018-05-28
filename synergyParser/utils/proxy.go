@@ -1,17 +1,22 @@
 package utils
 
 import (
+	"context"
 	"fmt"
-	"github.com/anaskhan96/soup"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
+
+	"github.com/anaskhan96/soup"
 )
 
 var (
 	ProxyCheckingUrl = "https://www.google.com"
+	parallelCnt      = 1
+	wait             = time.Duration(5)
 )
 
 type ProxyIp struct {
@@ -27,7 +32,19 @@ type Proxy struct {
 	proxyCursor  int
 }
 
-func NewProxy(limit int) *Proxy {
+func NewProxy(limit int, parallel int, waitThresholdSeconds int) *Proxy {
+	if parallel <= 0 {
+		parallelCnt = 1
+	} else if parallel >= limit {
+		parallelCnt = limit / 2
+	} else {
+		parallelCnt = parallel
+	}
+	if waitThresholdSeconds <= 0 {
+		wait = time.Duration(1)
+	} else {
+		wait = time.Duration(waitThresholdSeconds)
+	}
 	p := Proxy{limit: limit}
 	return &p
 }
@@ -40,12 +57,71 @@ func (p *Proxy) GetProxy() *ProxyIp {
 	return p.allProxyList[p.proxyCursor]
 }
 
+func proxyListChan(ctx context.Context, proxyList []*ProxyIp) <-chan *ProxyIp {
+	proxyIpChan := make(chan *ProxyIp)
+	go func() {
+		defer close(proxyIpChan)
+		for _, proxyIP := range proxyList {
+			select {
+			case proxyIpChan <- proxyIP:
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+	return proxyIpChan
+}
+
+func checkProxyChan(ctx context.Context, wg *sync.WaitGroup, proxyIpChan <-chan *ProxyIp) {
+	defer wg.Done()
+	for oneRes := range proxyIpChan {
+		working, timeTaken := oneRes.CheckProxy()
+		oneRes.TimeTaken = timeTaken
+		oneRes.working = working
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+	}
+}
+
+func (ipadr *ProxyIp) CheckProxy() (bool, time.Duration) {
+	startTime := time.Now()
+	timeout := time.Duration(wait * time.Second)
+	host := fmt.Sprintf("%s:%s", ipadr.Ip, ipadr.Port)
+	urlProxy := &url.URL{Host: host}
+
+	client := &http.Client{
+		Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)},
+		Timeout:   timeout}
+	resp, err := client.Get(ProxyCheckingUrl)
+	if err != nil {
+		return false, time.Duration(0)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+		return true, time.Since(startTime)
+	}
+	return false, time.Duration(0)
+}
+
 func (p *Proxy) RankProxy() {
-	for _, oneProxy := range p.allProxyList {
+	var wg sync.WaitGroup
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	proxyChan := proxyListChan(ctx, p.allProxyList)
+	for i := 0; i < parallelCnt; i++ {
+		wg.Add(1)
+		go checkProxyChan(ctx, &wg, proxyChan)
+	}
+	wg.Wait()
+	cancel()
+	/*for _, oneProxy := range p.allProxyList {
 		working, time := oneProxy.CheckProxy()
 		oneProxy.working = working
 		oneProxy.TimeTaken = time
-	}
+	}*/
 	newAllProxyList := make([]*ProxyIp, 0)
 	for _, oneProxy := range p.allProxyList {
 		if oneProxy.working {
@@ -68,26 +144,6 @@ func (p *Proxy) ListAll() {
 	for _, oneProxy := range p.allProxyList {
 		fmt.Println(oneProxy)
 	}
-}
-
-func (ipadr *ProxyIp) CheckProxy() (bool, time.Duration) {
-	startTime := time.Now()
-	timeout := time.Duration(15 * time.Second)
-	host := fmt.Sprintf("%s:%s", ipadr.Ip, ipadr.Port)
-	urlProxy := &url.URL{Host: host}
-
-	client := &http.Client{
-		Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)},
-		Timeout:   timeout}
-	resp, err := client.Get(ProxyCheckingUrl)
-	if err != nil {
-		return false, time.Duration(0)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
-		return true, time.Since(startTime)
-	}
-	return false, time.Duration(0)
 }
 
 func (ipadr *ProxyIp) ToString() string {

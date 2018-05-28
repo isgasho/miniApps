@@ -1,4 +1,12 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-    "window.zoomLevel": 0.5
+    "window.zoomLevel": 0.5,
+    "editor.fontFamily": "Fira Code", 
+    "editor.fontLigatures": true,
+    "go.buildOnSave": "package",
+    "go.lintOnSave": "package",
+    "go.vetOnSave": "package",
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.formatTool": "goreturns",
+    "workbench.colorTheme": "Quiet Light",
 }
