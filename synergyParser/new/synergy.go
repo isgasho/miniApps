@@ -5,18 +5,16 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/devarsh/miniApps/synergyParser/utils"
-	"github.com/fatih/color"
-	"github.com/tidwall/gjson"
-	"golang.org/x/net/publicsuffix"
 	"io/ioutil"
 	"net/http"
-	"net/http/cookiejar"
-	"net/url"
 	"os"
 	"path"
 	"strings"
 	"time"
+
+	"github.com/devarsh/miniApps/synergyParser/utils"
+	"github.com/fatih/color"
+	"github.com/tidwall/gjson"
 )
 
 var (
@@ -32,132 +30,6 @@ var (
 var client *http.Client
 var proxy *utils.Proxy
 var uas *utils.UA
-
-type CreateInvoiceEmp struct {
-	EmployeeName    string `json:"employeeName"`
-	ContractorId    string `json:"contractorId"`
-	ResumeNumber    string `json:"resumeNumber"`
-	EmpCompanyCode  string `json:"empCompanyCode"`
-	TimesheetYear   string `json:"timesheetYear"`
-	TimeSheetMonth  string `json:"timeSheetMonth"`
-	Rate            string `json:"Rate"`
-	RateTypeDesc    string `json:"RateTypeDesc"`
-	ContractorState string `json:"contractorState"`
-	Rmdayshours     string `json:"Rmdayshours"`
-	ProjectCode     string `json:"projectCode"`
-	InvoiceAmount   string `json:"invoiceAmount"`
-}
-
-type InvoiceSummary struct {
-	AgencyName         string  `json:"str_agency_name"`
-	ClientId           int     `json:"n_cons_focrec_id"`
-	InvoiceNumber      string  `json:"str_invoice_number"`
-	InvoiceDt          string  `json:"dt_invoice_date"`
-	LastStatusDt       string  `json:"dt_last_status"`
-	InvoiceStatusDesc  string  `json:"str_invoice_status_desc"`
-	InvoiceStatus      string  `json:"str_invoice_status"`
-	TotalInvoiceAmtStr string  `json:"str_total_invoice_amount"`
-	TotalInvoiceAmt    float64 `json:"n_total_invoice_amount"`
-	//InvoiceType         string  `json:"str_type_of_invoice"`
-	//NewInvoiceNumber    string  `json:"STR_NEW_INVOICENUMBER"`
-	//ChequeHandOverDt    string  `json:"dt_cheque_handover"`
-	//Comments            string  `json:"str_comments"`
-	//ModifyInvoiceNumber string  `json:"STR_MODIFY_INV_COMMENTS"`
-	//SapConsultantCode  string `json:"str_sap_consultant_code"`
-	//RegistrationNumber string `json:"str_registration_num"`
-	//AmountModify        float64 `json:"n_modified_amt"`
-}
-
-type AllInvoiceSummary struct {
-	Result []InvoiceSummary `json:"result"`
-}
-
-type AllCreateInvoiceEmpList struct {
-	Result []CreateInvoiceEmp `json:"result"`
-}
-
-type InvoiceEmp struct {
-	EmployeeId      string  `json:"str_employee_id"`
-	EmployeeName    string  `json:"str_employee_name"`
-	ProjectCode     string  `json:"str_project_code"`
-	InoviceMonth    string  `json:"str_invoice_month"`
-	InvoiceYear     string  `json:"str_invoice_year"`
-	TimeSheetStDt   string  `json:"dt_timesheet_start_date"`
-	TimeSheetEndDt  string  `json:"dt_timesheet_end_date"`
-	RmHours         string  `json:"str_rm_hrs"`
-	RmDays          string  `json:"str_rm_days"`
-	CurrenySymbol   string  `json:"str_contractor_currency_desc"`
-	RateDesc        string  `json:"str_contractor_rate_desc"`
-	RateStr         string  `json:"str_rate"`
-	InvoiceAmount   float64 `json:"n_payment_amt"`
-	TaxAmount       float64 `json:"N_TAX_AMOUNT"`
-	ContractorState string  `json:"contractorState"`
-	WiproGSTNo      string  `json:"wiproStateGSTN"`
-	SezIndicator    string  `json:"sezIndicator"`
-}
-
-type InvoicePid struct {
-	InvoiceNo          string          `json:"str_invoice_number"`
-	InvoiceDt          string          `json:"dt_invoice_date"`
-	LastStatusDt       string          `json:"dt_last_status"`
-	VendorCode         string          `json:"str_sap_consultant_code"`
-	AgencyGSTN         string          `json:"agencyGSTN"`
-	CGSTAmt            string          `json:"CGSTAmt"`
-	SGSTAmt            string          `json:"SGSTAmt"`
-	SerivceType        string          `json:"existingSAC_number"`
-	ContractState      string          `json:"existingcontractorState"`
-	WiproVendorDetails []VendorDetails `json:"vendorgstnList"`
-}
-
-type VendorDetails struct {
-	ClassDesc   string `json:"strGSTVedorClassDescription"`
-	Address     string `json:"strVendorAddress"`
-	GSTCode     string `json:"strVendorGSTSAPCode"`
-	Name        string `json:"strVendorName"`
-	VendorState string `json:"strVendorStateSAPCode"`
-}
-
-type AllEmpInvoice struct {
-	Result []InvoiceEmp `json:"result"`
-}
-
-type FinalInvoices struct {
-	EmpInvoices   []InvoiceEmp
-	OneInvoicePid *InvoicePid
-}
-
-func getHeaders(init bool, cookieString, wlInstance string) http.Header {
-	customHeader := http.Header{}
-	customHeader.Add("accept", "text/javascript, text/html, application/xml, text/xml, */*")
-	customHeader.Add("dnt", "1")
-
-	customHeader.Add("user-agent", "")
-	if init == true {
-		customHeader.Add("accept-language", "en-US,en;q=0.9,es;q=0.8,hi;q=0.7")
-		customHeader.Add("upgrade-insecure-requests", "1")
-	}
-	if init == false {
-		customHeader.Add("accept-language", "en-GB")
-		customHeader.Add("content-type", "application/x-www-form-urlencoded; charset=UTF-8")
-		customHeader.Add("origin", "https://appstore.wipro.com")
-		customHeader.Add("referer", initUrl)
-		customHeader.Add("x-requested-with", "XMLHttpRequest")
-		customHeader.Add("x-wl-app-details", `{"applicationDetails":{"platformVersion":"6.3.0.0","nativeVersion":""}}`)
-		customHeader.Add("x-wl-clientlog-env", "common")
-		customHeader.Add("x-wl-clientlog-osversion", "UNKNOWN")
-		customHeader.Add("x-wl-clientlog-appversion", "1.0")
-		customHeader.Add("x-wl-app-version", "1.0")
-		customHeader.Add("x-wl-clientlog-model", "UNKNOWN")
-		customHeader.Add("x-wl-clientlog-appname", "ContractPartner")
-		if cookieString != "" {
-			customHeader.Add("cookie", cookieString)
-		}
-		if wlInstance != "" {
-			customHeader.Add("wl-instance-id", wlInstance)
-		}
-	}
-	return customHeader
-}
 
 func getCreateInvoicePurpose() string {
 	return fmt.Sprintf(`["{\"inputs\":{\"nconsfocrecid\":\"%s\"}}","cinv"]`, usernameG)
@@ -184,37 +56,6 @@ func getInvoicePurposePemp(invoiceNo string) string {
 
 func getInvoicePurposePid(invoiceNo string) string {
 	return fmt.Sprintf(`["{\"inputs\":{\"nconsfocrecid\":\"%s\",\"strinvoicenumber\":\"%s\"}}","cinviewpid"]`, usernameG, invoiceNo)
-}
-
-func formData() url.Values {
-	form := url.Values{}
-	form.Add("adapter", "PartnerWebAdapter")
-	form.Add("isAjaxRequest", "true")
-	form.Add("procedure", "invokeService")
-	form.Add("parameters", "")
-	return form
-}
-
-func appendCookies(cookies string, cookiesArray []*http.Cookie) string {
-	for _, oneCookie := range cookiesArray {
-		cookies = cookies + oneCookie.Name + "=" + oneCookie.Value + ";"
-	}
-	return cookies
-}
-
-func initClient() *http.Client {
-	proxyAdr := proxy.GetProxy()
-	color.Magenta("New Proxy Setup :", proxyAdr.ToString())
-
-	color.Magenta("Setting Up Http Client")
-	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
-	if err != nil {
-		panic(err)
-	}
-	host := fmt.Sprintf("%s:%s", proxyAdr.Ip, proxyAdr.Port)
-	urlProxy := &url.URL{Host: host}
-	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
-	return &client
 }
 
 func _init_() {
@@ -496,82 +337,6 @@ func writeInvoicesToCsv(filePath, month, year string, allInvoicesSummary *AllInv
 		return
 	}
 	color.Cyan("Done creating file....")
-}
-
-func loadPage() (string, error) {
-	startTime := time.Now()
-	req, err := http.NewRequest("GET", initUrl, nil)
-	if err != nil {
-		return "", err
-	}
-	req.Header = getHeaders(true, "", "")
-	res, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	color.Cyan("Load Login Page Request\nGET %s\nTime Taken:%s\n", initUrl, time.Since(startTime))
-	defer res.Body.Close()
-	cookies := appendCookies("", res.Cookies())
-
-	return cookies, nil
-}
-
-func performLogin1(cookies string) (string, error) {
-	reqFormData := formData()
-	reqFormData.Set("parameters", getLoginPurpose())
-	startTime := time.Now()
-	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(reqFormData.Encode()))
-	if err != nil {
-		return "", err
-	}
-	req.Header = getHeaders(false, cookies, "")
-	res, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	color.Cyan("First Login Req With Cookie %s\nPOST %s\nTime Taken:%s\n", cookies, apiUrl, time.Since(startTime))
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return "", err
-	}
-	responseStr := string(body)
-	wlIst := gjson.Get(responseStr, "challenges.wl_antiXSRFRealm.WL-Instance-Id")
-	if wlIst.String() == "" {
-		return "", fmt.Errorf("Could retrive WL-Instance-Id")
-	}
-
-	return wlIst.String(), nil
-}
-
-func performLogin2(cookies string, wlInst string) (bool, error) {
-	reqFormData := formData()
-	reqFormData.Set("parameters", getLoginPurpose())
-	startTime := time.Now()
-	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(reqFormData.Encode()))
-	if err != nil {
-		return false, err
-	}
-	req.Header = getHeaders(false, cookies, wlInst)
-	res, err := client.Do(req)
-	if err != nil {
-		return false, err
-	}
-	color.Cyan("Second Login Req With Cookies: %s & WL-InstToken: %s\nPOST %s\nTime Taken:%s\n", cookies, wlInst, apiUrl, time.Since(startTime))
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return false, err
-	}
-	responseStr := string(body)
-	success := gjson.Get(responseStr, "result.authFlag")
-
-	if success.String() == "failure" {
-		return false, fmt.Errorf("Invalid Login Credentials")
-	} else if success.String() == "success" {
-		return true, nil
-	}
-	return false, fmt.Errorf("Something went wrong while making request contact devarsh")
 }
 
 func getInvoiceList(cookies, wlInst, month, year string) (*AllInvoiceSummary, error) {

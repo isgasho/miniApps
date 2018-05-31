@@ -85,7 +85,10 @@ func main() {
 		ctx, cancel := context.WithCancel(ctx1)
 		invoicesNoChan := invoicesChan(ctx, allInvoicesNo)
 		ch1 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
-		chAll := mergeRequestChan(ctx, ch1)
+		ch2 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+		ch3 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+		ch4 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+		chAll := mergeRequestChan(ctx, ch1, ch2, ch3, ch4)
 		split1 := make(chan *Result)
 		split2 := make(chan *Result)
 		var wg sync.WaitGroup
