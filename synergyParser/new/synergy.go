@@ -25,6 +25,9 @@ var (
 	apiUrl               = "https://appstore.wipro.com/worklight/apps/services/api/ContractPartner/common/query"
 	usernameG            = "13618"
 	passwordG            = "dummy"
+	noOfProxy            = 6
+	threadCnt            = 3
+	waitThreshold        = 10
 )
 
 var client *http.Client
@@ -59,7 +62,7 @@ func getInvoicePurposePid(invoiceNo string) string {
 }
 
 func _init_() {
-	proxy = utils.NewProxy(5)
+	proxy = utils.NewProxy(noOfProxy, threadCnt, waitThreshold)
 	color.Magenta("Fetching Proxy list")
 	proxy.LoadProxies()
 	color.Magenta("Ranking Proxies")
