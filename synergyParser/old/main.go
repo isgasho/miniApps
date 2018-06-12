@@ -33,7 +33,7 @@ var uas *utils.UA
 
 func setUpFlags() {
 	username := flag.String("username", "13618", "Enter login username")
-	password := flag.String("password", "5alD_PlbOVu3-", "Enter Login password")
+	password := flag.String("password", "ashaka@2468", "Enter Login password")
 	yearStr := flag.String("year", "2018", "Year for which you want to fetch invoices")
 	monthInt := flag.Int("month", 3, "Moth for which you want to fetch invoices i.e 1 - Janurary, 2 February")
 	outFilePath := flag.String("path", "./", "outfile path")

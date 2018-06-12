@@ -49,12 +49,17 @@ func NewProxy(limit int, parallel int, waitThresholdSeconds int) *Proxy {
 	return &p
 }
 
-func (p *Proxy) GetProxy() *ProxyIp {
+func (p *Proxy) GetProxy() (bool, *ProxyIp) {
+	if len(p.allProxyList) == 0 {
+		p.ListAll()
+		fmt.Printf("Proxy Not found oops")
+		return false, nil
+	}
 	p.proxyCursor++
 	if p.proxyCursor > len(p.allProxyList)-1 {
 		p.proxyCursor = 0
 	}
-	return p.allProxyList[p.proxyCursor]
+	return true, p.allProxyList[p.proxyCursor]
 }
 
 func proxyListChan(ctx context.Context, proxyList []*ProxyIp) <-chan *ProxyIp {
