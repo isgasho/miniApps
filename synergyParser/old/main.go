@@ -1,3 +1,9 @@
+/*
+Link:- https://synergy.wipro.com/synergy/PartnerWILogin.jsp
+User Type:- Partner Supervisor
+Login ID:- 13618
+Password:-
+*/
 package main
 
 import (
@@ -14,33 +20,43 @@ import (
 )
 
 var (
-	initURL          = "https://synergy.wipro.com/synergy/PartnerWILogin.jsp"
-	loginURL         = "https://synergy.wipro.com/synergy/LoginServlet"
-	invoicesURL      = "https://synergy.wipro.com/synergy/CN_AgencyInvoicesView.jsp"
-	invoiceDetailURL = "https://synergy.wipro.com/synergy/CN_AgencyInvoiceSingleView.jsp?hSelectedPartner=%s&hSelectedInvoiceNumber=%s&hSelectedInvoiceStatus=PARKED"
-	usernameG        = ""
-	passwordG        = ""
-	month            = ""
-	year             = ""
-	filePath         = ""
-	noOfProxy        = 6
-	threadCnt        = 3
-	waitThreshold    = 10
+	initURL                = "https://synergy.wipro.com/synergy/PartnerWILogin.jsp"
+	loginURL               = "https://synergy.wipro.com/synergy/LoginServlet"
+	invoicesURL            = "https://synergy.wipro.com/synergy/CN_AgencyInvoicesView.jsp"
+	invoiceDetailURL       = "https://synergy.wipro.com/synergy/CN_AgencyInvoiceSingleView.jsp?hSelectedPartner=%s&hSelectedInvoiceNumber=%s&hSelectedInvoiceStatus=PARKED"
+	reimbursementLogin1    = "https://synergy.wipro.com/synergy/LoginServlet?Operation=Reimbursement%20Invoice%20View"
+	reimbursementLogin2    = "https://synergy.wipro.com/synergy/Authentication.do?Operation=AuthenticateUser"
+	reimbursementURL       = "https://synergy.wipro.com/synergy/AgencyViewAction.do"
+	reimbursementDetailURL = "https://synergy.wipro.com/synergy/AgencyViewAction.do?Operation=InvoiceViewScreen&hSelectedPartner=%s&hSelectedInvoiceNumber=%s&hSelectedInvoiceStatus=PARKED"
+	usernameG              = ""
+	passwordG              = ""
+	recordsPerPage         = ""
+	month                  = ""
+	year                   = ""
+	filePath               = ""
+	reimbursement          = false
+	noOfProxy              = 6
+	threadCnt              = 3
+	waitThreshold          = 10
 )
 
 var proxy *utils.Proxy
 var uas *utils.UA
 
 func setUpFlags() {
-	username := flag.String("username", "13618", "Enter login username")
-	password := flag.String("password", "ashaka@2468", "Enter Login password")
-	yearStr := flag.String("year", "2018", "Year for which you want to fetch invoices")
-	monthInt := flag.Int("month", 3, "Moth for which you want to fetch invoices i.e 1 - Janurary, 2 February")
-	outFilePath := flag.String("path", "./", "outfile path")
+	username := flag.String("u", "13618", "Enter login username")
+	password := flag.String("pwd", "ashaka@2468", "Enter Login password")
+	yearStr := flag.String("y", "2018", "Year for which you want to fetch invoices")
+	monthInt := flag.Int("m", 3, "Moth for which you want to fetch invoices i.e 1 - Janurary, 2 February")
+	recordsPerPageStr := flag.String("recordsPerPage", "100", "No of invoices to fetch since pagination is not supported we fetch all records in one go. Don't change if you dont know what you're doing it should be a positive number")
+	reimbursementB := flag.Bool("r", false, "If Need to fetch reimbursement details pass true")
+	outFilePath := flag.String("p", "./", "outfile path")
 	flag.Parse()
 	usernameG = *username
 	passwordG = *password
 	year = *yearStr
+	recordsPerPage = *recordsPerPageStr
+	reimbursement = *reimbursementB
 	filePath = *outFilePath
 	monthStr := time.Month(*monthInt)
 	month = monthStr.String()
@@ -61,8 +77,7 @@ func _init() {
 
 func main() {
 	setUpFlags()
-	color.Magenta("......Start.....\n Press Ctrl+c to stop")
-
+	color.Magenta("......Start......\n Press Ctrl+c to stop")
 	_init()
 	client := makeClient()
 	cookies, err := loadPage(client)
@@ -73,43 +88,94 @@ func main() {
 	res, err := performLogin(client, cookies)
 	if err != nil {
 		fmt.Println("Error couldnt login in", err)
-	}
-	fmt.Println("Logged In:", res, err)
-	allInvoicesNo, err := fetchInvoicesList(client, cookies)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(allInvoicesNo)
-	if len(allInvoicesNo) > 0 {
-		ctx1 := context.Background()
-		ctx, cancel := context.WithCancel(ctx1)
-		invoicesNoChan := invoicesChan(ctx, allInvoicesNo)
-		ch1 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
-		ch2 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
-		ch3 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
-		ch4 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
-		chAll := mergeRequestChan(ctx, ch1, ch2, ch3, ch4)
-		split1 := make(chan *Result)
-		split2 := make(chan *Result)
-		var wg sync.WaitGroup
-		wg.Add(1)
-		go writeInvoicesAllToCsvChan(ctx, &wg, split1)
-		for i := 0; i < 2; i++ {
-			wg.Add(1)
-			go writeInvoiceOneToCsvChan(ctx, &wg, split2)
-		}
-		go duplicateChannels(ctx, chAll, split1, split2)
-		c := make(chan os.Signal)
-		signal.Notify(c, os.Interrupt)
-		go func() {
-			select {
-			case <-c:
-				cancel()
-			}
-		}()
-		wg.Wait()
-		fmt.Println("Done..")
+	} else if res == false {
+		fmt.Println("Could not Log In:")
 		return
+	}
+	if reimbursement {
+		color.Red("Reimbursement Invoices")
+		res, err := performRLoginRequest(client, cookies)
+		if err != nil {
+			fmt.Println("Error something happened", err)
+			return
+		} else if res == false {
+			fmt.Println("could not login")
+			return
+		}
+		allInvoicesNo, err := fetchReimbursmentsList(client, cookies)
+		if err != nil {
+			panic(err)
+		}
+		if len(allInvoicesNo) > 0 {
+			ctx1 := context.Background()
+			ctx, cancel := context.WithCancel(ctx1)
+			defer cancel()
+			invoicesNoChan := invoicesChan(ctx, allInvoicesNo)
+			ch1 := makeRequestChanR(ctx, client, cookies, invoicesNoChan)
+			ch2 := makeRequestChanR(ctx, client, cookies, invoicesNoChan)
+			ch3 := makeRequestChanR(ctx, client, cookies, invoicesNoChan)
+			ch4 := makeRequestChanR(ctx, client, cookies, invoicesNoChan)
+			chAll := mergeRequestChan(ctx, ch1, ch2, ch3, ch4)
+			split1 := make(chan *Result)
+			split2 := make(chan *Result)
+			var wg sync.WaitGroup
+			wg.Add(1)
+			go writeInvoicesAllToCsvChan(ctx, "Reimbursments-AllInvoices", &wg, split1)
+			for i := 0; i < 2; i++ {
+				wg.Add(1)
+				go writeRInvoiceOneToCsvChan(ctx, &wg, split2)
+			}
+			go duplicateChannels(ctx, chAll, split1, split2)
+			c := make(chan os.Signal)
+			signal.Notify(c, os.Interrupt)
+			go func() {
+				select {
+				case <-c:
+					cancel()
+				}
+			}()
+			wg.Wait()
+			fmt.Println("Done...")
+			return
+		}
+	} else {
+		color.Red("Regular Invoices")
+		allInvoicesNo, err := fetchInvoicesList(client, cookies)
+		if err != nil {
+			panic(err)
+		}
+		if len(allInvoicesNo) > 0 {
+			ctx1 := context.Background()
+			ctx, cancel := context.WithCancel(ctx1)
+			defer cancel()
+			invoicesNoChan := invoicesChan(ctx, allInvoicesNo)
+			ch1 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+			ch2 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+			ch3 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+			ch4 := makeRequestChan(ctx, client, cookies, invoicesNoChan)
+			chAll := mergeRequestChan(ctx, ch1, ch2, ch3, ch4)
+			split1 := make(chan *Result)
+			split2 := make(chan *Result)
+			var wg sync.WaitGroup
+			wg.Add(1)
+			go writeInvoicesAllToCsvChan(ctx, "AllInvoices", &wg, split1)
+			for i := 0; i < 2; i++ {
+				wg.Add(1)
+				go writeInvoiceOneToCsvChan(ctx, &wg, split2)
+			}
+			go duplicateChannels(ctx, chAll, split1, split2)
+			c := make(chan os.Signal)
+			signal.Notify(c, os.Interrupt)
+			go func() {
+				select {
+				case <-c:
+					cancel()
+				}
+			}()
+			wg.Wait()
+			fmt.Println("Done..")
+			return
+		}
 	}
 	fmt.Println("Oops empty invoice list")
 }

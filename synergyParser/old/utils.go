@@ -31,7 +31,9 @@ func getHeaders(init bool, cookieString string) http.Header {
 
 func appendCookies(cookies string, cookiesArray []*http.Cookie) string {
 	for _, oneCookie := range cookiesArray {
-		cookies = cookies + oneCookie.Name + "=" + oneCookie.Value + ";"
+		if oneCookie.Name == "JSESSIONID" || oneCookie.Name == "SYNPRD-ARRAffinity" {
+			cookies = cookies + oneCookie.Name + "=" + oneCookie.Value + ";"
+		}
 	}
 	return cookies
 }

@@ -1,20 +1,18 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 
-	"golang.org/x/net/html"
-
-	"regexp"
-
 	"github.com/anaskhan96/soup"
+	"golang.org/x/net/html"
 )
 
 func init() {
 	soup.SetDebug(false)
 }
 
-func fetchInvoiceList(respBody string) []string {
+func fetchReimbursmentList(respBody string) []string {
 	if respBody == "" {
 		return []string{""}
 	}
@@ -29,31 +27,34 @@ func fetchInvoiceList(respBody string) []string {
 		Find("tbody").FindAll("tr")
 
 	allInvoices := make([]string, len(trs)-1)
-
 	for index, oneTr := range trs {
 		if index == 0 {
 			continue
 		}
-		allInvoices[index-1] = extractInvoicesNoFromTrs(oneTr)
+		allInvoices[index-1] = extractRinvoiceNoFromTrs(oneTr)
 	}
 	return allInvoices
+
 }
 
-func extractInvoicesNoFromTrs(parent soup.Root) string {
+func extractRinvoiceNoFromTrs(parent soup.Root) string {
 	tdsList := parent.FindAll("td")
-	if len(tdsList) == 8 {
+	if len(tdsList) == 7 {
 		return strings.TrimSpace(tdsList[2].Find("div").Text())
 	}
 	return ""
 }
 
-func fetchInvoiceDetail(respBody string) OneInvoiceDetail {
+func fetchRInvoiceDetail(respBody string) OneInvoiceDetail {
+	if respBody == "" {
+		return nil
+	}
 	doc := soup.HTMLParse(respBody)
 	trs := doc.Find("form", "name", "AgencyInvoice").
 		Find("table").Find("tbody").Find("tbody").FindAll("tr")
 	details := make(OneInvoiceDetail, 0)
 	for _, oneTr := range trs {
-		oneTrd := fetchInvoiceDetailsEmployee(oneTr)
+		oneTrd := fetchRInvoiceDetailsEmployee(oneTr)
 		if oneTrd != nil {
 			details = append(details, oneTrd)
 		}
@@ -61,30 +62,23 @@ func fetchInvoiceDetail(respBody string) OneInvoiceDetail {
 	return details
 }
 
-func fetchInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
+func fetchRInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
 	tdsList := parent.FindAll("td")
-	if len(tdsList) != 12 {
+	if len(tdsList) != 7 {
 		return nil
 	}
 	braces := regexp.MustCompile("[()]")
+	numbersOnly := regexp.MustCompile("[^0-9]")
 	data := &EmployeeDetail{}
-	data.EmployeeName = strings.TrimSpace(extractAllText(tdsList[0].Find("div")))
-	empData := strings.Split(data.EmployeeName, "~")
-	if len(empData) == 4 {
-		data.EmployeeName = empData[0]
-		data.EmployeeID = braces.ReplaceAllString(empData[1], "")
-	}
-	data.InvoiceMonth = strings.TrimSpace(extractAllText(tdsList[2].Find("div")))
-	empData = strings.Split(data.InvoiceMonth, "~")
-	if len(empData) == 3 {
-		data.InvoiceMonth = empData[0]
-		data.InvoiceYear = braces.ReplaceAllString(empData[1], "")
+	data.EmployeeName = strings.TrimSpace(tdsList[0].Find("div").Text())
+	vals := braces.Split(data.EmployeeName, -1)
+	if len(vals) >= 2 {
+		data.EmployeeID = vals[1]
+		data.EmployeeName = vals[0]
 	}
 	data.PeriodFrom = strings.TrimSpace(tdsList[3].Find("div").Text())
 	data.PeriodTo = strings.TrimSpace(tdsList[4].Find("div").Text())
-	data.WorkingDuration = strings.TrimSpace(tdsList[5].Find("div").Text())
-	data.ContractorRate = strings.TrimSpace(tdsList[6].Find("div").Text())
-	data.InvoiceAmount = strings.TrimSpace(tdsList[7].Find("div", "style", "display:block").Text())
+	data.InvoiceAmount = numbersOnly.ReplaceAllLiteralString(strings.TrimSpace(tdsList[5].Find("div").Text()), "")
 	return data
 }
 
