@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -16,11 +17,15 @@ func fetchReimbursmentList(respBody string) []string {
 	if respBody == "" {
 		return []string{""}
 	}
+	if strings.Contains(respBody, "No record found") {
+		return []string{""}
+	}
 	doc := soup.HTMLParse(respBody)
 	title := doc.Find("title")
 	if strings.TrimSpace(title.Text()) == "Failure Message" {
 		return []string{""}
 	}
+	fmt.Println(respBody)
 	trs := doc.Find("form", "name", "AgencyInvoice").
 		Find("table").
 		Find("tbody").

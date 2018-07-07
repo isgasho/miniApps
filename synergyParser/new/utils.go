@@ -15,7 +15,7 @@ func getHeaders(init bool, cookieString, wlInstance string) http.Header {
 	customHeader.Add("accept", "text/javascript, text/html, application/xml, text/xml, */*")
 	customHeader.Add("dnt", "1")
 
-	customHeader.Add("user-agent", "")
+	customHeader.Add("user-agent", uas.GetRndUserAgent())
 	if init == true {
 		customHeader.Add("accept-language", "en-US,en;q=0.9,es;q=0.8,hi;q=0.7")
 		customHeader.Add("upgrade-insecure-requests", "1")
@@ -24,7 +24,7 @@ func getHeaders(init bool, cookieString, wlInstance string) http.Header {
 		customHeader.Add("accept-language", "en-GB")
 		customHeader.Add("content-type", "application/x-www-form-urlencoded; charset=UTF-8")
 		customHeader.Add("origin", "https://appstore.wipro.com")
-		customHeader.Add("referer", initUrl)
+		customHeader.Add("referer", initURL)
 		customHeader.Add("x-requested-with", "XMLHttpRequest")
 		customHeader.Add("x-wl-app-details", `{"applicationDetails":{"platformVersion":"6.3.0.0","nativeVersion":""}}`)
 		customHeader.Add("x-wl-clientlog-env", "common")
@@ -59,7 +59,7 @@ func appendCookies(cookies string, cookiesArray []*http.Cookie) string {
 	return cookies
 }
 
-func initClient() *http.Client {
+func makeClient() *http.Client {
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	if err != nil {
 		panic(err)

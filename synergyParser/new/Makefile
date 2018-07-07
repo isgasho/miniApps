@@ -1,5 +1,6 @@
-build: clean
-	go build -o build/main
+prime: clean
+	go build -o build/main	
+build: clean prime
 	GOOS=windows GOARCH=386 go build -o build/main_windows.exe
 	zip -r build/main_win_new.zip build/main_windows.exe
 clean:
