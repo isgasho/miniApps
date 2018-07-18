@@ -1,5 +1,5 @@
-SR NO,REGION,MACHINE,REF NO,ADDRESS,EXPIRY DATE,PERIOD 1,Payment Terms,MODEL,RATE,QTY,TYPE,STATUS
-16,AHMEDABAD,CCM,012/0518,"The Branch Manager~
+SR NO,BILL DATE,REGION,MACHINE,REF NO,ADDRESS,EXPIRY DATE,PERIOD 1,Payment Terms,MODEL,RATE,QTY,TYPE,STATUS
+16,01-Apr-18,AHMEDABAD,CCM,012/0518,"The Branch Manager~
 Bank of Baroda~
 Bopal Branch~
 Shri Hari House~
@@ -8,7 +8,7 @@ Bopal~
 Ahmedabad-380058.~
 Tel: 02717-230531.~
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,REN,
-17,AHMEDABAD,NCM,013/0518,"The Branch Manager~
+17,20-Apr-18,AHMEDABAD,NCM,013/0518,"The Branch Manager~
 Bank of Baroda~
 Bopal Branch~
 Shri Hari House~
@@ -17,7 +17,7 @@ Bopal~
 Ahmedabad-380058.~
 Tel: 02717-230531.~
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Methodex Floor,3500,1,REN,
-18,AHMEDABAD,CCM,014/0518,"
+18,04-Apr-18,AHMEDABAD,CCM,014/0518,"
 The Branch Manager~
 Central Bank of India~
 Bhupendra Road Branch~
@@ -26,7 +26,7 @@ Bhupendra Road~
 Rajkot~
 Mo: 9427564456.~
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,NEW,
-19,AHMEDABAD,NCM,016/0518,"
+19,15-Apr-18,AHMEDABAD,NCM,016/0518,"
 The Branch Manager~
 Union Bank Of India~
 Sidhpur  Branch~
@@ -37,14 +37,14 @@ Ta:-Sidhpur~
 Dist:-Patan-384151~
 
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,NEW,
-20,AHMEDABAD,CCM,017/0518,"The Branch Manager~
+20,03-Apr-18,AHMEDABAD,CCM,017/0518,"The Branch Manager~
 Central Bank of India~
 Dehmai Branch~
 Dehmai - 383330~
 Ta : Bayad~
 Dist : Sabarkantha~
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,RENNON,
-21,AHMEDABAD,NCM,018/0518,"
+21,23-Apr-18,AHMEDABAD,NCM,018/0518,"
 The Branch Manager~
 Central Bank of India~
 Unjha Branch~
@@ -53,7 +53,7 @@ Station Road~
 Unjha.~
 Dist: Mehsana ~
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Infres Floor,2500,1,RENNON,
-22,AHMEDABAD,CCM,019/0518,"
+22,05-Apr-18,AHMEDABAD,CCM,019/0518,"
 The Branch Manager~
 Citizen Co Opp Bank Ltd~
 Morbi Branch~
@@ -62,7 +62,7 @@ Sardar Road~
 Morbi - 363642~
 
 ",30-Apr-18,1-5-2018 to 30-4-2019,Annually,Maxsell 50i,3500,1,NEWNON,
-23,AHMEDABAD,NCM,020/0518,"The Branch Manager~
+23,18-Apr-18,AHMEDABAD,NCM,020/0518,"The Branch Manager~
 Bank of India ~
 Sabarmati Branch~
 Near Pukhraj Hospital~

@@ -18,11 +18,6 @@ import (
 	"github.com/devarsh/miniApps/template/mdToPdf"
 )
 
-type Mixture struct {
-	Quotation *csvReader.Quotation
-	Date      string
-}
-
 func initDirectory(dirPath string) {
 	subdirs := []string{"./md", "./pdf"}
 	for _, oneDir := range subdirs {
@@ -37,10 +32,9 @@ func initDirectory(dirPath string) {
 }
 
 func main() {
-	inputFile := flag.String("inputFile", "./input.csv", "Specify input CSV file to be used")
-	outputDirectory := flag.String("outputDir", "./out", "Output Director where files will be generated")
-	ignoreFirstLine := flag.Bool("ignoreFirstLine", true, "Ignore the Header Line of CSV input file")
-	quotatonDate := flag.String("qdate", "01-01-2000", "Quotation Date for generation")
+	inputFile := flag.String("i", "./input.csv", "Specify input CSV file to be used")
+	outputDirectory := flag.String("o", "./out", "Output Director where files will be generated")
+	ignoreFirstLine := flag.Bool("n", true, "Ignore the Header Line of CSV input file")
 	flag.Parse()
 	initDirectory(*outputDirectory)
 	ncm, err := Asset("templates/COMP/ncm.md")
@@ -99,32 +93,29 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	csvRd := csvReader.NewTemplateReader(*quotatonDate)
+	csvRd := csvReader.NewTemplateReader()
 	err = csvRd.ReadCsv(*inputFile, *ignoreFirstLine)
 	if err != nil {
 		fmt.Println(err)
 	}
 	envelopeGen := envelope.NewEnvelope()
 	mdPdf := mdToPdf.NewMdtoPdf(13, "Arial")
-	mixture := &Mixture{}
-	mixture.Date = csvRd.Date
 	for csvRd.Next() {
 		var b bytes.Buffer
 		oneRecord := csvRd.GetRecord()
-		mixture.Quotation = oneRecord
 		if oneRecord.QuotationType == "REN" || oneRecord.QuotationType == "NEW" {
 			if oneRecord.MachineType == "CCM" {
-				ccmTmpl.Execute(&b, mixture)
+				ccmTmpl.Execute(&b, oneRecord)
 			} else if oneRecord.MachineType == "NCM" {
-				ncmTmpl.Execute(&b, mixture)
+				ncmTmpl.Execute(&b, oneRecord)
 			} else {
 				continue
 			}
 		} else if oneRecord.QuotationType == "RENNON" || oneRecord.QuotationType == "NEWNON" {
 			if oneRecord.MachineType == "CCM" {
-				ccmNonCTmpl.Execute(&b, mixture)
+				ccmNonCTmpl.Execute(&b, oneRecord)
 			} else if oneRecord.MachineType == "NCM" {
-				ncmNonCTmpl.Execute(&b, mixture)
+				ncmNonCTmpl.Execute(&b, oneRecord)
 			}
 		} else {
 			continue

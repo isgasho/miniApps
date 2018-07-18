@@ -17,6 +17,7 @@ var (
 
 type Quotation struct {
 	SrNo          string
+	BillDate      string
 	RefNo         string
 	Region        string
 	MachineType   string
@@ -45,13 +46,11 @@ type TemplateReader struct {
 	allQuotation map[int64]*Quotation
 	keys         []int64
 	cursor       int
-	Date         string
 }
 
-func NewTemplateReader(date string) *TemplateReader {
+func NewTemplateReader() *TemplateReader {
 	inst := &TemplateReader{}
 	inst.allQuotation = make(map[int64]*Quotation)
-	inst.Date = date
 	inst.cursor = -1
 	inst.keys = make([]int64, 0)
 	return inst
@@ -82,24 +81,25 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 		if err != nil {
 			return err
 		}
-		if record[0] != "" && record[1] != "" {
+		if record[0] != "" && record[2] != "" {
 			oneQuoatation := &Quotation{}
 			oneQuoatation.Machines = make([]*MachineDetails, 0)
 			oneQuoatation.SrNo = record[0]
-			oneQuoatation.Region = record[1]
-			oneQuoatation.MachineType = record[2]
-			oneQuoatation.RefNo = record[3]
-			oneQuoatation.Address = strings.TrimSpace(record[4])
-			oneQuoatation.ExpiryDate = record[5]
-			oneQuoatation.Period = record[6]
-			oneQuoatation.PaymentTerms = record[7]
+			oneQuoatation.BillDate = record[1]
+			oneQuoatation.Region = record[2]
+			oneQuoatation.MachineType = record[3]
+			oneQuoatation.RefNo = record[4]
+			oneQuoatation.Address = strings.TrimSpace(record[5])
+			oneQuoatation.ExpiryDate = record[6]
+			oneQuoatation.Period = record[7]
+			oneQuoatation.PaymentTerms = record[8]
 			oneQuoatation.Total = 0.0
-			oneQuoatation.QuotationType = strings.ToUpper(strings.TrimSpace(record[11]))
+			oneQuoatation.QuotationType = strings.ToUpper(strings.TrimSpace(record[12]))
 			oneMachine := &MachineDetails{}
 			oneMachine.SrNo = record[0]
-			oneMachine.Model = record[8]
-			oneMachine.Rate = record[9]
-			oneMachine.Qty = record[10]
+			oneMachine.Model = record[9]
+			oneMachine.Rate = record[10]
+			oneMachine.Qty = record[11]
 			/*Calculate GST & Total & Append total to grand Total*/
 			rate, err := strconv.ParseFloat(oneMachine.Rate, 64)
 			if err != nil {
@@ -166,9 +166,9 @@ func (t *TemplateReader) ReadCsv(filepath string, ignoreFirstLine bool) error {
 		if record[0] != "" && record[1] == "" {
 			oneMachine := &MachineDetails{}
 			oneMachine.SrNo = record[0]
-			oneMachine.Model = record[8]
-			oneMachine.Rate = record[9]
-			oneMachine.Qty = record[10]
+			oneMachine.Model = record[9]
+			oneMachine.Rate = record[10]
+			oneMachine.Qty = record[11]
 			/*Calculate GST & Total & Append total to grand Total*/
 			rate, err := strconv.ParseFloat(oneMachine.Rate, 64)
 			if err != nil {
