@@ -3,11 +3,13 @@ package mdToPdf
 import (
 	"bytes"
 	"fmt"
-	"github.com/jung-kurt/gofpdf"
-	bf "gopkg.in/russross/blackfriday.v2"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/jung-kurt/gofpdf"
+	bf "gopkg.in/russross/blackfriday.v2"
+	"github.com/devarsh/miniApps/template/assets"
 )
 
 /*var (
@@ -61,6 +63,31 @@ func NewMdtoPdf(fontSize float64, fontStyle string) *MdtoPdf {
 	return newInst
 }
 
+func (md *MdtoPdf) NewPdfWithHeader(fileBytes []byte, outfileName string, footer string) error {
+	md.resetInternals()
+	md.pdf = gofpdf.NewCustom(&gofpdf.InitType{
+		UnitStr:        "mm",
+		Size:           gofpdf.SizeType{Wd: 210, Ht: 297},
+		OrientationStr: "P",
+	})
+	md.ht = md.pdf.PointConvert(md.fontSize)
+	md.pdf.SetFont(md.fontStyle, "", md.fontSize)
+	md.pdf.SetFooterFunc(func() {
+		md.pdf.SetY(-15)
+		md.pdf.SetFont(md.fontStyle, "I", md.fontSize)
+		md.pdf.CellFormat(0, md.ht, footer, "", 0, "C", false, 0, "")
+	})
+	md.pdf.AddPage()
+	renderer := bf.New(bf.WithExtensions(bf.Tables))
+	nodes := renderer.Parse(fileBytes)
+	nodes.Walk(md.customWalker(true))
+	err := md.pdf.OutputFileAndClose(outfileName + ".pdf")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (md *MdtoPdf) NewPdf(fileBytes []byte, outfileName string, footer string) error {
 	md.resetInternals()
 	md.pdf = gofpdf.NewCustom(&gofpdf.InitType{
@@ -80,8 +107,10 @@ func (md *MdtoPdf) NewPdf(fileBytes []byte, outfileName string, footer string) e
 
 	renderer := bf.New(bf.WithExtensions(bf.Tables))
 	nodes := renderer.Parse(fileBytes)
-	nodes.Walk(md.walker)
-
+	nodes.Walk(md.customWalker(false))
+	if md.pdf.Err() {
+		return md.pdf.Error()
+	}
 	err := md.pdf.OutputFileAndClose(outfileName + ".pdf")
 	if err != nil {
 		return err
@@ -101,106 +130,143 @@ func (md *MdtoPdf) resetInternals() {
 	}
 }
 
-func (md *MdtoPdf) walker(node *bf.Node, entering bool) bf.WalkStatus {
-	switch node.Type {
-	case bf.Strong:
-		if entering {
-			if md.tableEnabled {
-				md.tableData[md.tableRowIndex][md.tableColumnIndex].Bold = true
-				break
-			}
-			md.pdf.SetFont(md.fontStyle, "B", md.fontSize)
-		} else {
-			md.pdf.SetFont(md.fontStyle, "", md.fontSize)
-		}
-	case bf.Paragraph:
-		if md.liLevel > 0 {
+func (md *MdtoPdf) customWalker(printHeader bool) bf.NodeVisitor {
+	return func(node *bf.Node, entering bool) bf.WalkStatus {
+		switch node.Type {
+		case bf.Strong:
 			if entering {
-				md.pdf.Ln(md.ht / 2)
+				if md.tableEnabled {
+					md.tableData[md.tableRowIndex][md.tableColumnIndex].Bold = true
+					break
+				}
+				md.pdf.SetFont(md.fontStyle, "B", md.fontSize)
+			} else {
+				md.pdf.SetFont(md.fontStyle, "", md.fontSize)
+			}
+		case bf.Paragraph:
+			if md.liLevel > 0 {
+				if entering {
+					md.pdf.Ln(md.ht / 2)
+					break
+				}
+			}
+			md.pdf.Ln(md.ht)
+		case bf.HTMLSpan:
+			if string(node.Literal) == "<br/>" {
+				md.pdf.Ln(md.ht)
+			}
+		case bf.Document:
+			break
+		case bf.HorizontalRule:
+			if printHeader != true {
+				md.pdf.SetMargins(20, 40, 20)
+			}
+			md.pdf.AddPage()
+		case bf.Text:
+			if md.liLevel > 0 {
+				if md.orderedListLevelType[md.liLevel] {
+					spacer := repeatString("     ", md.liLevel-1)
+					if string(node.Literal) != "" {
+						md.pdf.Write(md.ht, fmt.Sprintf("%s%d. %s", spacer, md.orderedListLevelCount[md.liLevel], string(node.Literal)))
+					}
+				} else {
+					spacer := repeatString("       ", md.liLevel-1)
+					md.pdf.Write(md.ht, fmt.Sprintf("%s", spacer))
+					md.drawBullet(md.pdf.GetX()+md.ht/2, md.pdf.GetY()+md.ht/2+md.ht/4, md.ht/3)
+					md.pdf.Write(md.ht, fmt.Sprintf(" %s", string(node.Literal)))
+				}
 				break
 			}
-		}
-		md.pdf.Ln(md.ht)
-	case bf.HTMLSpan:
-		if string(node.Literal) == "<br/>" {
-			md.pdf.Ln(md.ht)
-		}
-	case bf.Document:
-		break
-	case bf.HorizontalRule:
-		md.pdf.SetMargins(20, 40, 20)
-		md.pdf.AddPage()
-	case bf.Text:
-		if md.liLevel > 0 {
-			if md.orderedListLevelType[md.liLevel] {
-				spacer := repeatString("     ", md.liLevel-1)
-				if string(node.Literal) != "" {
-					md.pdf.Write(md.ht, fmt.Sprintf("%s%d. %s", spacer, md.orderedListLevelCount[md.liLevel], string(node.Literal)))
+			if md.tableEnabled {
+				md.tableData[md.tableRowIndex][md.tableColumnIndex].Text = string(node.Literal)
+				var alignment string
+				switch node.Align {
+				case bf.TableAlignmentCenter:
+					alignment = "C"
+				case bf.TableAlignmentLeft:
+					alignment = "L"
+				case bf.TableAlignmentRight:
+					alignment = "R"
+				default:
+					alignment = "L"
 				}
-			} else {
-				spacer := repeatString("       ", md.liLevel-1)
-				md.pdf.Write(md.ht, fmt.Sprintf("%s", spacer))
-				md.drawBullet(md.pdf.GetX()+md.ht/2, md.pdf.GetY()+md.ht/2+md.ht/4, md.ht/3)
-				md.pdf.Write(md.ht, fmt.Sprintf(" %s", string(node.Literal)))
+				md.tableData[md.tableRowIndex][md.tableColumnIndex].Direction = alignment
+				break
 			}
+			md.pdf.Write(md.ht, string(node.Literal))
+		case bf.List:
+			if entering {
+				md.liLevel++
+				if node.ListFlags&bf.ListTypeOrdered != 0 {
+					md.orderedListLevelType[md.liLevel] = true
+				} else {
+					md.orderedListLevelType[md.liLevel] = false
+				}
+				md.orderedListLevelCount[md.liLevel] = 0
+			} else {
+				md.orderedListLevelCount[md.liLevel] = 0
+				md.liLevel--
+			}
+		case bf.Item:
+			if entering {
+				md.orderedListLevelCount[md.liLevel] = md.orderedListLevelCount[md.liLevel] + 1
+			}
+		case bf.Table:
+			if entering {
+				md.tableEnabled = true
+			} else {
+				md.tableEnabled = false
+				md.renderTable()
+			}
+			md.tableRowIndex = -1
+		case bf.TableRow:
+			if entering {
+				md.tableRowIndex++
+			}
+			md.tableColumnIndex = -1
+		case bf.TableCell:
+			if entering {
+				md.tableColumnIndex++
+				md.tableData[md.tableRowIndex] = append(md.tableData[md.tableRowIndex], &TableItem{})
+			}
+		case bf.Link:
+			if printHeader {
+				if entering {
+					var path, params string
+					data := strings.Split(strings.TrimSpace(string(node.LinkData.Destination)), " ")
+					if len(data) == 2 {
+						path = strings.TrimSpace(data[0])
+						params = strings.TrimSpace(data[1])
+					}
+					paramsArr := strings.Split(params, ",")
+					if len(paramsArr) == 3 {
+						x, err := strconv.ParseFloat(paramsArr[0], 64)
+						if err != nil {
+							fmt.Println("Invalid Integer", paramsArr[0])
+						}
+						w, err := strconv.ParseFloat(paramsArr[1], 64)
+						if err != nil {
+							fmt.Println("Invalid Integer", paramsArr[1])
+						}
+						h, err := strconv.ParseFloat(paramsArr[2], 64)
+						if err != nil {
+							fmt.Println("Invalid Integer", paramsArr[2])
+						}
+						imgBuf, err := assets.Asset(path)
+						if err != nil {
+							panic(err)
+						}
+						reader := bytes.NewReader(imgBuf)
+						md.pdf.RegisterImageReader(path, "PNG", reader)
+						md.pdf.ImageOptions(path, x, md.pdf.GetY(), w, h, true, gofpdf.ImageOptions{ImageType: "PNG"}, 0, "")
+					}
+				}
+			}
+		default:
 			break
 		}
-		if md.tableEnabled {
-			md.tableData[md.tableRowIndex][md.tableColumnIndex].Text = string(node.Literal)
-			var alignment string
-			switch node.Align {
-			case bf.TableAlignmentCenter:
-				alignment = "C"
-			case bf.TableAlignmentLeft:
-				alignment = "L"
-			case bf.TableAlignmentRight:
-				alignment = "R"
-			default:
-				alignment = "L"
-			}
-			md.tableData[md.tableRowIndex][md.tableColumnIndex].Direction = alignment
-			break
-		}
-		md.pdf.Write(md.ht, string(node.Literal))
-	case bf.List:
-		if entering {
-			md.liLevel++
-			if node.ListFlags&bf.ListTypeOrdered != 0 {
-				md.orderedListLevelType[md.liLevel] = true
-			} else {
-				md.orderedListLevelType[md.liLevel] = false
-			}
-			md.orderedListLevelCount[md.liLevel] = 0
-		} else {
-			md.orderedListLevelCount[md.liLevel] = 0
-			md.liLevel--
-		}
-	case bf.Item:
-		if entering {
-			md.orderedListLevelCount[md.liLevel] = md.orderedListLevelCount[md.liLevel] + 1
-		}
-	case bf.Table:
-		if entering {
-			md.tableEnabled = true
-		} else {
-			md.tableEnabled = false
-			md.renderTable()
-		}
-		md.tableRowIndex = -1
-	case bf.TableRow:
-		if entering {
-			md.tableRowIndex++
-		}
-		md.tableColumnIndex = -1
-	case bf.TableCell:
-		if entering {
-			md.tableColumnIndex++
-			md.tableData[md.tableRowIndex] = append(md.tableData[md.tableRowIndex], &TableItem{})
-		}
-	default:
-		break
+		return bf.GoToNext
 	}
-	return bf.GoToNext
 }
 
 func (md *MdtoPdf) renderTable() {

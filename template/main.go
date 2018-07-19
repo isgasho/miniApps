@@ -16,10 +16,11 @@ import (
 	"github.com/devarsh/miniApps/template/csvReader"
 	"github.com/devarsh/miniApps/template/envelope"
 	"github.com/devarsh/miniApps/template/mdToPdf"
+	"github.com/devarsh/miniApps/template/assets"
 )
 
 func initDirectory(dirPath string) {
-	subdirs := []string{"./md", "./pdf"}
+	subdirs := []string{"./md", "./pdf", "./pdfLH"}
 	for _, oneDir := range subdirs {
 		pather := path.Join(dirPath, oneDir)
 		if _, err := os.Stat(pather); os.IsNotExist(err) {
@@ -37,19 +38,20 @@ func main() {
 	ignoreFirstLine := flag.Bool("n", true, "Ignore the Header Line of CSV input file")
 	flag.Parse()
 	initDirectory(*outputDirectory)
-	ncm, err := Asset("templates/COMP/ncm.md")
+	
+	ncm, err := assets.Asset("../_assets/templates/COMP/ncm.md")
 	if err != nil {
 		panic(err)
 	}
-	ccm, err := Asset("templates/COMP/ccm.md")
+	ccm, err := assets.Asset("../_assets/templates/COMP/ccm.md")
 	if err != nil {
 		panic(err)
 	}
-	ncmNonc, err := Asset("templates/NONCOMP/ncm.md")
+	ncmNonc, err := assets.Asset("../_assets/templates/NONCOMP/ncm.md")
 	if err != nil {
 		panic(err)
 	}
-	ccmNonc, err := Asset("templates/NONCOMP/ccm.md")
+	ccmNonc, err := assets.Asset("../_assets/templates/NONCOMP/ccm.md")
 	if err != nil {
 		panic(err)
 	}
@@ -124,17 +126,18 @@ func main() {
 		filename := fmt.Sprintf("./Qoutation-%s-%s-%s-%s", oneRecord.SrNo, oneRecord.MachineType, oneRecord.Region, oneRecord.QuotationType)
 		filename1 := path.Join(*outputDirectory, "./md", filename)
 		filename2 := path.Join(*outputDirectory, "./pdf", filename)
-
+		filename3 := path.Join(*outputDirectory, "./pdfLH", filename)
 		fs, err := os.Create(filename1 + ".md")
 		if err != nil {
 			panic(err)
 		}
 		fs.Write(bytes)
 		mdPdf.NewPdf(bytes, filename2, "For any complaints call us on 079-26424229 / 99252 04929 / 99099 58229")
+		mdPdf.NewPdfWithHeader(bytes, filename3, "For any complaints call us on 079-26424229 / 99252 04929 / 99099 58229")
 		envelopeGen.NewAddress(oneRecord.Address)
 	}
-	filename3 := path.Join(*outputDirectory, "./envelope.pdf")
-	envelopeGen.GenerateFile(filename3)
+	filename4 := path.Join(*outputDirectory, "./envelope.pdf")
+	envelopeGen.GenerateFile(filename4)
 }
 
 func IndianCurrComma(amount string) string {
