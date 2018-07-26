@@ -45,7 +45,7 @@ var uas *utils.UA
 
 func setUpFlags() {
 	username := flag.String("u", "13618", "Enter login username")
-	password := flag.String("pwd", "ashaka@2468", "Enter Login password")
+	password := flag.String("pwd", "beena@2468", "Enter Login password")
 	yearStr := flag.String("y", "2018", "Year for which you want to fetch invoices")
 	monthInt := flag.Int("m", 3, "Month for which you want to fetch invoices i.e 1 - Janurary, 2 February")
 	recordsPerPageStr := flag.String("recordsPerPage", "100", "No of invoices to fetch since pagination is not supported we fetch all records in one go. Don't change if you dont know what you're doing it should be a positive number")

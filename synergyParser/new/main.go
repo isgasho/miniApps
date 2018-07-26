@@ -51,7 +51,6 @@ func setupFlags() {
 	filePath = *outFilePath
 	monthStr := time.Month(*monthInt)
 	month = monthStr.String()
-	fmt.Println(month,year)
 	return
 }
 
@@ -74,7 +73,6 @@ func getCreateInvoicePurpose() string {
 
 func getLoginPurpose() string {
 	x := fmt.Sprintf(`["{\"inputs\":{\"userId\":\"%s\",\"pwd\":\"%s\",\"userType\":\"PS\"}}","login"]`, usernameG, passwordG)
-	fmt.Println(x)
 	return x
 }
 

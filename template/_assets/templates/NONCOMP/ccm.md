@@ -2,9 +2,9 @@
 **Date:**{{datesFmt .BillDate}}
 <br/>
 {{- if eq .QuotationType "NEWNON"}} 
-**REF:**VRPL:{{.Region}}:{{.MachineType}}:NEW:AMC:{{.RefNo}}
+**REF:**VRPL:{{.Region}}:{{.MachineType}}:NEWNON:AMC:{{.RefNo}}
 {{- else if eq .QuotationType "RENNON"}}
-**REF:**VRPL:{{.Region}}:{{.MachineType}}:REN:AMC:{{.RefNo}}
+**REF:**VRPL:{{.Region}}:{{.MachineType}}:RENNON:AMC:{{.RefNo}}
 {{- else}}
 **REF:**No Refrence Found For this Quotation Type
 {{- end}}

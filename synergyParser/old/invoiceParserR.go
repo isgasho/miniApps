@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -25,7 +24,6 @@ func fetchReimbursmentList(respBody string) []string {
 	if strings.TrimSpace(title.Text()) == "Failure Message" {
 		return []string{""}
 	}
-	fmt.Println(respBody)
 	trs := doc.Find("form", "name", "AgencyInvoice").
 		Find("table").
 		Find("tbody").
@@ -73,7 +71,7 @@ func fetchRInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
 		return nil
 	}
 	braces := regexp.MustCompile("[()]")
-	numbersOnly := regexp.MustCompile("[^0-9]")
+	numbersOnly := regexp.MustCompile("[^0-9.]")
 	data := &EmployeeDetail{}
 	data.EmployeeName = strings.TrimSpace(tdsList[0].Find("div").Text())
 	vals := braces.Split(data.EmployeeName, -1)
