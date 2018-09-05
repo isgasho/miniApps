@@ -30,7 +30,7 @@ func writeInvoiceToCsv(invoice *FinalInvoices) {
 		oneRecord = []string{oneInvoiceDetail.EmployeeId, "", "", "", ""}
 		records = append(records, oneRecord)
 	}
-	finalFilePath := path.Join(filePath, fmt.Sprintf("./%s-%s-%s.csv", invoice.OneInvoicePid.InvoiceNo, month, year))
+	finalFilePath := path.Join(filePath, "./invoices", fmt.Sprintf("./%s-%s-%s.csv", invoice.OneInvoicePid.InvoiceNo, month, year))
 	color.Cyan("Creating file %s", finalFilePath)
 	file, err := os.Create(finalFilePath)
 	if err != nil {

@@ -25,6 +25,7 @@ var (
 	year                  = ""
 	filePath              = ""
 	reimbursement         = false
+	reimbursementExcel    = false
 	generateCreateInvFile = false
 	noOfProxy             = 6
 	threadCnt             = 3
@@ -36,17 +37,20 @@ var uas *utils.UA
 
 func setupFlags() {
 	username := flag.String("u", "13618", "Enter Username")
-	password := flag.String("pwd", "acute#258", "Enter Password")
+	password := flag.String("pwd", "acute@258", "Enter Password")
 	yearStr := flag.String("y", "2018", "Enter year for which you want the invoice i.e 2017,2018")
 	monthInt := flag.Int("m", 1, "Enter Month number for which you want the invoice i.e 1 -January, 2- February")
 	reimbursementB := flag.Bool("r", false, "If Need to fetch reimbursement details pass true")
+	reimbursementBE := flag.Bool("re", false, "If Need to fetch reimbursement invoice employee details pass true")
 	outFilePath := flag.String("p", "./", "outfile path")
 	generateCreateInvFileG := flag.Bool("g", false, "If need to generate create invoice file pass true")
 	flag.Parse()
+	fmt.Println(*username, *password, *yearStr, *monthInt, *reimbursementB, *generateCreateInvFileG)
 	usernameG = *username
 	passwordG = *password
 	year = *yearStr
 	reimbursement = *reimbursementB
+	reimbursementExcel = *reimbursementBE
 	generateCreateInvFile = *generateCreateInvFileG
 	filePath = *outFilePath
 	monthStr := time.Month(*monthInt)
@@ -65,6 +69,7 @@ func _init() {
 	uas = utils.NewRandomUA()
 	color.Magenta("Loading User agents")
 	uas.LoadDummyUserAgents()
+	initDirectory(filePath)
 }
 
 func getCreateInvoicePurpose() string {
@@ -72,8 +77,11 @@ func getCreateInvoicePurpose() string {
 }
 
 func getLoginPurpose() string {
-	x := fmt.Sprintf(`["{\"inputs\":{\"userId\":\"%s\",\"pwd\":\"%s\",\"userType\":\"PS\"}}","login"]`, usernameG, passwordG)
-	return x
+	return fmt.Sprintf(`["{\"inputs\":{\"userId\":\"%s\",\"pwd\":\"%s\",\"userType\":\"PS\"}}","login"]`, usernameG, passwordG)
+}
+
+func getReimbursementInvoiceEmpExcel(empId string, month string, year string, fromDt string, toDt string) string {
+	return fmt.Sprintf(`https://synergy.wipro.com/services/rest/file/excelDownload?contractorId=%s&invMonth=%s&invYear=%s&expFromDate=%s&expToDate=%s`, empId, month, year, fromDt, toDt)
 }
 
 func getReimbursementListPurpose() string {
@@ -104,6 +112,7 @@ func main() {
 	setupFlags()
 	color.Magenta("......Start......\n Press Ctrl+c to stop")
 	_init()
+	initDirectory(filePath)
 	client := makeClient()
 	cookie, err := loadPage(client)
 	if err != nil {
@@ -144,6 +153,7 @@ func main() {
 			chAll := mergeRequestChanR(ctx, ch1, ch2, ch3)
 			split1 := make(chan *RResult)
 			split2 := make(chan *RResult)
+			var split3 chan *RResult
 			var wg sync.WaitGroup
 			wg.Add(1)
 			go writeAllInvoicesToCsvChanR(ctx, "ReimbursementAllInvoices", &wg, split1)
@@ -151,7 +161,18 @@ func main() {
 				wg.Add(1)
 				go writeInvoiceToCsvChanR(ctx, &wg, split2)
 			}
-			go duplicateChannelsR(ctx, chAll, split1, split2)
+			if reimbursementExcel == true {
+				split3 = make(chan *RResult)
+				for i := 0; i < 2; i++ {
+					wg.Add(1)
+					go generateExcelChanR(ctx, client, &wg, split3)
+				}
+			}
+			if reimbursementExcel == true {
+				go duplicateChannelsR(ctx, chAll, split1, split2, split3)
+			} else {
+				go duplicateChannelsR(ctx, chAll, split1, split2)
+			}
 			c := make(chan os.Signal)
 			signal.Notify(c, os.Interrupt)
 			go func() {

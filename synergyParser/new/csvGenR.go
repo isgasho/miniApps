@@ -27,7 +27,7 @@ func writeInvoiceToCsvR(invoice []RInvoiceEmp) {
 		}
 		records = append(records, oneRecord)
 	}
-	finalFilePath := path.Join(filePath, fmt.Sprintf("./%s-%s-%s.csv", invoice[0].InvoiceNo, month, year))
+	finalFilePath := path.Join(filePath, "./rinvoices", fmt.Sprintf("./%s-%s-%s.csv", invoice[0].InvoiceNo, month, year))
 	color.Cyan("Creating file %s", finalFilePath)
 	file, err := os.Create(finalFilePath)
 	if err != nil {

@@ -143,3 +143,15 @@ func writeInvoiceToCsvChanR(ctx context.Context, wg *sync.WaitGroup, res <-chan 
 		}
 	}
 }
+
+func generateExcelChanR(ctx context.Context, client *http.Client, wg *sync.WaitGroup, res <-chan *RResult) {
+	defer wg.Done()
+	for oneRes := range res {
+		DownloadExcel(client, oneRes.Invoice)
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+	}
+}
