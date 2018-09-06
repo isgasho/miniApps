@@ -79,6 +79,12 @@ func fetchRInvoiceDetailsEmployee(parent soup.Root) *EmployeeDetail {
 		data.EmployeeID = vals[1]
 		data.EmployeeName = vals[0]
 	}
+	data.InvoiceMonth = strings.TrimSpace(extractAllText(tdsList[2].Find("div")))
+	empData := strings.Split(data.InvoiceMonth, "~")
+	if len(empData) == 3 {
+		data.InvoiceMonth = empData[0]
+		data.InvoiceYear = braces.ReplaceAllString(empData[1], "")
+	}
 	data.PeriodFrom = strings.TrimSpace(tdsList[3].Find("div").Text())
 	data.PeriodTo = strings.TrimSpace(tdsList[4].Find("div").Text())
 	data.InvoiceAmount = numbersOnly.ReplaceAllLiteralString(strings.TrimSpace(tdsList[5].Find("div").Text()), "")

@@ -162,7 +162,7 @@ func main() {
 				go writeInvoiceToCsvChanR(ctx, &wg, split2)
 			}
 			if reimbursementExcel == true {
-				split3 = make(chan *RResult)
+				split3 = make(chan *RResult, 5)
 				for i := 0; i < 2; i++ {
 					wg.Add(1)
 					go generateExcelChanR(ctx, client, &wg, split3)

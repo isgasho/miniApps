@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"os"
+	"path"
 
 	"github.com/fatih/color"
 	"golang.org/x/net/publicsuffix"
@@ -53,4 +55,17 @@ func makeClient() *http.Client {
 	urlProxy := &url.URL{Host: host}
 	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
 	return &client
+}
+
+func initDirectory(dirPath string) {
+	subdirs := []string{"./invoices", "./rinvoices", "./rexcels"}
+	for _, oneDir := range subdirs {
+		pather := path.Join(dirPath, oneDir)
+		if _, err := os.Stat(pather); os.IsNotExist(err) {
+			err := os.MkdirAll(pather, 0755)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
 }

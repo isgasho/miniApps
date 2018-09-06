@@ -23,6 +23,18 @@ func makeRequestChanR(ctx context.Context, client *http.Client, cookies string, 
 	return resChan
 }
 
+func downloadRInvoiceOneToExcelChan(ctx context.Context, wg *sync.WaitGroup, client *http.Client, cookies string, res <-chan *Result) {
+	defer wg.Done()
+	for oneRes := range res {
+		downloadRinvoicetoExcel(client, oneRes.InvDetail, oneRes.InvoiceNo, cookies)
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+	}
+}
+
 func writeRInvoiceOneToCsvChan(ctx context.Context, wg *sync.WaitGroup, res <-chan *Result) {
 	defer wg.Done()
 	for oneRes := range res {

@@ -74,7 +74,7 @@ func writeInvoiceOnetoCsv(invoice OneInvoiceDetail, invoiceNo string) error {
 		oneRecord = []string{"( " + oneEmp.EmployeeID + " )", "", "", "", ""}
 		records = append(records, oneRecord)
 	}
-	finalFilePath := path.Join(filePath, fmt.Sprintf("Synergy-%s-%s-%s.csv", invoiceNo, month, year))
+	finalFilePath := path.Join(filePath, "./invoices", fmt.Sprintf("Synergy-%s-%s-%s.csv", invoiceNo, month, year))
 	color.Cyan("Creating File %s", finalFilePath)
 	err := utils.WriteCsv(records, finalFilePath)
 	if err != nil {
