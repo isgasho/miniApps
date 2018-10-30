@@ -2,6 +2,8 @@ github.com/anaskhan96/soup v1.0.1 h1:3p9zOr7o2weHqDakRA1uR0SZNr6VhH5qPkm6p3gvS6o
 github.com/anaskhan96/soup v1.0.1/go.mod h1:pT5vs4HXDwA5y4KQCsKvnkpQd3D+joP7IqpiGskfWW0=
 github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
+github.com/jordan-wright/email v0.0.0-20181003202814-27742b011ce5 h1:e+YGOVpgjWOmTMugULm7fpQeFv+aCoDX/vb483Rdc5M=
+github.com/jordan-wright/email v0.0.0-20181003202814-27742b011ce5/go.mod h1:1c7szIrayyPPB/987hsnvNzLushdWf4o/79s3P08L8A=
 github.com/jung-kurt/gofpdf v1.0.0 h1:EroSdlP9BOoL5ssLYf3uLJXhCQMMM2fFxCJDKA3RhnA=
 github.com/jung-kurt/gofpdf v1.0.0/go.mod h1:7Id9E/uU8ce6rXgefFLlgrJj/GYY22cpxn+r32jIOes=
 github.com/mattn/go-colorable v0.0.9 h1:UVL0vNpWh04HeJXV0KLcaT7r06gOH2l4OW6ddYRUIY4=

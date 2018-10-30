@@ -3,6 +3,7 @@ module github.com/devarsh/miniApps
 require (
 	github.com/anaskhan96/soup v1.0.1
 	github.com/fatih/color v1.7.0
+	github.com/jordan-wright/email v0.0.0-20181003202814-27742b011ce5
 	github.com/jung-kurt/gofpdf v1.0.0
 	github.com/mattn/go-colorable v0.0.9 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect

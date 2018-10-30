@@ -41,9 +41,7 @@ Yours faithfully,
 
 
 For, **Veb Robomak (P) Ltd.**
-
-<br/>
-
+[ ](../_assets/seal.png 10,15,15)
 **Authorized Signatory**
 
 ---------------------------
@@ -67,6 +65,7 @@ We agree to provide Comprehensive Maintenance services under the agreement to ke
 3. Maintenance and services will be provided during normal working hours on all the working days.
 4. Break down calls will be responded within 48 hrs.
 5. Any parts damaged or replaced cost for the same will be borne by the Institution.
+[ ](../_assets/seal.png 10,15,15)
 
 ------------------------
 [ ](../_assets/copypad.png 10,190,30)

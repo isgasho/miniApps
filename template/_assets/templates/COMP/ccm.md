@@ -39,11 +39,8 @@ Thanking you in the meanwhile and assuring you the best of our service and kind 
 
 Yours faithfully,
 
-
 For, **Veb Robomak (P) Ltd.**
-
-<br/>
-
+[ ](../_assets/seal.png 10,15,15)
 **Authorized Signatory**
 
 ---------------------------
@@ -73,6 +70,7 @@ We agree to provide Comprehensive Maintenance services under the agreement to ke
 Major up gradation of the system.
 
 Any work external to the machine such as maintenance of the attachment accessories etc. not originally included in the contract. Repairs of malfunctioning or damaged due to rat bites, damages due to accident, transportation negligence, natural disaster or use of non-standard electrical power and power fluctuation or short circuit.
+[ ](../_assets/seal.png 10,15,15)
 
 ------------------------
 [ ](../_assets/copypad.png 10,190,30)

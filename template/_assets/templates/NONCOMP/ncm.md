@@ -41,9 +41,7 @@ Yours faithfully,
 
 
 For, **Veb Robomak (P) Ltd.**
-
-<br/>
-
+[ ](../_assets/seal.png 10,15,15)
 **Authorized Signatory**
 
 ---------------------------
@@ -64,11 +62,11 @@ We agree to provide Comprehensive Maintenance services under the agreement to ke
 
 1. Maintenance will cover both preventive and breakdown calls. 
 2. Preventive maintenance will be provided Quarterly.
-3. The service includes as under: cleaning of spindles, encoding diaphragm change, belt checking, checking of RPM of the motor, cleaning of air filter & checking of
-spindle unit.
+3. The service includes as under: cleaning of spindles, encoding diaphragm change, belt checking, checking of RPM of the motor, cleaning of air filter & checking of spindle unit.
 4. Maintenance and services will be provided during normal working hours on all the working days.
 5. Break down calls will be responded within 48 hrs.
 6. Any parts damaged or replaced cost for the same will be borne by the Institution.
+[ ](../_assets/seal.png 10,15,15)
 
 --------------
 [ ](../_assets/copypad.png 10,190,30)
