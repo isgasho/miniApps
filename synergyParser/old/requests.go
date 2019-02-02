@@ -2,13 +2,12 @@ package main
 
 import (
 	"errors"
+	"github.com/devarsh/miniApps/synergyParser/utils"
+	"github.com/fatih/color"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/devarsh/miniApps/synergyParser/utils"
-	"github.com/fatih/color"
 )
 
 func loadPage(client *http.Client) (string, error) {

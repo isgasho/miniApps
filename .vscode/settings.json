@@ -9,4 +9,12 @@
     "go.useCodeSnippetsOnFunctionSuggest": true,
     "go.formatTool": "goreturns",
     "workbench.colorTheme": "Code Blue",
+    "go.alternateTools": {
+        "go-langserver": "bingo",
+      },
+      "go.languageServerExperimentalFeatures": {
+        "format": true,
+        "autoComplete": true
+      },
+      "go.useLanguageServer": true
 }

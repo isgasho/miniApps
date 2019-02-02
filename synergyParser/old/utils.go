@@ -52,8 +52,10 @@ func makeClient() *http.Client {
 	}
 	color.Magenta("New Proxy Setup :", proxyAdr.ToString())
 	host := fmt.Sprintf("%s:%s", proxyAdr.Ip, proxyAdr.Port)
+	fmt.Println(host)
 	urlProxy := &url.URL{Host: host}
 	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
+	//client := http.Client{Jar: jar}
 	return &client
 }
 

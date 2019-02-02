@@ -31,6 +31,7 @@ func loadPage(client *http.Client) (string, error) {
 func performLogin1(client *http.Client, cookies string) (string, error) {
 	reqFormData := formData()
 	reqFormData.Set("parameters", getLoginPurpose())
+	fmt.Println(getLoginPurpose())
 	req, err := http.NewRequest("POST", apiUrl, strings.NewReader(reqFormData.Encode()))
 	if err != nil {
 		return "", err
