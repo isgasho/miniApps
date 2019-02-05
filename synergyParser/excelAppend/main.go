@@ -6,11 +6,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/360EntSecGroup-Skylar/excelize"
-	"github.com/kyokomi/emoji"
 	"github.com/olekukonko/tablewriter"
 	"io"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 )
 
@@ -23,12 +23,12 @@ var (
 	sheetName         = "ASheet2"
 	EmployeeName      = 0
 	EmployeeId        = 1
-	Month             = 8
-	Year              = 9
-	ClaimedAmount     = 13
-	EligibleAmount    = 17
-	ExcessAmount      = 18
-	InvoiceNo         = 20
+	Month             = 2
+	Year              = 3
+	ClaimedAmount     = 4
+	EligibleAmount    = 5
+	ExcessAmount      = 6
+	InvoiceNo         = 7
 	Payment_EmpID     = 1
 	Payment_SynergyID = 2
 	AcuteSynergyIDMap = map[string]string{}
@@ -41,6 +41,8 @@ func flags() {
 	sout := flag.String("o", "./out", "Directory where to put completed files")
 	sskip := flag.Bool("skip", true, "Weather to skip first line from input file")
 	sName := flag.String("sname", "ASheet2", "Sheet Name to be used for generation")
+	_ = flag.String("z_validationFormat", "none", "EmployeeName|EmployeeID|Month|Year|ClaimedAmount|ExcessAmount|EligibleAmount|InvoiceNo")
+	_ = flag.String("z_paymentFormat", "none", "sr_cd|emp_id|REF_NO|...others")
 	flag.Parse()
 	inputFile = *sinput
 	skipHeader = *sskip
@@ -74,30 +76,45 @@ func main() {
 }
 
 func PrintOutput(AllResults []*Result) {
-	file, err := os.Create("Program_output.txt")
+	file, err := os.Create(path.Join(outputPath, "Program_output.csv"))
 	defer file.Close()
 	if err != nil {
 		fmt.Println("Error Generating Report", err)
 	}
-	w := io.MultiWriter(file, os.Stdout)
-	table := tablewriter.NewWriter(w)
-	table.SetHeader([]string{"FileName", "Status", "Failure_Reason", "Output_File_Name"})
+	w := csv.NewWriter(file)
+	defer w.Flush()
+	table := tablewriter.NewWriter(os.Stdout)
+	header := []string{"FileName", "Status", "Failure_Reason", "Output_File_Name"}
+	table.SetHeader(header)
+	w.Write(header)
 	for _, v := range AllResults {
 		if v.Result == true {
-			table.Append([]string{v.FileName, emoji.Sprint(":white_check_mark:"), v.FailureReason, v.OuputFileName})
+			failed := []string{v.FileName, "SUCCESS", v.FailureReason, v.OuputFileName}
+			table.Append(failed)
+			w.Write(failed)
 		} else {
-			table.Append([]string{v.FileName, emoji.Sprint(":x:"), v.FailureReason, v.OuputFileName})
+			success := []string{v.FileName, "X", v.FailureReason, v.OuputFileName}
+			table.Append(success)
+			w.Write(success)
 		}
 	}
 	table.Render()
 }
 
 func OpenAndEditExcel(line []string) *Result {
+	if len(line)-1 != 7 {
+		return &Result{FileName: "Validation.csv", Result: false, FailureReason: "CSV File Less or More Columns"}
+	}
+	regex, err := regexp.Compile("[^A-Za-z]+")
+	if err != nil {
+		return &Result{FileName: "Validation.csv", Result: false, FailureReason: err.Error()}
+	}
+	line[Month] = regex.ReplaceAllString(line[Month], "")
 	filename := fmt.Sprintf("%s-%s-%s-%s.xlsx", strings.TrimSpace(line[InvoiceNo]), strings.TrimSpace(line[EmployeeId]), strings.TrimSpace(line[Month]), strings.TrimSpace(line[Year]))
 	xlsx, err := excelize.OpenFile(path.Join(scanDir, fmt.Sprintf("./%s", filename)))
 	if err != nil {
 		if os.IsNotExist(err) {
-			return &Result{FileName: filename, Result: false, FailureReason: "Not Found"}
+			return &Result{FileName: filename, Result: false, FailureReason: "File Not Found"}
 		}
 		return &Result{FileName: filename, Result: false, FailureReason: err.Error()}
 
@@ -115,7 +132,7 @@ func OpenAndEditExcel(line []string) *Result {
 	for k, v := range excelLine {
 		xlsx.SetCellValue(sheetName, k, v)
 	}
-	outputFile := path.Join(outputPath, fmt.Sprintf("./%s-%s-%s-%s.xlsx", strings.TrimSpace(line[EmployeeId]), strings.TrimSpace(line[InvoiceNo]), strings.TrimSpace(line[Month]), strings.TrimSpace(line[Year])))
+	outputFile := path.Join(outputPath, fmt.Sprintf("./%s-%s-%s-%s-%s.xlsx", AcuteId, strings.TrimSpace(line[EmployeeId]), strings.TrimSpace(line[InvoiceNo]), strings.TrimSpace(line[Month]), strings.TrimSpace(line[Year])))
 	err = xlsx.SaveAs(outputFile)
 	if err != nil {
 		return &Result{FileName: filename, Result: false, FailureReason: err.Error()}
@@ -135,11 +152,15 @@ func ReadPayment() {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-
 			fmt.Print(err)
 			break
 		}
+		if len(line) < 3 {
+			fmt.Println("Payment File Not enough records")
+			break
+		}
 		AcuteSynergyIDMap[line[Payment_SynergyID]] = line[Payment_EmpID]
+
 	}
 }
 

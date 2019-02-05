@@ -61,22 +61,27 @@ func appendCookies(cookies string, cookiesArray []*http.Cookie) string {
 	return cookies
 }
 
-func makeClient() *http.Client {
+func makeClient(proxyEnabled bool) *http.Client {
 	jar, err := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
 	if err != nil {
 		panic(err)
 	}
-	res, proxyAdr := proxy.GetProxy()
-	color.Magenta("Setting Up Http Client")
-	if res == false {
-		color.Magenta("Couldnt setup proxy using local IP")
-		client := http.Client{Jar: jar}
+	if proxyEnabled {
+		res, proxyAdr := proxy.GetProxy()
+		color.Magenta("Setting Up Http Client")
+
+		if res == false {
+			color.Magenta("Couldnt setup proxy using local IP")
+			client := http.Client{Jar: jar}
+			return &client
+		}
+		color.Magenta("New Proxy Setup :", proxyAdr.ToString())
+		host := fmt.Sprintf("%s:%s", proxyAdr.Ip, proxyAdr.Port)
+		urlProxy := &url.URL{Host: host}
+		client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
 		return &client
 	}
-	color.Magenta("New Proxy Setup :", proxyAdr.ToString())
-	host := fmt.Sprintf("%s:%s", proxyAdr.Ip, proxyAdr.Port)
-	urlProxy := &url.URL{Host: host}
-	client := http.Client{Jar: jar, Transport: &http.Transport{Proxy: http.ProxyURL(urlProxy)}}
+	client := http.Client{Jar: jar}
 	return &client
 }
 

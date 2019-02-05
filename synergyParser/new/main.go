@@ -31,6 +31,7 @@ var (
 	threadCnt             = 3
 	waitThreshold         = 10
 	version               = ""
+	proxyG                = false
 )
 
 var proxy *utils.Proxy
@@ -45,7 +46,9 @@ func setupFlags() {
 	reimbursementBE := flag.Bool("re", false, "If Need to fetch reimbursement invoice employee details pass true")
 	outFilePath := flag.String("p", "./", "outfile path")
 	generateCreateInvFileG := flag.Bool("g", false, "If need to generate create invoice file pass true")
+	proxyB := flag.Bool("proxy", false, "Should Proxy be enabled or not")
 	flag.Parse()
+	proxyG = *proxyB
 	usernameG = *username
 	passwordG = *password
 	year = *yearStr
@@ -59,12 +62,14 @@ func setupFlags() {
 }
 
 func _init() {
-	color.Magenta("Inititalizing Proxy")
-	proxy = utils.NewProxy(noOfProxy, threadCnt, waitThreshold)
-	color.Magenta("Fetching Proxy list")
-	proxy.LoadProxies()
-	color.Magenta("Ranking Proxies")
-	proxy.RankProxy()
+	if proxyG {
+		color.Magenta("Inititalizing Proxy")
+		proxy = utils.NewProxy(noOfProxy, threadCnt, waitThreshold)
+		color.Magenta("Fetching Proxy list")
+		proxy.LoadProxies()
+		color.Magenta("Ranking Proxies")
+		proxy.RankProxy()
+	}
 	color.Magenta("Initializing User Agents")
 	uas = utils.NewRandomUA()
 	color.Magenta("Loading User agents")
@@ -114,7 +119,7 @@ func main() {
 	color.Magenta("......Start......\n Press Ctrl+c to stop")
 	_init()
 	initDirectory(filePath)
-	client := makeClient()
+	client := makeClient(proxyG)
 	cookie, err := loadPage(client)
 	if err != nil {
 		fmt.Println("Error Loading the Page: ", err)
