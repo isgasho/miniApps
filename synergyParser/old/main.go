@@ -29,6 +29,7 @@ var (
 	reimbursementURL           = "https://synergy.wipro.com/synergy/AgencyViewAction.do"
 	reimbursementDetailURL     = "https://synergy.wipro.com/synergy/AgencyViewAction.do?Operation=InvoiceViewScreen&hSelectedPartner=%s&hSelectedInvoiceNumber=%s&hSelectedInvoiceStatus=PARKED"
 	reinbursementInvoiceEmpURL = "https://synergy.wipro.com/synergy/ReimbursementViewServlet"
+	timeSheetURL               = "https://synergy.wipro.com/synergy/WICN_TimeSheetAgencyViewOffShore.jsp"
 	usernameG                  = ""
 	passwordG                  = ""
 	recordsPerPage             = ""
@@ -56,7 +57,7 @@ func setUpFlags() {
 	reimbursementB := flag.Bool("r", false, "If Need to fetch reimbursement details pass true")
 	reimbursementBE := flag.Bool("re", false, "If Need to fetch reimbursement invoice employee claims pass true")
 	proxyL := flag.Bool("proxy", false, "enable proxy")
-	outFilePath := flag.String("p", "./", "outfile path")
+	outFilePath := flag.String("p", "./out", "outfile path")
 	flag.Parse()
 	usernameG = *username
 	passwordG = *password
@@ -71,8 +72,8 @@ func setUpFlags() {
 }
 
 func _init() {
-	color.Magenta("Inititalizing Proxy")
 	if proxyG {
+		color.Magenta("Inititalizing Proxy")
 		proxy = utils.NewProxy(noOfProxy, threadCnt, waitThreshold)
 		color.Magenta("Fetching Proxy list")
 		proxy.LoadProxies()

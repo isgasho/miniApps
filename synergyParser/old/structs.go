@@ -10,6 +10,7 @@ type EmployeeDetail struct {
 	WorkingDuration string
 	ContractorRate  string
 	InvoiceAmount   string
+	AttendanceDtl   []*EmployeeAttendance
 }
 
 type OneInvoiceDetail []*EmployeeDetail
@@ -18,4 +19,16 @@ type Result struct {
 	InvDetail OneInvoiceDetail
 	InvoiceNo string
 	Error     error
+}
+
+type EmployeeAttendance struct {
+	AttendaceDate    string
+	SwipeInDate      string
+	InTime           string
+	SwipeOutDate     string
+	TimeOut          string
+	TimeFromAttenSys string
+	LunchTime        string
+	ActualTimeWorked string
+	Remarks          string
 }

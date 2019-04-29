@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
+	"github.com/fatih/color"
 	"os"
 	"path"
 	"sync"
-
-	"github.com/fatih/color"
 )
 
 func invoicesChan(ctx context.Context, invoices []string) <-chan string {

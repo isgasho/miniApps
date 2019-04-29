@@ -44,7 +44,7 @@ func setupFlags() {
 	monthInt := flag.Int("m", 1, "Enter Month number for which you want the invoice i.e 1 -January, 2- February")
 	reimbursementB := flag.Bool("r", false, "If Need to fetch reimbursement details pass true")
 	reimbursementBE := flag.Bool("re", false, "If Need to fetch reimbursement invoice employee details pass true")
-	outFilePath := flag.String("p", "./", "outfile path")
+	outFilePath := flag.String("p", "./out", "outfile path")
 	generateCreateInvFileG := flag.Bool("g", false, "If need to generate create invoice file pass true")
 	proxyB := flag.Bool("proxy", false, "Should Proxy be enabled or not")
 	flag.Parse()
