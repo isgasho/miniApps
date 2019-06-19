@@ -7,27 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jung-kurt/gofpdf"
-	bf "gopkg.in/russross/blackfriday.v2"
 	"github.com/devarsh/miniApps/template/assets"
+	"github.com/jung-kurt/gofpdf"
+	bf "github.com/russross/blackfriday/v2"
 )
 
-/*var (
-	paraDepth        = 0
-	fontSize         = 12.0
-	pdf              *gofpdf.Fpdf
-	liLevel          = 0
-	tableEnabled     = false
-	tableRowIndex    = -1
-	tableColumnIndex = -1
-	footer           = "For any complaints call us on: 079 26424229 / M:99252 04929/ M:99099 58229"
-)
-
-var ht float64
-var orderedListLevelCount map[int]int
-var orderedListLevelType map[int]bool
-var tableData map[int][]*TableItem
-*/
 type TableItem struct {
 	Text      string
 	Direction string
