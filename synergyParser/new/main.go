@@ -81,6 +81,10 @@ func getCreateInvoicePurpose() string {
 	return fmt.Sprintf(`["{\"inputs\":{\"nconsfocrecid\":\"%s\"}}","cinv"]`, usernameG)
 }
 
+func getTimeSheetStEnDtPurpose(ContractorId string, invoiceMonth string, invoiceYear string) string {
+	return fmt.Sprintf(`["{\"inputs\":{\"contractorid\":\"%s\",\"strinvoicemonth\":\"%s\",\"strinvoiceyear\":\"%s\"}}","viewHeadDetails"]`, ContractorId, invoiceMonth, invoiceYear)
+}
+
 func getLoginPurpose() string {
 	return fmt.Sprintf(`["{\"inputs\":{\"userId\":\"%s\",\"pwd\":\"%s\",\"userType\":\"PS\"}}","login"]`, usernameG, passwordG)
 }

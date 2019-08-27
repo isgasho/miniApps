@@ -35,6 +35,30 @@ func getCreateInvoiceList(client *http.Client, cookies, wlInst string) error {
 	if err != nil {
 		return fmt.Errorf("Error wrapping invoicesList response to JSON")
 	}
+	/*Logic to Add TimeSheet Start Date & End Date*/
+	for _, oneInvoiceDetail := range allInvoices.Result {
+		newReqFromData := formData()
+		newReqFromData.Set("parameters", getTimeSheetStEnDtPurpose(oneInvoiceDetail.ContractorId, oneInvoiceDetail.TimeSheetMonth, oneInvoiceDetail.TimesheetYear))
+		req, err := http.NewRequest("POST", apiUrl, strings.NewReader(newReqFromData.Encode()))
+		if err != nil {
+			return err
+		}
+		req.Header = getHeaders(false, cookies, wlInst)
+		responseStr, timeTaken, err := utils.RequestMaker(client, req)
+		if err != nil {
+			return err
+		}
+		color.Yellow("Get TimeSheet Start Dt & End Dt for %s\nPOST %s\nTime Taken:%s\n", oneInvoiceDetail.ContractorId, apiUrl, timeTaken)
+		jsonExtract := gjson.Get(*responseStr, "result.0")
+		fmt.Println(jsonExtract.String())
+		timeSheetDtl := TimeSheetEmpDtl{}
+		err = json.Unmarshal([]byte(jsonExtract.String()), &timeSheetDtl)
+		if err != nil {
+			return fmt.Errorf("Error wrapping timeSheetData response to JSON")
+		}
+		oneInvoiceDetail.TimesheetStartDt = timeSheetDtl.TimeSheetStartDt
+		oneInvoiceDetail.TimesheetEndDt = timeSheetDtl.TimeSheetEndDt
+	}
 	records := make([][]string, 0)
 	headerRecord := []string{"ContractorID",
 		"ContractorState",
@@ -48,6 +72,8 @@ func getCreateInvoiceList(client *http.Client, cookies, wlInst string) error {
 		"Rmdayshours",
 		"TimeSheetMonth",
 		"TimeSheetYear",
+		"TimeSheetStartDate",
+		"TimeSheetEndDate",
 	}
 	records = append(records, headerRecord)
 	for _, oneInvoiceDetail := range allInvoices.Result {
@@ -64,6 +90,8 @@ func getCreateInvoiceList(client *http.Client, cookies, wlInst string) error {
 			oneInvoiceDetail.Rmdayshours,
 			oneInvoiceDetail.TimeSheetMonth,
 			oneInvoiceDetail.TimesheetYear,
+			oneInvoiceDetail.TimesheetStartDt,
+			oneInvoiceDetail.TimesheetEndDt,
 		}
 		records = append(records, oneRecord)
 	}

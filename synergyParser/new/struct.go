@@ -65,20 +65,28 @@ type Result struct {
 
 //Beena
 type CreateInvoiceEmp struct {
-	EmployeeName    string `json:"employeeName"`
-	ContractorId    string `json:"contractorId"`
-	ResumeNumber    string `json:"resumeNumber"`
-	EmpCompanyCode  string `json:"empCompanyCode"`
-	TimesheetYear   string `json:"timesheetYear"`
-	TimeSheetMonth  string `json:"timeSheetMonth"`
-	Rate            string `json:"Rate"`
-	RateTypeDesc    string `json:"RateTypeDesc"`
-	ContractorState string `json:"contractorState"`
-	Rmdayshours     string `json:"Rmdayshours"`
-	ProjectCode     string `json:"projectCode"`
-	InvoiceAmount   string `json:"invoiceAmount"`
+	EmployeeName     string `json:"employeeName"`
+	ContractorId     string `json:"contractorId"`
+	ResumeNumber     string `json:"resumeNumber"`
+	EmpCompanyCode   string `json:"empCompanyCode"`
+	TimesheetYear    string `json:"timesheetYear"`
+	TimeSheetMonth   string `json:"timeSheetMonth"`
+	Rate             string `json:"Rate"`
+	RateTypeDesc     string `json:"RateTypeDesc"`
+	ContractorState  string `json:"contractorState"`
+	Rmdayshours      string `json:"Rmdayshours"`
+	ProjectCode      string `json:"projectCode"`
+	InvoiceAmount    string `json:"invoiceAmount"`
+	TimesheetStartDt string `json:"timesheetStDt`
+	TimesheetEndDt   string `json:"timesheetEnDt`
+}
+
+type TimeSheetEmpDtl struct {
+	TimeSheetStartDt string `json:"dt_timesheet_start_date"`
+	TimeSheetEndDt   string `json:"dt_timesheet_end_date"`
+	EmployeeId       string `json:"str_employee_id"`
 }
 
 type AllCreateInvoiceEmpList struct {
-	Result []CreateInvoiceEmp `json:"result"`
+	Result []*CreateInvoiceEmp `json:"result"`
 }
