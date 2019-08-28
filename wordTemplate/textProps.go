@@ -293,7 +293,7 @@ func applyFontStyles(runner *document.Run, fontconfig *FontProps) {
 	}
 }
 
-func applyRunStyles(runner *document.Run, flags StyleTags) {
+func applyTextStyles(runner *document.Run, flags StyleTags) {
 	if (flags & Bold) != 0 {
 		runner.Properties().SetBold(true)
 	}

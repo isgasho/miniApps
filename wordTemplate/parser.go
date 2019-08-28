@@ -179,7 +179,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 				} else if currentState.currentTextStyle != nil && currentState.currentPara != nil {
 					run := currentState.currentPara.AddRun()
 					if currentState.currentTextStyle.flags != 0 {
-						applyRunStyles(&run, currentState.currentTextStyle.flags)
+						applyTextStyles(&run, currentState.currentTextStyle.flags)
 					}
 					if currentState.currentTextStyle.underline != nil {
 						uline := currentState.currentTextStyle.underline

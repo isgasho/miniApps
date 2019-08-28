@@ -36,13 +36,13 @@ const (
 type StyleTags int
 
 const (
-	TextShading         StyleTags = -6 //style,color,fill
-	TextBorder          StyleTags = -5 //style,color,frame,shadow,size,space
-	TextEffect          StyleTags = -4 //style
-	TextHighlight       StyleTags = -3 //style
-	Underline           StyleTags = -2 //style,color
-	Emphasis            StyleTags = -1 //style
-	Font                StyleTags = 0  //family,size,kern,charSpacing,color,scale,csize
+	TextShading         StyleTags = -6 //style={0-38},color={hex},fill={hex}
+	TextBorder          StyleTags = -5 //style={0-193},color={hex},frame={true/false},shadow={true/false},size={INT},space={INT}
+	TextEffect          StyleTags = -4 //style={0-7}
+	TextHighlight       StyleTags = -3 //style={0-17}
+	Underline           StyleTags = -2 //style={0-18},color={hex}
+	Emphasis            StyleTags = -1 //style={0-5}
+	Font                StyleTags = 0  //family={string},size={float},kern={float},charSpacing={float},color={hex},scale={string},csize={string}
 	Bold                StyleTags = 1 << 1
 	Italic              StyleTags = 1 << 2
 	Caps                StyleTags = 1 << 3
@@ -61,8 +61,6 @@ const (
 	SubScript           StyleTags = 1 << 16
 	SuperScript         StyleTags = 1 << 17
 )
-
-type Attrib byte
 
 var WhiteListSelfTags = map[string]SelfTags{}
 
