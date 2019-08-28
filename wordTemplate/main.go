@@ -18,7 +18,7 @@ func main() {
 	ancestorState.prev = nil
 	ancestorState.section = 0
 	ancestorState.currentTag = 0
-	ancestorState.currentStyle = &Styles{}
+	ancestorState.currentTextStyle = &TextStyles{}
 	parser(tokenizer, &ancestorState)
 }
 

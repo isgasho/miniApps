@@ -4,9 +4,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/unidoc/unioffice/color"
 	"github.com/unidoc/unioffice/document"
-	"github.com/unidoc/unioffice/measurement"
 	"github.com/unidoc/unioffice/schema/soo/wml"
 	"golang.org/x/net/html"
 )
@@ -81,31 +79,31 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					}
 				}
 			} else if tname, ok := WhiteListStyleTags[tnameStr]; ok {
+				var attribs map[string]string
+				if hasAttrib {
+					attribs = getAttributes(tokenizer)
+				}
 				switch tname {
 				case Bold, Italic, Caps, SmallCaps,
 					StrikeThrough, DoubleStrikeThrough, Outline,
 					Shadow, Emboss, Imprint, NoProof,
 					SnapToGrid, Vanish, WebHidden, RightToLeft,
 					SubScript, SuperScript:
-					currentState.currentStyle.flags = currentState.currentStyle.flags ^ tname
+					currentState.currentTextStyle.flags = currentState.currentTextStyle.flags ^ tname
 				case Underline:
-					var attribs map[string]string
-					if hasAttrib {
-						attribs = getAttributes(tokenizer)
-					}
 					currentState.setUnderline(attribs)
 				case Emphasis:
-					var attribs map[string]string
-					if hasAttrib {
-						attribs = getAttributes(tokenizer)
-					}
 					currentState.setEmphasis(attribs)
 				case Font:
-					var attribs map[string]string
-					if hasAttrib {
-						attribs = getAttributes(tokenizer)
-					}
-					currentState.setFont(attribs)
+					currentState.setFontStyles(attribs)
+				case TextHighlight:
+					currentState.setTextHighlight(attribs)
+				case TextEffect:
+					currentState.setTextEffect(attribs)
+				case TextBorder:
+					currentState.setTextBorders(attribs)
+				case TextShading:
+					currentState.setTextShading(attribs)
 				}
 			}
 			//fmt.Printf("%+v %p <%s>\n", currentState, currentState, tnameStr)
@@ -120,13 +118,21 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					Shadow, Emboss, Imprint, NoProof,
 					SnapToGrid, Vanish, WebHidden, RightToLeft,
 					SubScript, SuperScript:
-					currentState.currentStyle.flags = currentState.currentStyle.flags ^ tname
+					currentState.currentTextStyle.flags = currentState.currentTextStyle.flags ^ tname
 				case Underline:
-					currentState.currentStyle.underline = nil
+					currentState.currentTextStyle.underline = nil
 				case Emphasis:
-					currentState.currentStyle.emphasisStyle = wml.ST_EmUnset
+					currentState.currentTextStyle.emphasisStyle = wml.ST_EmUnset
 				case Font:
-					currentState.currentStyle.font = nil
+					currentState.currentTextStyle.font = nil
+				case TextHighlight:
+					currentState.currentTextStyle.textHighlight = wml.ST_HighlightColorUnset
+				case TextEffect:
+					currentState.currentTextStyle.textEffect = wml.ST_TextEffectUnset
+				case TextBorder:
+					currentState.currentTextStyle.textBorder = nil
+				case TextShading:
+					currentState.currentTextStyle.textshading = nil
 				}
 			} else if _, ok := WhiteListTags[tnameStr]; ok {
 				currentState = currentState.prev
@@ -145,6 +151,9 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 				case PageBreak:
 					run := currentState.currentPara.AddRun()
 					run.AddPageBreak()
+				case LineBreak:
+					run := currentState.currentPara.AddRun()
+					run.AddBreak()
 				}
 			}
 		case html.TextToken:
@@ -167,35 +176,38 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					case Company:
 						doc.AppProperties.SetCompany(txt)
 					}
-				} else if currentState.currentStyle != nil && currentState.currentPara != nil {
+				} else if currentState.currentTextStyle != nil && currentState.currentPara != nil {
 					run := currentState.currentPara.AddRun()
-					if currentState.currentStyle.flags != 0 {
-						setRunStyles(&run, currentState.currentStyle.flags)
+					if currentState.currentTextStyle.flags != 0 {
+						applyRunStyles(&run, currentState.currentTextStyle.flags)
 					}
-					if currentState.currentStyle.underline != nil {
-						uline := currentState.currentStyle.underline
+					if currentState.currentTextStyle.underline != nil {
+						uline := currentState.currentTextStyle.underline
 						run.Properties().SetUnderline(uline.style, uline.color)
 					}
-					if currentState.currentStyle.emphasisStyle != wml.ST_EmUnset {
+					if currentState.currentTextStyle.emphasisStyle != wml.ST_EmUnset {
 						em := wml.NewCT_Em()
-						em.ValAttr = currentState.currentStyle.emphasisStyle
+						em.ValAttr = currentState.currentTextStyle.emphasisStyle
 						run.Properties().X().Em = em
 					}
-					if currentState.currentStyle.font != nil {
-						fontconfig := currentState.currentStyle.font
-						if fontconfig.family != "" {
-							run.Properties().SetFontFamily(fontconfig.family)
-						}
-						if fontconfig.size != 0 {
-							run.Properties().SetSize(measurement.Distance(fontconfig.size))
-						}
-						if fontconfig.color != color.Auto {
-							run.Properties().SetColor(fontconfig.color)
-						}
-						if fontconfig.kern != 0 {
-							run.Properties().SetKerning(measurement.Distance(fontconfig.kern))
-						}
-
+					if currentState.currentTextStyle.font != nil {
+						applyFontStyles(&run, currentState.currentTextStyle.font)
+					}
+					if currentState.currentTextStyle.textHighlight != wml.ST_HighlightColorUnset {
+						hl := wml.NewCT_Highlight()
+						hl.ValAttr = currentState.currentTextStyle.textHighlight
+						run.Properties().X().Highlight = hl
+					}
+					if currentState.currentTextStyle.textEffect != wml.ST_TextEffectUnset {
+						te := wml.NewCT_TextEffect()
+						te.ValAttr = currentState.currentTextStyle.textEffect
+						run.Properties().X().Effect = te
+					}
+					if currentState.currentTextStyle.textBorder != nil {
+						applyTextBorder(&run, currentState.currentTextStyle.textBorder)
+					}
+					if currentState.currentTextStyle.textshading != nil {
+						applyTextShading(&run, currentState.currentTextStyle.textshading)
 					}
 					run.AddText(txt)
 				} else if currentState.currentRun != nil {
