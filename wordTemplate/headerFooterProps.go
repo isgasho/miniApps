@@ -1,29 +1,9 @@
-package main
+package main 
 
 import (
 	"github.com/unidoc/unioffice/document"
 	"github.com/unidoc/unioffice/schema/soo/wml"
 )
-
-type parserState struct {
-	currentPara      *document.Paragraph
-	currentRun       *document.Run
-	prev             *parserState
-	section          Tags
-	currentTag       Tags
-	currentTextStyle *TextStyles
-}
-
-func NewParserState(currentState *parserState, tagName Tags) *parserState {
-	newState := &parserState{}
-	newState.prev = currentState
-	newState.currentPara = currentState.currentPara
-	newState.currentRun = currentState.currentRun
-	newState.section = currentState.section
-	newState.currentTag = tagName
-	newState.currentTextStyle = currentState.currentTextStyle
-	return newState
-}
 
 func (p *parserState) setHeaderFooterParagraphPropsPstyle(value string) {
 	paraProps := p.currentPara.X()
