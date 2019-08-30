@@ -54,6 +54,7 @@ type FontProps struct {
 
 func (p *parserState) setTextShading(attribs map[string]string) {
 	shading := &TextShadingProps{}
+	p.currentTextStyle.textshading = shading
 	shading.style = wml.ST_ShdSolid
 	shading.color = nil
 	shading.fill = nil

@@ -1,14 +1,14 @@
-[ ](../_assets/letterpad.png 10,190,65)
+[ ](../\_assets/letterpad.png 10,190,30)
 **Date:**{{datesFmt .BillDate}}
 <br/>
-{{- if eq .QuotationType "NEW"}} 
+{{- if eq .QuotationType "NEW"}}
 **REF:**VRPL:{{.Region}}:{{.MachineType}}:NEW:AMC:{{.RefNo}}
 {{- else if eq .QuotationType "REN"}}
 **REF:**VRPL:{{.Region}}:{{.MachineType}}:REN:AMC:{{.RefNo}}
 {{- else}}
 **REF:**No Refrence Found For this Quotation Type
 {{- end}}
-<br/>                          
+<br/>  
 {{.Address}}
 
 Dear Sir,
@@ -40,11 +40,12 @@ Thanking you in the meanwhile and assuring you the best of our service and kind 
 Yours faithfully,
 
 For, **Veb Robomak (P) Ltd.**
-[ ](../_assets/seal.png 10,15,15)
+[ ](../\_assets/seal.png 10,15,15)
 **Authorized Signatory**
 
----------------------------
-[ ](../_assets/copypad.png 10,190,30)
+---
+
+[ ](../\_assets/copypad.png 10,190,30)
 **Comprehensive Annual Maintenance Contract**
 
 VRPL shall maintain the machine specified in this agreement on the terms and condition mention as below.
@@ -70,18 +71,20 @@ We agree to provide Comprehensive Maintenance services under the agreement to ke
 Major up gradation of the system.
 
 Any work external to the machine such as maintenance of the attachment accessories etc. not originally included in the contract. Repairs of malfunctioning or damaged due to rat bites, damages due to accident, transportation negligence, natural disaster or use of non-standard electrical power and power fluctuation or short circuit.
-[ ](../_assets/seal.png 10,15,15)
+[ ](../\_assets/seal.png 10,15,15)
 
-------------------------
-[ ](../_assets/copypad.png 10,190,30)
+---
+
+[ ](../\_assets/copypad.png 10,190,30)
 
 **Contract Details:**
 
 Contract Period: **{{datesFmt .Period}}**
 
-Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
-----------|----|-------|--------------|---|---------|
-50,L|30,R|25,R|30,R|14,L|32,R|
+| Model Name | Rate | GST@18% | Total With Tax | Qty  | Sub Total |
+| ---------- | ---- | ------- | -------------- | ---- | --------- |
+| 50,L       | 30,R | 25,R    | 30,R           | 14,L | 32,R      |
+
 {{- range .Machines}}
 {{.Model}}|{{indianCurr .Rate}}|{{indianCurrF .Gst}}|{{indianCurrF .TotalWithTax}}|{{.Qty}}|{{indianCurrF .Total}}|
 {{- end}}
@@ -89,7 +92,6 @@ Model Name|Rate|GST@18%|Total With Tax|Qty|Sub Total|
 RoundOff|||||{{indianCurrF .RoundOff}}|
 {{- end}}
 GrandTotal|||||{{indianCurrF .Total}}|
-
 
 <br/>
 
@@ -109,6 +111,6 @@ Signed on Behalf of Institution                Signed on Behalf of Veb Robomak P
 
 <br/>
 
-**Authorized Signature & Stamp.**           **Authorized Signature & Stamp.**
-[ ](../_assets/seal.png 95,20,20)
-**Date:**                                                       **Date: {{datesFmt .BillDate}}**
+**Authorized Signature & Stamp.** **Authorized Signature & Stamp.**
+[ ](../\_assets/seal.png 95,20,20)
+**Date:** **Date: {{datesFmt .BillDate}}**

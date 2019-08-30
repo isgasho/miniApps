@@ -9,6 +9,12 @@ const (
 	FieldNumberofPages SelfTags = 2
 	PageBreak          SelfTags = 3
 	LineBreak          SelfTags = 4
+	InlineImage        SelfTags = 5
+	AnchorImage        SelfTags = 6
+	ParaTop            SelfTags = 7
+	ParaBottom         SelfTags = 8
+	ParaLeft           SelfTags = 9
+	ParaRight          SelfTags = 10
 )
 
 //Tags are the tags with childrens
@@ -16,21 +22,23 @@ type Tags byte
 
 //Const field of type Tags
 const (
-	Document    Tags = 1
-	Body        Tags = 2
-	Center      Tags = 3
-	Left        Tags = 4
-	Right       Tags = 5
-	PageHeader  Tags = 6
-	PageFooter  Tags = 7
-	DocProps    Tags = 8
-	Title       Tags = 9
-	Author      Tags = 10
-	Description Tags = 11
-	Category    Tags = 12
-	Version     Tags = 13
-	Application Tags = 14
-	Company     Tags = 15
+	Document        Tags = 1
+	Body            Tags = 2
+	Center          Tags = 3
+	Left            Tags = 4
+	Right           Tags = 5
+	PageHeader      Tags = 6
+	PageFooter      Tags = 7
+	DocProps        Tags = 8
+	Title           Tags = 9
+	Author          Tags = 10
+	Description     Tags = 11
+	Category        Tags = 12
+	Version         Tags = 13
+	Application     Tags = 14
+	Company         Tags = 15
+	Paragraph       Tags = 16
+	ParagraphBorder Tags = 17
 )
 
 type StyleTags int
@@ -38,7 +46,7 @@ type StyleTags int
 const (
 	TextShading         StyleTags = -6 //style={0-38},color={hex},fill={hex}
 	TextBorder          StyleTags = -5 //style={0-193},color={hex},frame={true/false},shadow={true/false},size={INT},space={INT}
-	TextEffect          StyleTags = -4 //style={0-7}
+	TextEffect          StyleTags = -4 //style={0-7} //not working
 	TextHighlight       StyleTags = -3 //style={0-17}
 	Underline           StyleTags = -2 //style={0-18},color={hex}
 	Emphasis            StyleTags = -1 //style={0-5}
@@ -69,6 +77,8 @@ func initWhiteListSelfTags() {
 	WhiteListSelfTags["fieldnumberofpages"] = FieldNumberofPages
 	WhiteListSelfTags["pagebreak"] = PageBreak
 	WhiteListSelfTags["linebreak"] = LineBreak
+	WhiteListSelfTags["inlineImg"] = InlineImage
+	WhiteListSelfTags["anchorImg"] = AnchorImage
 }
 
 var WhiteListStyleTags = map[string]StyleTags{}
@@ -94,7 +104,7 @@ func initWhiteListStyleMap() {
 	WhiteListStyleTags["u"] = Underline
 	WhiteListStyleTags["em"] = Emphasis
 	WhiteListStyleTags["font"] = Font
-	WhiteListStyleTags["highlight"] = TextHighlight
+	WhiteListStyleTags["texthighlight"] = TextHighlight
 	WhiteListStyleTags["texteffect"] = TextEffect
 	WhiteListStyleTags["textborder"] = TextBorder
 	WhiteListStyleTags["textshading"] = TextShading
@@ -118,9 +128,9 @@ func initWhileListTags() {
 	WhiteListTags["version"] = Version
 	WhiteListTags["application"] = Application
 	WhiteListTags["company"] = Company
+	WhiteListTags["paragraph"] = Paragraph
+	WhiteListTags["paragraphborder"] = ParagraphBorder
 }
-
-var WhiteListAttribs = map[string]Attrib{}
 
 func initConstMap() {
 	initWhileListTags()

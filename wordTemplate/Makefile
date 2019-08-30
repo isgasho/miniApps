@@ -1,7 +1,7 @@
 clean:
-	rm -rf src unzip out.docx 
+	rm -rf unzip wordTemplate out.docx ~$$out.docx
 build: clean
 	go build
-	./src
+	./wordTemplate
 	unzip out.docx -d unzip
 all: build

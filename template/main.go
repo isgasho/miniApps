@@ -13,10 +13,10 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/devarsh/miniApps/template/assets"
 	"github.com/devarsh/miniApps/template/csvReader"
 	"github.com/devarsh/miniApps/template/envelope"
 	"github.com/devarsh/miniApps/template/mdToPdf"
-	"github.com/devarsh/miniApps/template/assets"
 )
 
 func initDirectory(dirPath string) {
@@ -38,7 +38,7 @@ func main() {
 	ignoreFirstLine := flag.Bool("n", true, "Ignore the Header Line of CSV input file")
 	flag.Parse()
 	initDirectory(*outputDirectory)
-	
+
 	ncm, err := assets.Asset("../_assets/templates/COMP/ncm.md")
 	if err != nil {
 		panic(err)
@@ -133,7 +133,10 @@ func main() {
 		}
 		fs.Write(bytes)
 		mdPdf.NewPdf(bytes, filename2, "For any complaints call us on 079-26424229 / 99252 04929 / 99099 58229")
-		mdPdf.NewPdfWithHeader(bytes, filename3, "For any complaints call us on 079-26424229 / 99252 04929 / 99099 58229")
+		err = mdPdf.NewPdfWithHeader(bytes, filename3, "For any complaints call us on 079-26424229 / 99252 04929 / 99099 58229")
+		if err != nil {
+			fmt.Println(err)
+		}
 		envelopeGen.NewAddress(oneRecord.Address)
 	}
 	filename4 := path.Join(*outputDirectory, "./envelope.pdf")
