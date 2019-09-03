@@ -1,8 +1,273 @@
 package main
 
 import (
+	"strconv"
+	"strings"
+
+	"github.com/unidoc/unioffice"
+	"github.com/unidoc/unioffice/measurement"
+	"github.com/unidoc/unioffice/schema/soo/ofc/sharedTypes"
 	"github.com/unidoc/unioffice/schema/soo/wml"
 )
+
+func (p *parserState) applyParaAlignment(attribs map[string]string) {
+	if len(attribs) != 0 {
+		for key, val := range attribs {
+			switch key {
+			case "style":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					p.currentPara.Properties().SetAlignment(wml.ST_Jc(num))
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaSpacing(attribs map[string]string) {
+	if len(attribs) != 0 {
+		for key, val := range attribs {
+			switch key {
+			case "after", "before":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					switch key {
+					case "after":
+						p.currentPara.Properties().Spacing().SetAfter(measurement.Distance(num))
+					case "before":
+						p.currentPara.Properties().Spacing().SetBefore(measurement.Distance(num))
+					}
+				}
+			case "autoafter", "autobefore":
+				if val == "true" || val == "1" || val == "on" {
+					switch key {
+					case "autoAfter":
+						p.currentPara.Properties().Spacing().SetAfterAuto(true)
+
+					case "autoBefore":
+						p.currentPara.Properties().Spacing().SetBeforeAuto(true)
+					}
+
+				}
+			case "linespacing":
+				vals := strings.Split(val, ",")
+				if len(vals) == 2 {
+					lheight := vals[0]
+					lstyle := vals[1]
+					lheightNum, err1 := strconv.ParseInt(lheight, 10, 64)
+					lstyleNum, err2 := strconv.ParseInt(lstyle, 10, 64)
+					if err1 == nil && err2 == nil {
+						p.currentPara.Properties().Spacing().SetLineSpacing(measurement.Distance(lheightNum), wml.ST_LineSpacingRule(lstyleNum))
+					}
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaIndent(attribs map[string]string) {
+	if len(attribs) != 0 {
+		for key, val := range attribs {
+			switch key {
+			case "start", "end", "hang", "first":
+				{
+					num, err := strconv.ParseInt(val, 10, 64)
+					if err == nil {
+						switch key {
+						case "start":
+							p.currentPara.Properties().SetStartIndent(measurement.Distance(num))
+						case "end":
+							p.currentPara.Properties().SetEndIndent(measurement.Distance(num))
+						case "hang":
+							p.currentPara.Properties().SetHangingIndent(measurement.Distance(num))
+						case "first":
+							p.currentPara.Properties().SetFirstLineIndent(measurement.Distance(num))
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaFrame(attribs map[string]string) {
+	if len(attribs) != 0 {
+		exProps := p.currentPara.Properties().X()
+		frame := wml.NewCT_FramePr()
+		exProps.FramePr = frame
+		for key, val := range attribs {
+			switch key {
+			case "dropCap", "lines", "wrap",
+				"hAnchor", "vAnchor", "xAlign", "yAlign",
+				"hRule":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					switch key {
+					case "dropCap":
+						frame.DropCapAttr = wml.ST_DropCap(num)
+					case "lines":
+						frame.LinesAttr = &num
+					case "wrap":
+						frame.WrapAttr = wml.ST_Wrap(num)
+					case "hAnchor":
+						frame.HAnchorAttr = wml.ST_HAnchor(num)
+					case "vAnchor":
+						frame.VAnchorAttr = wml.ST_VAnchor(num)
+					case "xAlign":
+						frame.XAlignAttr = sharedTypes.ST_XAlign(num)
+					case "yAlign":
+						frame.YAlignAttr = sharedTypes.ST_YAlign(num)
+					case "hRule":
+						frame.HRuleAttr = wml.ST_HeightRule(num)
+					}
+				}
+			case "height", "width", "vpad", "hpad":
+				mes, err := wml.ParseUnionST_TwipsMeasure(val)
+				if err != nil {
+					switch key {
+					case "height":
+						frame.HAttr = &mes
+					case "width":
+						frame.WAttr = &mes
+					case "hSpace":
+						frame.HSpaceAttr = &mes
+					case "vSpace":
+						frame.VSpaceAttr = &mes
+					}
+				}
+			case "x", "y":
+				mes, err := wml.ParseUnionST_SignedTwipsMeasure(val)
+				if err != nil {
+					switch key {
+					case "x":
+						frame.XAttr = &mes
+					case "y":
+						frame.YAttr = &mes
+					}
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaTextProps(attribs map[string]string) {
+	if len(attribs) != 0 {
+		for key, val := range attribs {
+
+			switch key {
+			case "align", "direction":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					exProps := p.currentPara.Properties().X()
+					switch key {
+					case "align":
+						val := wml.NewCT_TextAlignment()
+						val.ValAttr = wml.ST_TextAlignment(num)
+						exProps.TextAlignment = val
+					case "direction":
+						val := wml.NewCT_TextDirection()
+						val.ValAttr = wml.ST_TextDirection(num)
+						exProps.TextDirection = val
+					}
+				}
+
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaShading(attribs map[string]string) {
+	if len(attribs) != 0 {
+		exProps := p.currentPara.Properties().X()
+		newShd := wml.NewCT_Shd()
+		exProps.Shd = newShd
+		for key, val := range attribs {
+			switch key {
+			case "style":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					newShd.ValAttr = wml.ST_Shd(num)
+				}
+			case "color", "fill":
+				clr, err := wml.ParseUnionST_HexColor(val)
+				if err == nil {
+					switch key {
+					case "color":
+						newShd.ColorAttr = &clr
+					case "fill":
+						newShd.FillAttr = &clr
+					}
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaTextBoxTightWrap(attribs map[string]string) {
+	if len(attribs) != 0 {
+		for key, val := range attribs {
+			switch key {
+			case "style":
+				num, err := strconv.ParseInt(val, 10, 64)
+				if err == nil {
+					wrap := wml.NewCT_TextboxTightWrap()
+					wrap.ValAttr = wml.ST_TextboxTightWrap(num)
+					p.currentPara.Properties().X().TextboxTightWrap = wrap
+				}
+			}
+		}
+	}
+}
+
+func (p *parserState) applyParaBorder(attribs map[string]string, direction SelfTags) {
+	if len(attribs) != 0 {
+		side := p.currentPara.Properties().X().PBdr
+		if side != nil {
+			currBorder := wml.NewCT_Border()
+			for key, val := range attribs {
+				switch key {
+				case "style", "size", "space":
+					num, err := strconv.ParseInt(val, 10, 64)
+					if err == nil {
+						switch key {
+						case "style":
+							currBorder.ValAttr = wml.ST_Border(num)
+						case "size":
+							currBorder.SzAttr = unioffice.Uint64(uint64(num))
+						case "space":
+							currBorder.SpaceAttr = unioffice.Uint64(uint64(num))
+						}
+					}
+				case "color":
+					clr, err := wml.ParseUnionST_HexColor(val)
+					if err == nil {
+						currBorder.ColorAttr = &clr
+					}
+				case "frame", "shadow":
+					onoff, err := wml.ParseUnionST_OnOff(val)
+					if err == nil {
+						switch key {
+						case "frame":
+							currBorder.FrameAttr = &onoff
+						case "shadow":
+							currBorder.ShadowAttr = &onoff
+						}
+					}
+				}
+			}
+			switch direction {
+			case BorderLeft:
+				side.Left = currBorder
+			case BorderRight:
+				side.Right = currBorder
+			case BorderTop:
+				side.Top = currBorder
+			case BorderBottom:
+				side.Bottom = currBorder
+			}
+		}
+	}
+}
 
 func (p *parserState) setParaProps(attribs map[string]string) {
 	currentPara := p.currentPara
@@ -12,7 +277,9 @@ func (p *parserState) setParaProps(attribs map[string]string) {
 			case "keepNext", "keepLines", "pageBreakBefore",
 				"suppressLineNumbers", "widowControl", "wordWrap",
 				"overflowPunct", "topLinePunct", "autoSpaceDE", "autoSpaceDN",
-				"rtl", "kinsoku", "adjustRightInd", "snapToGrid":
+				"rtl", "kinsoku", "adjustRightInd", "snapToGrid",
+				"contextualSpacing", "mirrorIndents", "suppressOverlap",
+				"suppressAutoHyphens":
 				if value == "true" || value == "on" || value == "1" || value == "" {
 					onOff := wml.NewCT_OnOff()
 					exprop := currentPara.Properties().X()
@@ -51,6 +318,8 @@ func (p *parserState) setParaProps(attribs map[string]string) {
 						exprop.MirrorIndents = onOff
 					case "suppressOverlap":
 						exprop.SuppressOverlap = onOff
+					case "suppressAutoHyphens":
+						exprop.SuppressAutoHyphens = onOff
 					}
 				}
 			}
@@ -94,34 +363,40 @@ func (p *parserState) setParaProps(attribs map[string]string) {
 	MirrorIndents *CT_OnOff
 	// Prevent Text Frames From Overlapping
 	SuppressOverlap *CT_OnOff
-*/
+	// Suppress Hyphenation for Paragraph
+	SuppressAutoHyphens *CT_OnOff
 
-/*
-	PStyle *CT_String
-	// Text Frame Properties
-	FramePr *CT_FramePr
-	// Numbering Definition Instance Reference
-	NumPr *CT_NumPr
 	// Paragraph Borders
 	PBdr *CT_PBdr
 	// Paragraph Shading
 	Shd *CT_Shd
-	// Set of Custom Tab Stops
-	Tabs *CT_Tabs
-	// Suppress Hyphenation for Paragraph
-	SuppressAutoHyphens *CT_OnOff
+
 	// Spacing Between Lines and Above/Below Paragraph
 	Spacing *CT_Spacing
-	// Paragraph Indentation
-	Ind *CT_Ind
 	// Paragraph Alignment
 	Jc *CT_Jc
 	// Paragraph Text Flow Direction
 	TextDirection *CT_TextDirection
 	// Vertical Character Alignment on Line
 	TextAlignment *CT_TextAlignment
+	FramePr *CT_FramePr
+	// Numbering Definition Instance Reference
+	// Paragraph Indentation
+	Ind *CT_Ind
 	// Allow Surrounding Paragraphs to Tight Wrap to Text Box Contents
 	TextboxTightWrap *CT_TextboxTightWrap
+
+*/
+
+/*
+	PStyle *CT_String
+	// Text Frame Properties
+
+	NumPr *CT_NumPr
+	// Set of Custom Tab Stops
+	Tabs *CT_Tabs
+
+
 	// Associated Outline Level
 	OutlineLvl *CT_DecimalNumber
 	// Associated HTML div ID

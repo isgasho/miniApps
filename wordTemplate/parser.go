@@ -1,12 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"strings"
 
 	"github.com/unidoc/unioffice/document"
+	"github.com/unidoc/unioffice/measurement"
 	"github.com/unidoc/unioffice/schema/soo/wml"
 	"golang.org/x/net/html"
 )
@@ -16,6 +16,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 		return
 	}
 	currentState := ancestorState
+	numberingLevel := -1
 	doc := document.New()
 	isDone := false
 	for !isDone {
@@ -39,29 +40,32 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 				case Body:
 					currentState = NewParserState(currentState, tname)
 					currentState.section = tname
+					nd := doc.Numbering.AddDefinition()
+					currentState.numDef = &nd
+				case OrderedList, UnorderedList:
+					numberingLevel++
+					currentState = NewParserState(currentState, tname)
+					currentState.section = tname
+					level := 0
+					if currentState.currentList != nil {
+						level = currentState.currentList.level + 1
+					}
+					newList := ListProps{}
+					newList.level = level
+					newList.numDefLevel = numberingLevel
+					currentState.currentList = &newList
+					var attribs map[string]string
+					if hasAttrib {
+						attribs = getAttributes(tokenizer)
+					}
+					switch tname {
+					case OrderedList:
+						currentState.setupOrderedList(attribs)
+					case UnorderedList:
+						currentState.setupUnorderedList(attribs)
+					}
 				default:
-					if currentState.section == Paragraph {
-						switch tname {
-						case ParagraphBorder:
-							currentState = NewParserState(currentState, tname)
-							currentState.section = ParagraphBorder
-							exProps := currentState.currentPara.Properties().X()
-							exProps.PBdr = wml.NewCT_PBdr()
-						}
-					} else if currentState.section == Body {
-						switch tname {
-						case Paragraph:
-							para := doc.AddParagraph()
-							currentState = NewParserState(currentState, tname)
-							currentState.currentPara = &para
-							currentState.section = Paragraph
-							var attribs map[string]string
-							if hasAttrib {
-								attribs = getAttributes(tokenizer)
-								currentState.setParaProps(attribs)
-							}
-						}
-					} else if currentState.section == Document {
+					if currentState.section == Document {
 						switch tname {
 						case PageHeader:
 							hdr := doc.AddHeader()
@@ -81,14 +85,15 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 							currentState.setHeaderFooterParagraphPropsPstyle("Footer")
 						case DocProps:
 							currentState = NewParserState(currentState, tname)
-							currentState.section = DocProps
-
-						}
-					} else if currentState.section == DocProps {
-						switch tname {
-						case Title, Author, Description,
-							Category, Version, Application, Company:
+							currentState.section = tname
+						case DocPageBorder:
 							currentState = NewParserState(currentState, tname)
+							currentState.section = DocPageBorder
+							doc.BodySection().X().PgBorders = wml.NewCT_PageBorders()
+							if hasAttrib {
+								attribs := getAttributes(tokenizer)
+								setDocBorderProps(doc, attribs)
+							}
 						}
 					} else if currentState.section == PageHeader || currentState.section == PageFooter {
 						switch tname {
@@ -104,6 +109,60 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 							case Right:
 								currentState.setAlignmentTab(wml.ST_PTabRelativeToMargin, wml.ST_PTabLeaderNone, wml.ST_PTabAlignmentRight)
 							}
+						}
+					} else if currentState.section == DocProps {
+						switch tname {
+						case Title, Author, Description,
+							Category, Version, Application, Company:
+							currentState = NewParserState(currentState, tname)
+						}
+					} else if currentState.section == Body || currentState.section == ListItem {
+						currentState = NewParserState(currentState, tname)
+						currentState.section = tname
+						switch tname {
+						case Paragraph:
+							para := doc.AddParagraph()
+							currentState.currentPara = &para
+							var attribs map[string]string
+							if hasAttrib {
+								attribs = getAttributes(tokenizer)
+								currentState.setParaProps(attribs)
+							}
+							if currentState.section == ListItem {
+								para.Properties().SetStartIndent(measurement.Distance(int64(currentState.currentList.level * currentState.currentList.indentDelta)))
+							}
+						case Heading1:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading1")
+							}
+						case Heading2:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading2")
+							}
+						case Heading3:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading3")
+							}
+						}
+					} else if currentState.section == Paragraph {
+						switch tname {
+						case ParagraphBorder:
+							currentState = NewParserState(currentState, tname)
+							currentState.section = ParagraphBorder
+							currentState.currentPara.Properties().X().PBdr = wml.NewCT_PBdr()
+						}
+					} else if currentState.section == UnorderedList || currentState.section == OrderedList {
+						switch tname {
+						case ListItem:
+							currentState = NewParserState(currentState, tname)
+							currentState.section = tname
+							para := doc.AddParagraph()
+							currentState.currentPara = &para
+							run := para.AddRun()
+							currentState.currentRun = &run
+							nd := *currentState.numDef
+							para.SetNumberingDefinition(nd)
+							para.SetNumberingLevel(currentState.currentList.numDefLevel)
 						}
 					}
 				}
@@ -133,14 +192,11 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					currentState.setTextBorders(attribs)
 				case TextShading:
 					currentState.setTextShading(attribs)
-					fmt.Println(currentState.currentTextStyle.textshading)
 				}
 			}
-			//fmt.Printf("%+v %p <%s>\n", currentState, currentState, tnameStr)
 		case html.EndTagToken:
 			tn, _ := tokenizer.TagName()
 			tnameStr := string(tn)
-			//fmt.Printf("%+v %p </%s>\n", currentState, currentState, tnameStr)
 			if tname, ok := WhiteListStyleTags[tnameStr]; ok {
 				switch tname {
 				case Bold, Italic, Caps, SmallCaps,
@@ -183,11 +239,18 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					run := currentState.currentPara.AddRun()
 					run.AddField(document.FieldNumberOfPages)
 				case PageBreak:
-					run := currentState.currentPara.AddRun()
+					para := doc.AddParagraph()
+					run := para.AddRun()
 					run.AddPageBreak()
+					currentState.currentPara = &para
+					currentState.currentRun = &run
 				case LineBreak:
-					run := currentState.currentPara.AddRun()
-					run.AddBreak()
+					if currentState.currentRun != nil {
+						currentState.currentRun.AddBreak()
+					} else if currentState.currentPara != nil {
+						run := currentState.currentPara.AddRun()
+						run.AddBreak()
+					}
 				case InlineImage:
 					setInlineImage(doc, currentState.currentRun, attribs)
 				case AnchorImage:
@@ -196,10 +259,46 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					newRun := currentState.currentPara.AddRun()
 					currentState.currentRun = &newRun
 				default:
-					if currentState.section == Paragraph {
-
+					if currentState.section == DocPageBorder {
+						switch tname {
+						case BorderTop:
+							setTopDocBorder(doc, attribs)
+						case BorderBottom:
+							setBottomDocBorder(doc, attribs)
+						case BorderRight, BorderLeft:
+							setLeftRightDocBorder(doc, attribs, tname)
+						}
 					} else if currentState.section == ParagraphBorder {
-
+						switch tname {
+						case BorderTop, BorderRight, BorderBottom, BorderLeft:
+							currentState.applyParaBorder(attribs, tname)
+						}
+					} else if currentState.section == Paragraph {
+						switch tname {
+						case ParaShading:
+							currentState.applyParaShading(attribs)
+						case ParaAlignment:
+							currentState.applyParaAlignment(attribs)
+						case ParaText:
+							currentState.applyParaTextProps(attribs)
+						case ParaFrame:
+							currentState.applyParaFrame(attribs)
+						case ParaIndent:
+							currentState.applyParaIndent(attribs)
+						case ParaTextBoxTightWrap:
+							currentState.applyParaTextBoxTightWrap(attribs)
+						case ParaSpacing:
+							currentState.applyParaSpacing(attribs)
+						}
+					} else if currentState.section == Document {
+						switch tname {
+						case DocBackground:
+							setDocBackground(doc, attribs)
+						case DocPageSize:
+							setDocPageSize(doc, attribs)
+						case DocPageMargin:
+							setDocPageMargin(doc, attribs)
+						}
 					}
 				}
 			}
@@ -225,6 +324,9 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						case Company:
 							doc.AppProperties.SetCompany(txt)
 						}
+					} else if currentState.section == Heading1 || currentState.section == Heading2 || currentState.section == Heading3 {
+						run := currentState.currentPara.AddRun()
+						run.AddText(txt)
 					} else if currentState.currentTextStyle != nil && currentState.currentPara != nil {
 						run := currentState.currentPara.AddRun()
 						if currentState.currentTextStyle.flags != 0 {

@@ -1,7 +1,6 @@
-package main 
+package main
 
 import (
-	"github.com/unidoc/unioffice/document"
 	"github.com/unidoc/unioffice/schema/soo/wml"
 )
 

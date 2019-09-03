@@ -17,7 +17,7 @@ func setTableProps(table *document.Table, attribs map[string]string) {
 		case "width":
 			widthPer, err := strconv.ParseFloat(value, 32)
 			if err != nil {
-				fmt.Println("not a valid table widht")
+				fmt.Println("not a valid table width")
 			}
 			table.Properties().SetWidthPercent(widthPer)
 		case "border":

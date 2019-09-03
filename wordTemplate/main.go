@@ -10,7 +10,7 @@ import (
 
 func main() {
 	initConstMap()
-	tokenizer, err := readTemplateFile("./demo.html")
+	tokenizer, err := readTemplateFile("./demo.jsx")
 	if err != nil {
 		log.Fatal(err)
 	}

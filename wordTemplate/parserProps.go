@@ -11,6 +11,8 @@ type parserState struct {
 	section          Tags
 	currentTag       Tags
 	currentTextStyle *TextStyles
+	currentList      *ListProps
+	numDef           *document.NumberingDefinition
 }
 
 func NewParserState(currentState *parserState, tagName Tags) *parserState {
@@ -21,5 +23,13 @@ func NewParserState(currentState *parserState, tagName Tags) *parserState {
 	newState.section = currentState.section
 	newState.currentTag = tagName
 	newState.currentTextStyle = currentState.currentTextStyle
+	newState.numDef = currentState.numDef
+	newState.currentList = currentState.currentList
 	return newState
+}
+
+type ListProps struct {
+	level       int
+	indentDelta int
+	numDefLevel int
 }

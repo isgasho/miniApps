@@ -38,13 +38,13 @@ func setAnchoredImage(doc *document.Document, runner *document.Run, attribs map[
 							anchor.SetTextWrapNone()
 						case "name":
 							anchor.SetName(val)
-						case "hAlignment", "vAlignment", "yOffset", "xOffset", "wrap":
+						case "hAlign", "vAlign", "yOffset", "xOffset", "wrap":
 							num, err := strconv.Atoi(val)
 							if err == nil {
 								switch key {
-								case "hAlignment":
+								case "hAlign":
 									anchor.SetHAlignment(wml.WdST_AlignH(num))
-								case "vAlignment":
+								case "vAlign":
 									anchor.SetVAlignment(wml.WdST_AlignV(num))
 								case "xOffset":
 									anchor.SetXOffset(measurement.Distance(num) * measurement.Inch)
