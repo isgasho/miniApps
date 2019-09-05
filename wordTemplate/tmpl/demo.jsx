@@ -104,6 +104,11 @@
           <td>Devarsh</td>
           <td>Shah</td>
         </tr>
+        <tr>
+          <td colSpan="2" align="">
+            Harsh Patel
+          </td>
+        </tr>
       </table>
     </font>
   </body>
