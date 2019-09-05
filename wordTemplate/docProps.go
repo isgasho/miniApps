@@ -135,6 +135,13 @@ func setBottomDocBorder(doc *document.Document, attribs map[string]string) {
 	}
 }
 
+func setAllDocBorder(doc *document.Document, attribs map[string]string) {
+	setBottomDocBorder(doc, attribs)
+	setTopDocBorder(doc, attribs)
+	setLeftRightDocBorder(doc, attribs, BorderLeft)
+	setLeftRightDocBorder(doc, attribs, BorderRight)
+}
+
 func setTopDocBorder(doc *document.Document, attribs map[string]string) {
 	brd := doc.BodySection().X().PgBorders
 	if brd != nil {

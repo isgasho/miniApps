@@ -320,6 +320,8 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						currentState.setTableBorder(attribs, tname)
 					} else if currentState.section == DocPageBorder {
 						switch tname {
+						case BorderAll:
+							setAllDocBorder(doc, attribs)
 						case BorderTop:
 							setTopDocBorder(doc, attribs)
 						case BorderBottom:

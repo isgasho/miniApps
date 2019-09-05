@@ -123,7 +123,6 @@ func (p *parserState) setTextBorders(attribs map[string]string) {
 			}
 		}
 	}
-
 }
 
 func (p *parserState) setFontStyles(attribs map[string]string) {
