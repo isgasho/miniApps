@@ -9,9 +9,12 @@ import (
 )
 
 func setDocBorderProps(doc *document.Document, attribs map[string]string) {
-	if len(attribs) != 0 {
-		brd := doc.BodySection().X().PgBorders
-		if brd != nil {
+	brd := doc.BodySection().X().PgBorders
+	if brd != nil {
+		brd.ZOrderAttr = wml.ST_PageBorderZOrderFront
+		brd.DisplayAttr = wml.ST_PageBorderDisplayAllPages
+		brd.OffsetFromAttr = wml.ST_PageBorderOffsetUnset
+		if len(attribs) != 0 {
 			for key, val := range attribs {
 				switch key {
 				case "zorder", "display", "offset":
@@ -33,15 +36,22 @@ func setDocBorderProps(doc *document.Document, attribs map[string]string) {
 }
 
 func setLeftRightDocBorder(doc *document.Document, attribs map[string]string, direction SelfTags) {
-	if len(attribs) != 0 {
-		brd := doc.BodySection().X().PgBorders
-		if brd != nil {
-			brdLeftRight := wml.NewCT_PageBorder()
-			if direction == BorderLeft {
-				brd.Left = brdLeftRight
-			} else if direction == BorderRight {
-				brd.Right = brdLeftRight
-			}
+	brd := doc.BodySection().X().PgBorders
+	if brd != nil {
+		brdLeftRight := wml.NewCT_PageBorder()
+		brdLeftRight.ValAttr = wml.ST_BorderSingle
+		brdLeftRight.SzAttr = unioffice.Uint64(uint64(4))
+		brdLeftRight.SpaceAttr = unioffice.Uint64(uint64(24))
+		clr, err := wml.ParseUnionST_HexColor("#000000")
+		if err == nil {
+			brdLeftRight.ColorAttr = &clr
+		}
+		if direction == BorderLeft {
+			brd.Left = brdLeftRight
+		} else if direction == BorderRight {
+			brd.Right = brdLeftRight
+		}
+		if len(attribs) != 0 {
 			for key, val := range attribs {
 				switch key {
 				case "style", "size", "space":
@@ -78,11 +88,18 @@ func setLeftRightDocBorder(doc *document.Document, attribs map[string]string, di
 }
 
 func setBottomDocBorder(doc *document.Document, attribs map[string]string) {
-	if len(attribs) != 0 {
-		brd := doc.BodySection().X().PgBorders
-		if brd != nil {
-			brdBottom := wml.NewCT_BottomPageBorder()
-			brd.Bottom = brdBottom
+	brd := doc.BodySection().X().PgBorders
+	if brd != nil {
+		brdBottom := wml.NewCT_BottomPageBorder()
+		brdBottom.ValAttr = wml.ST_BorderSingle
+		brdBottom.SzAttr = unioffice.Uint64(uint64(4))
+		brdBottom.SpaceAttr = unioffice.Uint64(uint64(24))
+		clr, err := wml.ParseUnionST_HexColor("#000000")
+		if err == nil {
+			brdBottom.ColorAttr = &clr
+		}
+		brd.Bottom = brdBottom
+		if len(attribs) != 0 {
 			for key, val := range attribs {
 				switch key {
 				case "style", "size", "space":
@@ -119,11 +136,18 @@ func setBottomDocBorder(doc *document.Document, attribs map[string]string) {
 }
 
 func setTopDocBorder(doc *document.Document, attribs map[string]string) {
-	if len(attribs) != 0 {
-		brd := doc.BodySection().X().PgBorders
-		if brd != nil {
-			brdTop := wml.NewCT_TopPageBorder()
-			brd.Top = brdTop
+	brd := doc.BodySection().X().PgBorders
+	if brd != nil {
+		brdTop := wml.NewCT_TopPageBorder()
+		brdTop.ValAttr = wml.ST_BorderSingle
+		brdTop.SzAttr = unioffice.Uint64(uint64(4))
+		brdTop.SpaceAttr = unioffice.Uint64(uint64(24))
+		clr, err := wml.ParseUnionST_HexColor("#000000")
+		if err == nil {
+			brdTop.ColorAttr = &clr
+		}
+		brd.Top = brdTop
+		if len(attribs) != 0 {
 			for key, val := range attribs {
 				switch key {
 				case "style", "size", "space":
@@ -156,19 +180,18 @@ func setTopDocBorder(doc *document.Document, attribs map[string]string) {
 				}
 			}
 		}
-
 	}
 }
 
 func setDocBackground(doc *document.Document, attribs map[string]string) {
+	var background *wml.CT_Background
+	if doc.X().Background == nil {
+		background = wml.NewCT_Background()
+		doc.X().Background = background
+	} else {
+		background = doc.X().Background
+	}
 	if len(attribs) != 0 {
-		var background *wml.CT_Background
-		if doc.X().Background == nil {
-			background = wml.NewCT_Background()
-			doc.X().Background = background
-		} else {
-			background = doc.X().Background
-		}
 		for key, val := range attribs {
 			switch key {
 			case "color":
@@ -192,9 +215,33 @@ func setDocBackground(doc *document.Document, attribs map[string]string) {
 }
 
 func setDocPageMargin(doc *document.Document, attribs map[string]string) {
+	pgMargin := wml.NewCT_PageMar()
+	mesTop, err := wml.ParseUnionST_SignedTwipsMeasure("2.06cm")
+	if err != nil {
+		pgMargin.TopAttr = mesTop
+	}
+	mesBottom, err := wml.ParseUnionST_SignedTwipsMeasure("2.54cm")
+	if err != nil {
+		pgMargin.BottomAttr = mesBottom
+	}
+	mesLeft, err := wml.ParseUnionST_TwipsMeasure("2.54cm")
+	if err != nil {
+		pgMargin.LeftAttr = mesLeft
+	}
+	mesRight, err := wml.ParseUnionST_TwipsMeasure("2.54cm")
+	if err != nil {
+		pgMargin.RightAttr = mesRight
+	}
+	mesHeader, err := wml.ParseUnionST_TwipsMeasure("1.27cm")
+	if err != nil {
+		pgMargin.HeaderAttr = mesHeader
+	}
+	mesFooter, err := wml.ParseUnionST_TwipsMeasure("1.27cm")
+	if err != nil {
+		pgMargin.FooterAttr = mesFooter
+	}
+	doc.BodySection().X().PgMar = pgMargin
 	if len(attribs) != 0 {
-		pgMargin := wml.NewCT_PageMar()
-		doc.BodySection().X().PgMar = pgMargin
 		for key, val := range attribs {
 			switch key {
 			case "top", "bottom":
@@ -229,9 +276,18 @@ func setDocPageMargin(doc *document.Document, attribs map[string]string) {
 }
 
 func setDocPageSize(doc *document.Document, attribs map[string]string) {
+	pgSize := wml.NewCT_PageSz()
+	mes, err := wml.ParseUnionST_TwipsMeasure("20.99cm")
+	if err == nil {
+		pgSize.WAttr = &mes
+	}
+	mes2, err := wml.ParseUnionST_TwipsMeasure("29.7cm")
+	if err == nil {
+		pgSize.HAttr = &mes2
+	}
+	pgSize.OrientAttr = wml.ST_PageOrientationPortrait
+	doc.BodySection().X().PgSz = pgSize
 	if len(attribs) != 0 {
-		pgSize := wml.NewCT_PageSz()
-		doc.BodySection().X().PgSz = pgSize
 		for key, val := range attribs {
 			switch key {
 			case "width", "height":

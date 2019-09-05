@@ -8,6 +8,12 @@ import (
 	"github.com/unidoc/unioffice/schema/soo/wml"
 )
 
+type ListProps struct {
+	level       int
+	indentDelta int
+	numDefLevel int
+}
+
 func (p *parserState) setupOrderedList(attribs map[string]string) {
 	var indentDelta = 20
 	var hangingIndent = 20

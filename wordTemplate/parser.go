@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"log"
-	"strings"
+	"regexp"
 
 	"github.com/unidoc/unioffice/document"
 	"github.com/unidoc/unioffice/measurement"
@@ -64,8 +65,52 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					case UnorderedList:
 						currentState.setupUnorderedList(attribs)
 					}
+				case Table:
+					currentState = NewParserState(currentState, tname)
+					currentState.section = tname
+					currentState.currentTable = &TableProps{}
+					currentState.currentTable.spans = make([]*RowSpan, 0)
+					currTblProps := currentState.currentTable
+					tbl := doc.AddTable()
+					currTblProps.tbl = &tbl
+					currTblProps.currentRow = -1
+					attribs := getAttributes(tokenizer)
+					currentState.setTableProps(attribs)
 				default:
-					if currentState.section == Document {
+					if currentState.section == Table {
+						currentState = NewParserState(currentState, tname)
+						currentState.section = tname
+						switch tname {
+						case TableBorder:
+							currentState.currentTable.tbl.
+								Properties().X().TblBorders = wml.NewCT_TblBorders()
+						case TableRow:
+							row := currentState.currentTable.tbl.AddRow()
+							rowProps := TableRowProps{}
+							currentState.currentTable.currentRowProps = &rowProps
+							rowProps.currentRow = &row
+							currentState.currentTable.currentRow = currentState.currentTable.currentRow + 1
+							currentState.currentTable.currentCol = -1
+						}
+					} else if currentState.section == TableRow {
+						switch tname {
+						case TableData:
+							var attribs map[string]string
+							if hasAttrib {
+								attribs = getAttributes(tokenizer)
+							}
+							currentState = NewParserState(currentState, tname)
+							currentState.section = tname
+							currentState.currentTable.currentCol = currentState.currentTable.currentCol + 1
+							rowProps := currentState.currentTable.currentRowProps
+							cell := rowProps.currentRow.AddCell()
+							para := cell.AddParagraph()
+							run := para.AddRun()
+							currentState.currentPara = &para
+							currentState.currentRun = &run
+							currentState.setTableCellProps(&cell, attribs)
+						}
+					} else if currentState.section == Document {
 						switch tname {
 						case PageHeader:
 							hdr := doc.AddHeader()
@@ -157,6 +202,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 							currentState = NewParserState(currentState, tname)
 							currentState.section = tname
 							para := doc.AddParagraph()
+							//para.Properties().SetStartIndent(measurement.Distance(int64(currentState.currentList.level * currentState.currentList.indentDelta)))
 							currentState.currentPara = &para
 							run := para.AddRun()
 							currentState.currentRun = &run
@@ -258,8 +304,21 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					setAnchoredImage(doc, &run, attribs)
 					newRun := currentState.currentPara.AddRun()
 					currentState.currentRun = &newRun
+				case WhiteSpace:
+					run := currentState.currentPara.AddRun()
+					currentState.currentRun = &run
+					run.AddText(" ")
 				default:
-					if currentState.section == DocPageBorder {
+					if currentState.section == TableRow {
+						switch tname {
+						case TableRowMargin:
+							currentState.setTableRowCellMargin(attribs)
+						case TableRowShading:
+							currentState.setTableRowShading(attribs)
+						}
+					} else if currentState.section == TableBorder {
+						currentState.setTableBorder(attribs, tname)
+					} else if currentState.section == DocPageBorder {
 						switch tname {
 						case BorderTop:
 							setTopDocBorder(doc, attribs)
@@ -303,8 +362,11 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 				}
 			}
 		case html.TextToken:
-			txt := string(tokenizer.Text())
-			txt = strings.TrimSpace(txt)
+			data := tokenizer.Text()
+			re := regexp.MustCompile(" +")
+			replaced := re.ReplaceAll(bytes.TrimSpace(data), []byte(" "))
+			txt := string(replaced)
+			//txt = strings.TrimSpace(txt)
 			if txt != "" {
 				if currentState != nil {
 					if currentState.section == DocProps {

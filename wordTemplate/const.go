@@ -56,7 +56,13 @@ const (
 	//DocPageMargin props: top={string} bottom={string}
 	//left={string} right={string} header={string} footer={string}
 	//gutter={string}
-	DocPageMargin SelfTags = 20
+	DocPageMargin          SelfTags = 20
+	WhiteSpace             SelfTags = 21
+	BorderAll              SelfTags = 22
+	BorderInsideHorizontal SelfTags = 23
+	BorderInsideVertical   SelfTags = 24
+	TableRowShading        SelfTags = 25
+	TableRowMargin         SelfTags = 26
 )
 
 var WhiteListSelfTags = map[string]SelfTags{}
@@ -83,6 +89,12 @@ func initWhiteListSelfTags() {
 	WhiteListSelfTags["docbackground"] = DocBackground
 	WhiteListSelfTags["docpagesize"] = DocPageSize
 	WhiteListSelfTags["docpagemargin"] = DocPageMargin
+	WhiteListSelfTags["space"] = WhiteSpace
+	WhiteListSelfTags["borderall"] = BorderAll
+	WhiteListSelfTags["borderinsidehorizontal"] = BorderInsideHorizontal
+	WhiteListSelfTags["borderinsidevertical"] = BorderInsideVertical
+	WhiteListSelfTags["rowshading"] = TableRowShading
+	WhiteListSelfTags["rowmargin"] = TableRowMargin
 }
 
 type StyleTags int
@@ -188,9 +200,10 @@ const (
 	Heading1        Tags = 25
 	Heading2        Tags = 26
 	Heading3        Tags = 27
-	Heading4        Tags = 28
-	Heading5        Tags = 29
-	Heading6        Tags = 30
+	Table           Tags = 28
+	TableRow        Tags = 29
+	TableData       Tags = 30
+	TableBorder     Tags = 31
 )
 
 var WhiteListTags = map[string]Tags{}
@@ -221,9 +234,10 @@ func initWhileListTags() {
 	WhiteListTags["h1"] = Heading1
 	WhiteListTags["h2"] = Heading2
 	WhiteListTags["h3"] = Heading3
-	WhiteListTags["h4"] = Heading4
-	WhiteListTags["h5"] = Heading5
-	WhiteListTags["h6"] = Heading6
+	WhiteListTags["table"] = Table
+	WhiteListTags["tr"] = TableRow
+	WhiteListTags["td"] = TableData
+	WhiteListTags["tableborder"] = TableBorder
 }
 
 func initConstMap() {
