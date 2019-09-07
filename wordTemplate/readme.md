@@ -998,7 +998,7 @@ Tag: `<RowMargin/>`
 
 3. ##### Table Data
 
-Custom Tag: `<td></td>`
+Container Tag: `<td></td>`
 
 ###### Properties
 
@@ -1041,8 +1041,8 @@ ST_JcRight          ST_Jc = 12
 
 Container Tags:
 
-1. Ordered List - <ol></ol>
-2. Unordered List - <ul></ul>
+1. Ordered List - `<ol></ol>`
+2. Unordered List - `<ul></ul>`
 
 #### Properties
 
