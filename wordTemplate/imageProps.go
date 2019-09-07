@@ -35,7 +35,9 @@ func setAnchoredImage(doc *document.Document, runner *document.Run, attribs map[
 					for key, val := range attribs {
 						switch key {
 						case "noWrap":
-							anchor.SetTextWrapNone()
+							if val == "on" || val == "true" || val == "1" {
+								anchor.SetTextWrapNone()
+							}
 						case "name":
 							anchor.SetName(val)
 						case "hAlign", "vAlign", "yOffset", "xOffset", "wrap":

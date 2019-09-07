@@ -38,7 +38,7 @@ func (p *parserState) applyParaSpacing(attribs map[string]string) {
 						p.currentPara.Properties().Spacing().SetBefore(measurement.Distance(num))
 					}
 				}
-			case "autoafter", "autobefore":
+			case "autoAfter", "autoBefore":
 				if val == "true" || val == "1" || val == "on" {
 					switch key {
 					case "autoAfter":
@@ -256,6 +256,11 @@ func (p *parserState) applyParaBorder(attribs map[string]string, direction SelfT
 				}
 			}
 			switch direction {
+			case BorderAll:
+				side.Left = currBorder
+				side.Right = currBorder
+				side.Bottom = currBorder
+				side.Top = currBorder
 			case BorderLeft:
 				side.Left = currBorder
 			case BorderRight:

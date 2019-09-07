@@ -65,28 +65,32 @@ func initWhiteListSelfTags() {
 	WhiteListSelfTags["fieldcurrentpage"] = FieldCurrentPage
 	WhiteListSelfTags["fieldnumberofpages"] = FieldNumberofPages
 	WhiteListSelfTags["pagebreak"] = PageBreak
-	WhiteListSelfTags["br"] = LineBreak //alias of br
-	WhiteListSelfTags["linebreak"] = LineBreak
-	WhiteListSelfTags["inlineImg"] = InlineImage
-	WhiteListSelfTags["anchorImg"] = AnchorImage
+	WhiteListSelfTags["br"] = LineBreak
+	WhiteListSelfTags["space"] = WhiteSpace
+
+	WhiteListSelfTags["inlineimg"] = InlineImage
+	WhiteListSelfTags["anchorimg"] = AnchorImage
+
 	WhiteListSelfTags["bordertop"] = BorderTop
 	WhiteListSelfTags["borderright"] = BorderRight
 	WhiteListSelfTags["borderleft"] = BorderLeft
 	WhiteListSelfTags["borderbottom"] = BorderBottom
+	WhiteListSelfTags["borderall"] = BorderAll
+	WhiteListSelfTags["borderinsidehorizontal"] = BorderInsideHorizontal
+	WhiteListSelfTags["borderinsidevertical"] = BorderInsideVertical
+
 	WhiteListSelfTags["parashading"] = ParaShading
-	WhiteListSelfTags["paraalignment"] = ParaAlignment
+	WhiteListSelfTags["paraalign"] = ParaAlignment
 	WhiteListSelfTags["paratext"] = ParaText
 	WhiteListSelfTags["paraframe"] = ParaFrame
 	WhiteListSelfTags["paraindent"] = ParaIndent
 	WhiteListSelfTags["paratextboxtightwrap"] = ParaTextBoxTightWrap
 	WhiteListSelfTags["paraspacing"] = ParaSpacing
+
 	WhiteListSelfTags["docbackground"] = DocBackground
 	WhiteListSelfTags["docpagesize"] = DocPageSize
 	WhiteListSelfTags["docpagemargin"] = DocPageMargin
-	WhiteListSelfTags["space"] = WhiteSpace
-	WhiteListSelfTags["borderall"] = BorderAll
-	WhiteListSelfTags["borderinsidehorizontal"] = BorderInsideHorizontal
-	WhiteListSelfTags["borderinsidevertical"] = BorderInsideVertical
+
 	WhiteListSelfTags["rowshading"] = TableRowShading
 	WhiteListSelfTags["rowmargin"] = TableRowMargin
 }
@@ -137,12 +141,7 @@ var WhiteListTags = map[string]Tags{}
 
 func initWhileListTags() {
 	WhiteListTags["document"] = Document
-	WhiteListTags["body"] = Body
-	WhiteListTags["center"] = Center
-	WhiteListTags["left"] = Left
-	WhiteListTags["right"] = Right
-	WhiteListTags["pageheader"] = PageHeader
-	WhiteListTags["pagefooter"] = PageFooter
+
 	WhiteListTags["docprops"] = DocProps
 	WhiteListTags["title"] = Title
 	WhiteListTags["author"] = Author
@@ -151,16 +150,28 @@ func initWhileListTags() {
 	WhiteListTags["version"] = Version
 	WhiteListTags["application"] = Application
 	WhiteListTags["company"] = Company
-	WhiteListTags["paragraph"] = Paragraph
-	WhiteListTags["paragraphborder"] = ParagraphBorder
+
 	WhiteListTags["docsettings"] = DocSettings
 	WhiteListTags["docpageborder"] = DocPageBorder
-	WhiteListTags["ul"] = UnorderedList
-	WhiteListTags["ol"] = OrderedList
-	WhiteListTags["li"] = ListItem
+
+	WhiteListTags["pageheader"] = PageHeader
+	WhiteListTags["pagefooter"] = PageFooter
+	WhiteListTags["center"] = Center
+	WhiteListTags["left"] = Left
+	WhiteListTags["right"] = Right
+
+	WhiteListTags["body"] = Body
+
+	WhiteListTags["paragraph"] = Paragraph
+	WhiteListTags["paraborder"] = ParagraphBorder
 	WhiteListTags["h1"] = Heading1
 	WhiteListTags["h2"] = Heading2
 	WhiteListTags["h3"] = Heading3
+
+	WhiteListTags["ul"] = UnorderedList
+	WhiteListTags["ol"] = OrderedList
+	WhiteListTags["li"] = ListItem
+
 	WhiteListTags["table"] = Table
 	WhiteListTags["tr"] = TableRow
 	WhiteListTags["td"] = TableData

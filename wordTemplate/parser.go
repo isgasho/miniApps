@@ -331,7 +331,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						}
 					} else if currentState.section == ParagraphBorder {
 						switch tname {
-						case BorderTop, BorderRight, BorderBottom, BorderLeft:
+						case BorderTop, BorderRight, BorderBottom, BorderLeft, BorderAll:
 							currentState.applyParaBorder(attribs, tname)
 						}
 					} else if currentState.section == Paragraph {
