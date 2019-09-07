@@ -914,7 +914,7 @@ ST_TblLayoutTypeAutofit  ST_TblLayoutType = 2
 
 2) ### Table Row
 
-Container Tag: `<tr>`
+Container Tag: `<tr></tr>`
 
 #### Properties
 
