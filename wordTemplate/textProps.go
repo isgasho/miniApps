@@ -346,3 +346,37 @@ func applyTextStyles(runner *document.Run, flags StyleTags) {
 		runner.Properties().SetVerticalAlignment(sharedTypes.ST_VerticalAlignRunSubscript)
 	}
 }
+
+func applyTextFormattingToRun(currentState *parserState, run *document.Run) {
+	if currentState.currentTextStyle.flags != 0 {
+		applyTextStyles(run, currentState.currentTextStyle.flags)
+	}
+	if currentState.currentTextStyle.underline != nil {
+		uline := currentState.currentTextStyle.underline
+		run.Properties().SetUnderline(uline.style, uline.color)
+	}
+	if currentState.currentTextStyle.emphasisStyle != wml.ST_EmUnset {
+		em := wml.NewCT_Em()
+		em.ValAttr = currentState.currentTextStyle.emphasisStyle
+		run.Properties().X().Em = em
+	}
+	if currentState.currentTextStyle.font != nil {
+		applyFontStyles(run, currentState.currentTextStyle.font)
+	}
+	if currentState.currentTextStyle.textHighlight != wml.ST_HighlightColorUnset {
+		hl := wml.NewCT_Highlight()
+		hl.ValAttr = currentState.currentTextStyle.textHighlight
+		run.Properties().X().Highlight = hl
+	}
+	if currentState.currentTextStyle.textEffect != wml.ST_TextEffectUnset {
+		te := wml.NewCT_TextEffect()
+		te.ValAttr = currentState.currentTextStyle.textEffect
+		run.Properties().X().Effect = te
+	}
+	if currentState.currentTextStyle.textBorder != nil {
+		applyTextBorder(run, currentState.currentTextStyle.textBorder)
+	}
+	if currentState.currentTextStyle.textshading != nil {
+		applyTextShading(run, currentState.currentTextStyle.textshading)
+	}
+}

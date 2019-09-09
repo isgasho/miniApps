@@ -280,9 +280,12 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 				switch tname {
 				case FieldCurrentPage:
 					run := currentState.currentPara.AddRun()
+					applyTextFormattingToRun(currentState, &run)
 					run.AddField(document.FieldCurrentPage)
+
 				case FieldNumberofPages:
 					run := currentState.currentPara.AddRun()
+					applyTextFormattingToRun(currentState, &run)
 					run.AddField(document.FieldNumberOfPages)
 				case PageBreak:
 					para := doc.AddParagraph()
@@ -393,37 +396,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						run.AddText(txt)
 					} else if currentState.currentTextStyle != nil && currentState.currentPara != nil {
 						run := currentState.currentPara.AddRun()
-						if currentState.currentTextStyle.flags != 0 {
-							applyTextStyles(&run, currentState.currentTextStyle.flags)
-						}
-						if currentState.currentTextStyle.underline != nil {
-							uline := currentState.currentTextStyle.underline
-							run.Properties().SetUnderline(uline.style, uline.color)
-						}
-						if currentState.currentTextStyle.emphasisStyle != wml.ST_EmUnset {
-							em := wml.NewCT_Em()
-							em.ValAttr = currentState.currentTextStyle.emphasisStyle
-							run.Properties().X().Em = em
-						}
-						if currentState.currentTextStyle.font != nil {
-							applyFontStyles(&run, currentState.currentTextStyle.font)
-						}
-						if currentState.currentTextStyle.textHighlight != wml.ST_HighlightColorUnset {
-							hl := wml.NewCT_Highlight()
-							hl.ValAttr = currentState.currentTextStyle.textHighlight
-							run.Properties().X().Highlight = hl
-						}
-						if currentState.currentTextStyle.textEffect != wml.ST_TextEffectUnset {
-							te := wml.NewCT_TextEffect()
-							te.ValAttr = currentState.currentTextStyle.textEffect
-							run.Properties().X().Effect = te
-						}
-						if currentState.currentTextStyle.textBorder != nil {
-							applyTextBorder(&run, currentState.currentTextStyle.textBorder)
-						}
-						if currentState.currentTextStyle.textshading != nil {
-							applyTextShading(&run, currentState.currentTextStyle.textshading)
-						}
+						applyTextFormattingToRun(currentState, &run)
 						run.AddText(txt)
 					} else if currentState.currentRun != nil {
 						currentState.currentRun.AddText(txt)
