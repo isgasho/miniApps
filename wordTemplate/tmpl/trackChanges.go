@@ -7,7 +7,7 @@ import (
 	"github.com/unidoc/unioffice/schema/soo/wml"
 )
 
-func main() {
+func main2() {
 	doc := document.New()
 	doc.Settings.X().TrackRevisions = wml.NewCT_OnOff()
 	para := doc.AddParagraph()

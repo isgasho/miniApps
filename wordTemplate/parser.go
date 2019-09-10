@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"regexp"
+	"strconv"
 
 	"github.com/unidoc/unioffice/document"
 	"github.com/unidoc/unioffice/measurement"
@@ -294,23 +295,40 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					currentState.currentPara = &para
 					currentState.currentRun = &run
 				case LineBreak:
-					if currentState.currentRun != nil {
-						currentState.currentRun.AddBreak()
-					} else if currentState.currentPara != nil {
+					num := 0
+					for key, val := range attribs {
+						switch key {
+						case "count":
+							num1, err := strconv.Atoi(val)
+							if err == nil {
+								num = num1
+							}
+						}
+					}
+					if currentState.currentPara != nil {
 						run := currentState.currentPara.AddRun()
-						run.AddBreak()
+						if num == 0 {
+							num = 1
+						}
+						for itr := 1; itr <= num; itr++ {
+							run.AddBreak()
+						}
 					}
 				case InlineImage:
-					setInlineImage(doc, currentState.currentRun, attribs)
+					run := currentState.currentPara.AddRun()
+					setInlineImage(doc, &run, attribs)
+					newRun := currentState.currentPara.AddRun()
+					currentState.currentRun = &newRun
 				case AnchorImage:
 					run := currentState.currentPara.AddRun()
 					setAnchoredImage(doc, &run, attribs)
 					newRun := currentState.currentPara.AddRun()
 					currentState.currentRun = &newRun
 				case WhiteSpace:
-					run := currentState.currentPara.AddRun()
-					currentState.currentRun = &run
-					run.AddText(" ")
+					if currentState.currentPara != nil {
+						run := currentState.currentPara.AddRun()
+						run.AddText(" ")
+					}
 				default:
 					if currentState.section == TableRow {
 						switch tname {

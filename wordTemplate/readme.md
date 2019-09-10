@@ -466,15 +466,15 @@ These are special tags used to insert special characters, or field values in the
 
 ### Following are the tags to insert
 
-1. `<FieldCurrentPage/>`  
+1. Current Page: `<FieldCurrentPage/>`  
    This tag is used to insert a current page number into the word document
-2. `<FieldNumberofPages/>`  
+2. No Of Pages: `<FieldNumberofPages/>`  
    The tag is used to insert total count of pages into the word document.
-3. `<PageBreak/>`
+3. PageBreak: `<PageBreak/>`
    This tag is used to insert page break into the document and add a new page
-4. `<br/>`  
-   This tag is used to break the line within a document paragraph.
-5. `<space/>`
+4. LineBreak: `<br/>`  
+   This tag is used to break the line within a document paragraph. and has property `count` which can be used to set multiple page breaks i.e `<br count="2"/>` will put 2 line breaks
+5. WhiteSpace: `<space/>`
    This tag is used to insert space into the document, this is useful when space is needed before the start and after the end of the container tag's text.
 
 # Body
@@ -485,10 +485,10 @@ Container Tag: `<Body></Body>`
 
 **Following are the immediate children of the body element:**
 
-1. Paragraph
-2. Image
-3. Table
-4. List
+1. [Paragraph](#paragraph)
+2. [Image](#image)
+3. [Table](#table)
+4. [List](#list)
 
 ## Paragraph
 
@@ -772,7 +772,7 @@ ST_HeightRuleExact   ST_HeightRule = 2
 ST_HeightRuleAtLeast ST_HeightRule = 3
 ```
 
-## Images
+## Image
 
 Images can be included into the word document
 
@@ -789,6 +789,7 @@ Images can be included into the word document
 #### Properties
 
 - src: URL
+- size: width, height // (int (Inches))
 
 2. ### Anchored Image
 

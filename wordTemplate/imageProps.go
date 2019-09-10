@@ -17,7 +17,22 @@ func setInlineImage(doc *document.Document, runner *document.Run, attribs map[st
 		if err == nil {
 			imgRef, err := doc.AddImage(img)
 			if err == nil {
-				runner.AddDrawingInline(imgRef)
+				inline, err := runner.AddDrawingInline(imgRef)
+				if err == nil {
+					for key, val := range attribs {
+						switch key {
+						case "size":
+							strs := strings.Split(val, ",")
+							if len(strs) == 2 {
+								first, err1 := strconv.Atoi(strs[0])
+								second, err2 := strconv.Atoi(strs[1])
+								if err1 == nil && err2 == nil {
+									inline.SetSize(measurement.Distance(first)*measurement.Inch, measurement.Distance(second)*measurement.Inch)
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

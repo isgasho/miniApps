@@ -1,9 +1,11 @@
 clean:
-	rm -rf unzip demo demo.docx wordTemplate out.docx ~$$out.docx 
+	rm -rf out
 build: clean
-	go build
-	./wordTemplate
-	unzip out.docx -d unzip
+	mkdir -p out
+	cd ./tmpl; go run merge.go
+	html-minifier --output=out.min.jsx --output-dir=./out --input-dir=./out --file-ext=jsx --collapse-whitespace --remove-comments --remove-tag-whitespace --keep-closing-slash --remove-comments --case-sensitive
+	go build -o ./out/runner 
+	cd ./out;./runner;unzip out.docx -d outUnzip
 build2: clean 
 	go run tableDemo.go
 	unzip demo.docx -d demo
