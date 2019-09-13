@@ -1,7 +1,8 @@
 <li>
-  <b>About Us.</b>
+  <h1>
+    <b>About Us.</b>
+  </h1>
   <Paragraph>
-    <ParaSpacing linespacing="18,3" />
     Acute Informatics Pvt. Ltd. is a<space />
     <b>
       <u>
@@ -45,5 +46,4 @@
       <li>Wipro</li>
     </ul>
   </Paragraph>
-  <PageBreak />
 </li>;

@@ -891,19 +891,11 @@ ST_TblLayoutTypeAutofit  ST_TblLayoutType = 2
 1. [Table Border](#table-border)
 2. [Table Row](#table-row)
 
-1) ### Table Border
-   Container Tag: `<TableBorder>`
+1)  ### Table Border
 
-##### Properties
+Container Tag: `<TableBorder>`
 
-- size: unsignInt
-- space: unsignInt
-- color: HexColor
-- frame : OnOff
-- shadow: OnOff
-- style: ST_Border
-
-##### Children Tags
+#### Children Tags
 
 1.  `<BorderTop/>`
 2.  `<BorderBottom/>`
@@ -913,7 +905,46 @@ ST_TblLayoutTypeAutofit  ST_TblLayoutType = 2
 6.  `<BorderInsideHorizontal/>`
 7.  `<BorderInsideVertical/>`
 
-2) ### Table Row
+##### Properties
+
+- size: unsignInt
+- color: HexColor
+- style: ST_Border
+
+```go
+ST_BorderUnset                  ST_Border = 0
+ST_BorderNil                    ST_Border = 1
+ST_BorderNone                   ST_Border = 2
+ST_BorderSingle                 ST_Border = 3
+ST_BorderThick                  ST_Border = 4
+ST_BorderDouble                 ST_Border = 5
+ST_BorderDotted                 ST_Border = 6
+ST_BorderDashed                 ST_Border = 7
+ST_BorderDotDash                ST_Border = 8
+ST_BorderDotDotDash             ST_Border = 9
+ST_BorderTriple                 ST_Border = 10
+ST_BorderThinThickSmallGap      ST_Border = 11
+ST_BorderThickThinSmallGap      ST_Border = 12
+ST_BorderThinThickThinSmallGap  ST_Border = 13
+ST_BorderThinThickMediumGap     ST_Border = 14
+ST_BorderThickThinMediumGap     ST_Border = 15
+ST_BorderThinThickThinMediumGap ST_Border = 16
+ST_BorderThinThickLargeGap      ST_Border = 17
+ST_BorderThickThinLargeGap      ST_Border = 18
+ST_BorderThinThickThinLargeGap  ST_Border = 19
+ST_BorderWave                   ST_Border = 20
+ST_BorderDoubleWave             ST_Border = 21
+ST_BorderDashSmallGap           ST_Border = 22
+ST_BorderDashDotStroked         ST_Border = 23
+ST_BorderThreeDEmboss           ST_Border = 24
+ST_BorderThreeDEngrave          ST_Border = 25
+ST_BorderOutset                 ST_Border = 26
+ST_BorderInset                  ST_Border = 27
+ST_BorderEclipsingSquares1      ST_Border = 87
+ST_BorderEclipsingSquares2      ST_Border = 88
+```
+
+2. ### Table Row
 
 Container Tag: `<tr></tr>`
 
@@ -996,6 +1027,7 @@ Tag: `<RowMargin/>`
 - bottom: int
 - left: int
 - right: int
+- all: int
 
 3. ##### Table Data
 

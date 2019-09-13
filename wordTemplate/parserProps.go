@@ -4,6 +4,15 @@ import (
 	"github.com/unidoc/unioffice/document"
 )
 
+type GlobalConsts struct {
+	h1 float64
+	h2 float64
+	h3 float64
+	h4 float64
+	h5 float64
+	h6 float64
+}
+
 type parserState struct {
 	currentPara      *document.Paragraph
 	currentRun       *document.Run

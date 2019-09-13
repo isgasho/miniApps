@@ -17,6 +17,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 	if ancestorState == nil || tokenizer == nil {
 		return
 	}
+	globalConsts := GlobalConsts{h1: 16, h2: 15, h3: 14, h4: 13, h5: 12, h6: 11}
 	currentState := ancestorState
 	numberingLevel := -1
 	doc := document.New()
@@ -36,6 +37,9 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 			tnameStr := string(tn)
 			if tname, ok := WhiteListTags[tnameStr]; ok {
 				switch tname {
+				case Global:
+					currentState = NewParserState(currentState, tname)
+					currentState.section = tname
 				case Document:
 					currentState = NewParserState(currentState, tname)
 					currentState.section = tname
@@ -176,6 +180,7 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 							}
 							if currentState.section == ListItem {
 								para.Properties().SetStartIndent(measurement.Distance(int64(currentState.currentList.level * currentState.currentList.indentDelta)))
+
 							}
 						case Heading1:
 							if currentState.currentPara != nil {
@@ -188,6 +193,18 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						case Heading3:
 							if currentState.currentPara != nil {
 								currentState.currentPara.SetStyle("Heading3")
+							}
+						case Heading4:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading4")
+							}
+						case Heading5:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading5")
+							}
+						case Heading6:
+							if currentState.currentPara != nil {
+								currentState.currentPara.SetStyle("Heading6")
 							}
 						}
 					} else if currentState.section == Paragraph {
@@ -288,6 +305,8 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 					run := currentState.currentPara.AddRun()
 					applyTextFormattingToRun(currentState, &run)
 					run.AddField(document.FieldNumberOfPages)
+				case FieldTableOfContents:
+					doc.AddParagraph().AddRun().AddField(document.FieldTOC)
 				case PageBreak:
 					para := doc.AddParagraph()
 					run := para.AddRun()
@@ -305,15 +324,19 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 							}
 						}
 					}
+					var runner document.Run
 					if currentState.currentPara != nil {
-						run := currentState.currentPara.AddRun()
-						if num == 0 {
-							num = 1
-						}
-						for itr := 1; itr <= num; itr++ {
-							run.AddBreak()
-						}
+						runner = currentState.currentPara.AddRun()
+					} else {
+						runner = doc.AddParagraph().AddRun()
 					}
+					if num == 0 {
+						num = 1
+					}
+					for itr := 1; itr <= num; itr++ {
+						runner.AddBreak()
+					}
+
 				case InlineImage:
 					run := currentState.currentPara.AddRun()
 					setInlineImage(doc, &run, attribs)
@@ -329,8 +352,23 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						run := currentState.currentPara.AddRun()
 						run.AddText(" ")
 					}
+				case RupeeSymbol:
+					if currentState.currentPara != nil {
+						run := currentState.currentPara.AddRun()
+						run.AddText("₹")
+					}
 				default:
-					if currentState.section == TableRow {
+					if currentState.section == Global {
+						switch tname {
+						case GlobalFont:
+							setGlobalFontStyle(doc, attribs)
+						case ParaSpacing:
+							setGlobalParaSpacing(doc, attribs)
+						case GlobalHeading:
+							setGlobalHeadingSize(&globalConsts, attribs)
+
+						}
+					} else if currentState.section == TableRow {
 						switch tname {
 						case TableRowMargin:
 							currentState.setTableRowCellMargin(attribs)
@@ -411,7 +449,28 @@ func parser(tokenizer *html.Tokenizer, ancestorState *parserState) {
 						}
 					} else if currentState.section == Heading1 || currentState.section == Heading2 || currentState.section == Heading3 {
 						run := currentState.currentPara.AddRun()
-						run.AddText(txt)
+						if currentState.currentTextStyle != nil && currentState.currentPara != nil {
+							if currentState.currentTextStyle.font != nil {
+								oldSize := currentState.currentTextStyle.font.size
+								switch currentState.section {
+								case Heading1:
+									currentState.currentTextStyle.font.size = globalConsts.h1
+								case Heading2:
+									currentState.currentTextStyle.font.size = globalConsts.h2
+								case Heading3:
+									currentState.currentTextStyle.font.size = globalConsts.h3
+								case Heading4:
+									currentState.currentTextStyle.font.size = globalConsts.h4
+								case Heading5:
+									currentState.currentTextStyle.font.size = globalConsts.h5
+								case Heading6:
+									currentState.currentTextStyle.font.size = globalConsts.h6
+								}
+								applyTextFormattingToRun(currentState, &run)
+								run.AddText(txt)
+								currentState.currentTextStyle.font.size = oldSize
+							}
+						}
 					} else if currentState.currentTextStyle != nil && currentState.currentPara != nil {
 						run := currentState.currentPara.AddRun()
 						applyTextFormattingToRun(currentState, &run)

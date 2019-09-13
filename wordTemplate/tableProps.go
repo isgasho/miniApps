@@ -108,10 +108,15 @@ func (p *parserState) setTableRowCellMargin(attribs map[string]string) {
 			p.currentTable.currentRowProps.margin = cellMarginInst
 			for key, val := range attribs {
 				switch key {
-				case "top", "bottom", "left", "right":
+				case "top", "bottom", "left", "right", "all":
 					num, err := strconv.Atoi(val)
 					if err == nil {
 						switch key {
+						case "all":
+							cellMarginInst.top = num
+							cellMarginInst.bottom = num
+							cellMarginInst.left = num
+							cellMarginInst.right = num
 						case "top":
 							cellMarginInst.top = num
 						case "bottom":
@@ -255,10 +260,23 @@ func (p *parserState) setTableProps(attribs map[string]string) {
 						currTbl.Properties().SetLayout(wml.ST_TblLayoutType(num))
 					}
 				}
-			case "width":
+			case "width", "cellspacing":
 				num, err := strconv.ParseFloat(val, 64)
 				if err == nil {
-					currTbl.Properties().SetWidthPercent(num)
+					switch key {
+					case "width":
+						currTbl.Properties().SetWidthPercent(num)
+					case "cellspacing":
+						currTbl.Properties().SetCellSpacingPercent(num)
+					}
+				}
+			case "indent":
+				width := wml.NewCT_TblWidth()
+				currTbl.Properties().X().TblInd = width
+				w, err := wml.ParseUnionST_MeasurementOrPercent(val)
+				if err == nil {
+					width.WAttr = &w
+					width.TypeAttr = wml.ST_TblWidthDxa
 				}
 			}
 		}

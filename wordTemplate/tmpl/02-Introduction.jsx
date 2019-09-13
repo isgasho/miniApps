@@ -4,7 +4,6 @@
       <BorderAll size="20" color="#30529c" style="3" />
     </ParaBorder>
     <ParaAlign style="2" />
-    <ParaSpacing linespacing="18,3" />
     <br />
     Commercial Proposal for providing
     <br />
@@ -16,7 +15,6 @@
     <br />
   </Paragraph>
   <Paragraph>
-    <ParaSpacing linespacing="18,3" />
     <br count="2" />
     <caps>
       <b>

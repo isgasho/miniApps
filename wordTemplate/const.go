@@ -54,9 +54,13 @@ const (
 	//DocPageMargin props: top={string} bottom={string}
 	//left={string} right={string} header={string} footer={string}
 	//gutter={string}
-	DocPageMargin   SelfTags = 20
-	TableRowShading SelfTags = 25
-	TableRowMargin  SelfTags = 26
+	DocPageMargin        SelfTags = 20
+	TableRowShading      SelfTags = 25
+	TableRowMargin       SelfTags = 26
+	GlobalFont           SelfTags = 27
+	GlobalHeading        SelfTags = 28
+	RupeeSymbol          SelfTags = 29
+	FieldTableOfContents SelfTags = 30
 )
 
 var WhiteListSelfTags = map[string]SelfTags{}
@@ -67,6 +71,8 @@ func initWhiteListSelfTags() {
 	WhiteListSelfTags["pagebreak"] = PageBreak
 	WhiteListSelfTags["br"] = LineBreak
 	WhiteListSelfTags["space"] = WhiteSpace
+	WhiteListSelfTags["rs"] = RupeeSymbol
+	WhiteListSelfTags["toc"] = FieldTableOfContents
 
 	WhiteListSelfTags["inlineimg"] = InlineImage
 	WhiteListSelfTags["anchorimg"] = AnchorImage
@@ -93,6 +99,9 @@ func initWhiteListSelfTags() {
 
 	WhiteListSelfTags["rowshading"] = TableRowShading
 	WhiteListSelfTags["rowmargin"] = TableRowMargin
+
+	WhiteListSelfTags["font"] = GlobalFont
+	WhiteListSelfTags["heading"] = GlobalHeading
 }
 
 //Tags are the tags with childrens
@@ -100,6 +109,7 @@ type Tags byte
 
 //Const field of type Tags
 const (
+	Global      Tags = 0
 	Document    Tags = 1
 	Body        Tags = 2
 	Center      Tags = 3
@@ -131,15 +141,20 @@ const (
 	Heading1        Tags = 25
 	Heading2        Tags = 26
 	Heading3        Tags = 27
-	Table           Tags = 28
-	TableRow        Tags = 29
-	TableData       Tags = 30
-	TableBorder     Tags = 31
+	Heading4        Tags = 28
+	Heading5        Tags = 29
+	Heading6        Tags = 30
+	Table           Tags = 31
+	TableRow        Tags = 32
+	TableData       Tags = 33
+	TableBorder     Tags = 34
 )
 
 var WhiteListTags = map[string]Tags{}
 
 func initWhileListTags() {
+	WhiteListTags["global"] = Global
+
 	WhiteListTags["document"] = Document
 
 	WhiteListTags["docprops"] = DocProps
@@ -167,6 +182,9 @@ func initWhileListTags() {
 	WhiteListTags["h1"] = Heading1
 	WhiteListTags["h2"] = Heading2
 	WhiteListTags["h3"] = Heading3
+	WhiteListTags["h4"] = Heading4
+	WhiteListTags["h5"] = Heading5
+	WhiteListTags["h6"] = Heading6
 
 	WhiteListTags["ul"] = UnorderedList
 	WhiteListTags["ol"] = OrderedList
