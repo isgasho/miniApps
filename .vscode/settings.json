@@ -2,7 +2,7 @@
 {
   "window.zoomLevel": 0.5,
   "editor.fontSize": 12,
-
+  "editor.tabSize": 2,
   "editor.fontWeight": "300",
   "editor.fontLigatures": true,
   "go.buildOnSave": "package",

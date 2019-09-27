@@ -2,3 +2,5 @@ build/
 out/
 vendor/
 dummy/
+*.mod
+*.sum
