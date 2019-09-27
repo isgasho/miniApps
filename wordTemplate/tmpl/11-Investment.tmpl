@@ -142,7 +142,7 @@
         </tr>
         {{range $idx,$bName := .Branches}}
         <tr>
-          <td>{{$idx}}.</td>
+          <td>{{inc $idx}}.</td>
           <td>{{$bName}}</td>
         </tr>
         {{end}}

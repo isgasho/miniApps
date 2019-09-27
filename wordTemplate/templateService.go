@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -45,30 +42,11 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	data, err := ioutil.ReadAll(reader)
+	reader, err = fileOut(reader, filepath.Join(outDir, "out.docx"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	err = ioutil.WriteFile(filepath.Join(outDir, "doc.docx"), data, 0766)
-	if err != nil {
-		fmt.Println(err)
-	}
-
+	Unzip(reader, filepath.Join(outDir, "outUnzip"))
 	fmt.Println("Done")
-
-}
-
-func fileOut(data io.Reader, filename string) (io.Reader, error) {
-	var buf1, buf2 bytes.Buffer
-	w := io.MultiWriter(&buf1, &buf2)
-	if _, err := io.Copy(w, data); err != nil {
-		return nil, err
-	}
-	myData, err := ioutil.ReadAll(&buf1)
-	if err != nil {
-		return nil, err
-	}
-	ioutil.WriteFile(filename, myData, 0766)
-	return &buf2, err
 }

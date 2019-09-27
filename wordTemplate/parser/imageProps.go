@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,7 +17,6 @@ func setInlineImage(doc *document.Document, runner *document.Run, attribs map[st
 		source := attribs["src"]
 		dir, _ := os.Getwd()
 		path := filepath.Join(dir, source)
-		fmt.Println(path)
 		img, err := common.ImageFromFile(path)
 		if err == nil {
 			imgRef, err := doc.AddImage(img)

@@ -63,9 +63,14 @@ func initData() *ASPDocFields {
 func getTemplateFns() map[string]interface{} {
 	funcMap := make(map[string]interface{}, 0)
 	funcMap["iter"] = N
+	funcMap["inc"] = Incr
 	return funcMap
 }
 
 func N(n int) []struct{} {
 	return make([]struct{}, n)
+}
+
+func Incr(val int) string {
+	return fmt.Sprintf("%d", val+1)
 }
