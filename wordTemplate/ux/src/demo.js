@@ -14,18 +14,6 @@ const PromiseQueue = () => {
   let timeoutInSeconds = 60;
   let cleanupIntervalInSeconds = 1;
 
-  const resetQueue = () => {
-    _internalQueue = {};
-  };
-  const stopCleanUp = () => {
-    clearInterval(interval);
-    interval = null;
-  };
-  const startCleanUp = () => {
-    if (interval === null) {
-      interval = setInterval(() => cleanUp(), cleanupIntervalInSeconds * 1000);
-    }
-  };
   const cancelFn = (reason, callback, key, value, others) => {
     const error = {
       path: key,
@@ -74,7 +62,7 @@ const PromiseQueue = () => {
             }
           }
         } else {
-          currentPromise[CANCELFN]("cancelled because other promise started");
+          currentPromise[CANCELFN]("cancelled because you're stale");
         }
       }
     }
@@ -120,6 +108,18 @@ const PromiseQueue = () => {
   const count = () => {
     let keys = Object.keys(_internalQueue);
     return keys.length;
+  };
+  const resetQueue = () => {
+    _internalQueue = {};
+  };
+  const stopCleanUp = () => {
+    clearInterval(interval);
+    interval = null;
+  };
+  const startCleanUp = () => {
+    if (interval === null) {
+      interval = setInterval(() => cleanUp(), cleanupIntervalInSeconds * 1000);
+    }
   };
   return {
     addTask: addTask(false),
@@ -198,7 +198,7 @@ const fetchResult = async (key, value, timeout) => {
     ];
     myNames.forEach(one => {
       const { path, value, timeout } = one;
-      let x = newQueue
+      newQueue
         .addTask(fetchResult, path, value, timeout)
         .then(data => console.log(data))
         .catch(e => console.log("err", e));
