@@ -11,7 +11,8 @@ const PromiseQueue = () => {
   let _internalQueue = {};
   let interval = null;
   let cacheInvalidateTimeInSeconds = 30;
-  let timeoutInSeconds = 20;
+  let timeoutInSeconds = 60;
+  let cleanupIntervalInSeconds = 1;
 
   const resetQueue = () => {
     _internalQueue = {};
@@ -22,7 +23,7 @@ const PromiseQueue = () => {
   };
   const startCleanUp = () => {
     if (interval === null) {
-      interval = setInterval(() => cleanUp());
+      interval = setInterval(() => cleanUp(), cleanupIntervalInSeconds * 1000);
     }
   };
   const cancelFn = (reason, callback, key, value, others) => {
@@ -108,7 +109,7 @@ const PromiseQueue = () => {
   };
   const activeCount = () => {
     const clonedQueue = { ..._internalQueue };
-    const count = 0;
+    let count = 0;
     for (let value of Object.values(clonedQueue)) {
       if (!value.done) {
         count++;
@@ -197,19 +198,10 @@ const fetchResult = async (key, value, timeout) => {
     ];
     myNames.forEach(one => {
       const { path, value, timeout } = one;
-      let x = newQueue.addTask(fetchResult, path, value, timeout);
-      x.then(data => console.log(data));
-      x.catch(e => console.log("err", e));
+      let x = newQueue
+        .addTask(fetchResult, path, value, timeout)
+        .then(data => console.log(data))
+        .catch(e => console.log("err", e));
     });
   }, 15000);
-  /*
-  setTimeout(() => {
-    names.forEach(value => {
-      let x = newQueue.addTask(fetchResult, value);
-      x.then(data => console.log(data));
-    });
-  }, 40000);*/
-  /*setInterval(() => {
-    console.log("current Count:" + newQueue.activeCount());
-  }, 1000);*/
 })();
