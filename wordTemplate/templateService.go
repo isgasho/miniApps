@@ -10,7 +10,7 @@ import (
 	"github.com/devarsh/miniApps/wordTemplate/templategen"
 )
 
-func main() {
+func genTemplate() {
 	outDir := "./out"
 	err := os.MkdirAll(outDir, 0766)
 	if err != nil {

@@ -5,29 +5,32 @@ import (
 )
 
 type ASPDocFields struct {
-	ProposalNumber                string
-	ProposalDate                  string
-	BankName                      string
-	ApplicationCurrentRelease     string
-	ApplicationCurrentReleaseDate string
-	ProjectCompletionDays         string
-	BranchCount                   string
 	DocumentAuthor                string
 	DocumentAuthorDesignation     string
 	DocumentAuthorContactNo       string
-	PropsalValidityDays           string
+	ProposalNumber                string
+	ProposalDate                  string
+	ProposalValidityDays          string
 	ProjectLeadTimeInWeeks        string
-	BranchCountNum                int
-	ReplicationLinkBandwithInMbps string
+	ProjectCompletionDays         string
+	ApplicationCurrentRelease     string
+	ApplicationCurrentReleaseDate string
+
+	BankName       string
+	BranchCount    string
+	BranchCountNum int
+	Branches       []string
+
 	IncludeBCPDR                  bool
 	RPOInMinutes                  string
 	RTOInMinutes                  string
-	ContractPeriodYears           string
+	ReplicationLinkBandwithInMbps string
 	RentPaymentFrequency          string
+
 	ContractRenewalHikePercentage string
+	ContractPeriodInYears         string
 	OrganizationAgeInYears        string
 	OrganizationStrength          string
-	Branches                      []string
 }
 
 func initData() *ASPDocFields {
